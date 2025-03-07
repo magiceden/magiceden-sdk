@@ -2,7 +2,6 @@ import { BaseApiClient } from './base';
 import { ChainType, ClientConfig } from '../../types';
 import { supportedOn } from '../utils/decorators';
 
-
 /**
  * V2 API client implementation (primarily for Solana marketplace operations)
  */
@@ -112,6 +111,7 @@ export class V2ApiClient extends BaseApiClient {
   // Helper methods for API URLs
   getBaseUrl(): string {
     const isDev = this.config.environment === 'development';
+    // Same url for dev and prod
     return isDev ? 'https://api-mainnet.magiceden.dev/v2' : 'https://api-mainnet.magiceden.dev/v2';
   }
 }

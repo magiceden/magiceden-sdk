@@ -62,8 +62,7 @@ export class V4ApiClient extends BaseApiClient {
   // Helper methods for API URLs
   getBaseUrl(): string {
     const isDev = this.config.environment === 'development';
-    return isDev
-      ? 'https://api-mainnet.magiceden.dev/v4'
-      : 'https://api-mainnet.magiceden.dev/v4';
+    // Same url for dev and prod
+    return isDev ? 'https://api-mainnet.magiceden.dev/v4' : 'https://api-mainnet.magiceden.dev/v4';
   }
 }
