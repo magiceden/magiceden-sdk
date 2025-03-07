@@ -6,7 +6,7 @@ import { WalletError, TransactionError } from '../errors';
  * Solana wallet provider
  */
 export class SolanaWalletProvider implements WalletProvider {
-  private readonly wallet: any; // Replace with actual Solana wallet type
+  private readonly wallet: any;
 
   constructor(wallet: any) {
     this.wallet = wallet;
@@ -26,8 +26,6 @@ export class SolanaWalletProvider implements WalletProvider {
 
   async signAndSendTransaction(transaction: any): Promise<TransactionResponse> {
     try {
-      // For Solana, the transaction object from the API might need to be
-      // converted to the format expected by the wallet
       const signature = await this.wallet.signAndSendTransaction(transaction);
 
       return {
@@ -46,11 +44,9 @@ export class SolanaWalletProvider implements WalletProvider {
 
   async signMessage(message: string): Promise<string> {
     try {
-      // Convert string message to Uint8Array for Solana
       const messageBytes = new TextEncoder().encode(message);
       const signedMessage = await this.wallet.signMessage(messageBytes);
 
-      // Convert signature to base64 string
       return Buffer.from(signedMessage).toString('base64');
     } catch (error: any) {
       throw new WalletError(`Failed to sign message: ${error.message}`);
