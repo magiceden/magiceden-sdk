@@ -14,7 +14,7 @@ export class V4ApiClient extends BaseApiClient {
    * Gets instructions to create a launchpad
    */
   @supportedOn(['solana', 'evm'])
-  async getCreateLaunchpadInstructions(params: any): Promise<any> {
+  async createLaunchpad(params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
     return this.api.post('/launchpad/create', {
@@ -27,7 +27,7 @@ export class V4ApiClient extends BaseApiClient {
    * Gets instructions to update a launchpad
    */
   @supportedOn(['solana', 'evm'])
-  async getUpdateLaunchpadInstructions(launchpadId: string, params: any): Promise<any> {
+  async updateLaunchpad(launchpadId: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
     return this.api.post(`/launchpad/${launchpadId}/update`, {
@@ -40,7 +40,7 @@ export class V4ApiClient extends BaseApiClient {
    * Gets instructions to mint from a launchpad
    */
   @supportedOn(['solana', 'evm'])
-  async getMintInstructions(launchpadId: string, params: any): Promise<any> {
+  async mint(launchpadId: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
     return this.api.post(`/collections/${launchpadId}/mint`, {

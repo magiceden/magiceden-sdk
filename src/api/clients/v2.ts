@@ -15,7 +15,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to list an NFT
    */
   @supportedOn(['solana'])
-  async getListInstructions(mintAddress: string, params: any): Promise<any> {
+  async list(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
     return this.api.post('/instructions/list', {
@@ -29,7 +29,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to cancel a listing
    */
   @supportedOn(['solana'])
-  async getCancelListingInstructions(mintAddress: string, params: any): Promise<any> {
+  async cancelListing(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
     return this.api.post('/instructions/cancel', {
@@ -43,7 +43,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to buy an NFT
    */
   @supportedOn(['solana'])
-  async getBuyInstructions(mintAddress: string, params: any): Promise<any> {
+  async buy(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
     return this.api.post('/instructions/buy', {
@@ -57,7 +57,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to make an offer on an NFT
    */
   @supportedOn(['solana'])
-  async getMakeOfferInstructions(mintAddress: string, params: any): Promise<any> {
+  async makeOffer(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
     return this.api.post('/instructions/offer', {
@@ -71,7 +71,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to cancel an offer
    */
   @supportedOn(['solana'])
-  async getCancelOfferInstructions(mintAddress: string, params: any): Promise<any> {
+  async cancelOffer(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
     return this.api.post('/instructions/canceloffer', {
@@ -85,7 +85,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to accept an offer
    */
   @supportedOn(['solana'])
-  async getTakeOfferInstructions(mintAddress: string, params: any): Promise<any> {
+  async takeOffer(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
     return this.api.post('/instructions/takeoffer', {
@@ -99,7 +99,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to transfer an NFT
    */
   @supportedOn(['solana'])
-  async getTransferInstructions(mintAddress: string, params: any): Promise<any> {
+  async transfer(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
     return this.api.post('/instructions/transfer', {

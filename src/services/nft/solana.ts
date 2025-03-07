@@ -35,8 +35,8 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getCreateLaunchpadInstructions(params: CreateLaunchpadParams): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
-    
-    return this.v4ApiClient.getCreateLaunchpadInstructions(params);
+
+    return this.v4ApiClient.createLaunchpad(params);
   }
 
   /**
@@ -46,8 +46,8 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getUpdateLaunchpadInstructions(launchpadId: string, params: UpdateLaunchpadParams): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
-    
-    return this.v4ApiClient.getUpdateLaunchpadInstructions(launchpadId, params);
+
+    return this.v4ApiClient.updateLaunchpad(launchpadId, params);
   }
 
   /**
@@ -57,8 +57,8 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getMintInstructions(launchpadId: string, params: MintParams): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
-    
-    return this.v4ApiClient.getMintInstructions(launchpadId, params);
+
+    return this.v4ApiClient.mint(launchpadId, params);
   }
 
   /**
@@ -68,8 +68,8 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getListInstructions(mintAddress: string, params: ListParams): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
-    
-    return this.v2ApiClient.getListInstructions(mintAddress, params);
+
+    return this.v2ApiClient.list(mintAddress, params);
   }
 
   /**
@@ -79,8 +79,8 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getCancelListingInstructions(mintAddress: string, params: CancelListingParams): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
-    
-    return this.v2ApiClient.getCancelListingInstructions(mintAddress, params);
+
+    return this.v2ApiClient.cancelListing(mintAddress, params);
   }
 
   /**
@@ -90,8 +90,8 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getBuyInstructions(mintAddress: string, params: BuyParams): Promise<any> {
     const buyerWallet = await this.config.wallet!.getAddress();
-    
-    return this.v2ApiClient.getBuyInstructions(mintAddress, params);
+
+    return this.v2ApiClient.buy(mintAddress, params);
   }
 
   /**
@@ -101,8 +101,8 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getMakeOfferInstructions(mintAddress: string, params: MakeOfferParams): Promise<any> {
     const buyerWallet = await this.config.wallet!.getAddress();
-    
-    return this.v2ApiClient.getMakeOfferInstructions(mintAddress, params);
+
+    return this.v2ApiClient.makeOffer(mintAddress, params);
   }
 
   /**
@@ -112,8 +112,8 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getCancelOfferInstructions(mintAddress: string, params: CancelOfferParams): Promise<any> {
     const buyerWallet = await this.config.wallet!.getAddress();
-    
-    return this.v2ApiClient.getCancelOfferInstructions(mintAddress, params);
+
+    return this.v2ApiClient.cancelOffer(mintAddress, params);
   }
 
   /**
@@ -123,8 +123,8 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getTakeOfferInstructions(mintAddress: string, params: TakeOfferParams): Promise<any> {
     const buyerWallet = await this.config.wallet!.getAddress();
-    
-    return this.v2ApiClient.getTakeOfferInstructions(mintAddress, params);
+
+    return this.v2ApiClient.takeOffer(mintAddress, params);
   }
 
   /**
@@ -134,7 +134,7 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getTransferInstructions(mintAddress: string, params: TransferParams): Promise<any> {
     const senderWallet = await this.config.wallet!.getAddress();
-    
-    return this.v2ApiClient.getTransferInstructions(mintAddress, params);
+
+    return this.v2ApiClient.transfer(mintAddress, params);
   }
 }
