@@ -1,4 +1,3 @@
-import { ChainType } from '../../types';
 import { ClientConfig } from '../../types';
 import { ApiManager } from '../utils/apimanager';
 
