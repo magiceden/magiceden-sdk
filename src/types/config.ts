@@ -3,12 +3,19 @@ import { WalletProvider } from '../wallet/provider';
 /**
  * Environment options
  */
-export type Environment = 'production' | 'development';
+export enum Environment {
+  PRODUCTION = 'production',
+  DEVELOPMENT = 'development'
+}
 
 /**
  * Chain type
  */
-export type ChainType = 'solana' | 'evm' | 'bitcoin';
+export enum ChainType {
+  SOLANA = 'solana',
+  EVM = 'evm',
+  BITCOIN = 'bitcoin'
+}
 
 /**
  * Client configuration options

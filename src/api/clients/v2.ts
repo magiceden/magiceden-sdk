@@ -1,5 +1,5 @@
 import { BaseApiClient } from './base';
-import { ClientConfig } from '../../types';
+import { ChainType, ClientConfig } from '../../types';
 import { supportedOn } from '../utils/decorators';
 
 
@@ -14,7 +14,7 @@ export class V2ApiClient extends BaseApiClient {
   /**
    * Gets instructions to list an NFT
    */
-  @supportedOn(['solana'])
+  @supportedOn([ChainType.SOLANA])
   async list(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
@@ -28,7 +28,7 @@ export class V2ApiClient extends BaseApiClient {
   /**
    * Gets instructions to cancel a listing
    */
-  @supportedOn(['solana'])
+  @supportedOn([ChainType.SOLANA])
   async cancelListing(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
@@ -42,7 +42,7 @@ export class V2ApiClient extends BaseApiClient {
   /**
    * Gets instructions to accept an offer
    */
-  @supportedOn(['solana'])
+  @supportedOn([ChainType.SOLANA])
   async takeOffer(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
@@ -56,7 +56,7 @@ export class V2ApiClient extends BaseApiClient {
   /**
    * Gets instructions to make an offer on an NFT
    */
-  @supportedOn(['solana'])
+  @supportedOn([ChainType.SOLANA])
   async makeOffer(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
@@ -70,7 +70,7 @@ export class V2ApiClient extends BaseApiClient {
   /**
    * Gets instructions to cancel an offer
    */
-  @supportedOn(['solana'])
+  @supportedOn([ChainType.SOLANA])
   async cancelOffer(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
@@ -80,11 +80,11 @@ export class V2ApiClient extends BaseApiClient {
       ...params,
     });
   }
-  
+
   /**
    * Gets instructions to buy an NFT
    */
-  @supportedOn(['solana'])
+  @supportedOn([ChainType.SOLANA])
   async buy(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
@@ -98,7 +98,7 @@ export class V2ApiClient extends BaseApiClient {
   /**
    * Gets instructions to transfer an NFT
    */
-  @supportedOn(['solana'])
+  @supportedOn([ChainType.SOLANA])
   async transfer(mintAddress: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 

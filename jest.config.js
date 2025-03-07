@@ -1,8 +1,13 @@
+// jest.config.js
 module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node",
-  testMatch: ["**/test/**/*.test.ts"],
-  collectCoverage: true,
-  coverageDirectory: "coverage",
-  collectCoverageFrom: ["src/**/*.ts", "!src/types/**/*.ts"],
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testMatch: [
+    '**/src/test/**/*.test.ts',
+    '**/src/tests/**/*.test.ts'
+  ],
+  moduleFileExtensions: ['ts', 'js', 'json'],
+  transform: {
+    '^.+\\.ts$': 'ts-jest'
+  }
 };

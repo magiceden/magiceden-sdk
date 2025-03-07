@@ -1,5 +1,5 @@
 import { BaseApiClient } from './base';
-import { ClientConfig } from '../../types';
+import { ChainType, ClientConfig } from '../../types';
 import { supportedOn } from '../utils/decorators';
 
 /**
@@ -13,7 +13,7 @@ export class V4ApiClient extends BaseApiClient {
   /**
    * Gets instructions to create a launchpad
    */
-  @supportedOn(['solana', 'evm'])
+  @supportedOn([ChainType.SOLANA, ChainType.EVM])
   async createLaunchpad(params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
@@ -26,7 +26,7 @@ export class V4ApiClient extends BaseApiClient {
   /**
    * Gets instructions to update a launchpad
    */
-  @supportedOn(['solana', 'evm'])
+  @supportedOn([ChainType.SOLANA, ChainType.EVM])
   async updateLaunchpad(launchpadId: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
@@ -36,10 +36,20 @@ export class V4ApiClient extends BaseApiClient {
     });
   }
 
+  @supportedOn([ChainType.SOLANA])
+  async publishLaunchpad(launchpadId: string, params: any): Promise<any> {
+    const walletAddress = await this.config.wallet!.getAddress();
+
+    return this.api.post(`/self_serve/nft/publish`, {
+      ...params,
+      creatorWallet: walletAddress,
+    });
+  }
+
   /**
    * Gets instructions to mint from a launchpad
    */
-  @supportedOn(['solana', 'evm'])
+  @supportedOn([ChainType.SOLANA, ChainType.EVM])
   async mint(launchpadId: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
