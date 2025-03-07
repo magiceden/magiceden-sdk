@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
-import { NetworkError, AuthenticationError, RateLimitError, ApiError } from '../errors';
+import { NetworkError, AuthenticationError, RateLimitError, ApiError } from '../../errors';
 
 /**
  * API configuration options

@@ -8,7 +8,7 @@ export type Environment = 'production' | 'development';
 /**
  * Chain type
  */
-export type ChainType = 'solana' | 'ethereum' | 'arbitrum' | 'base' | 'polygon' | 'bitcoin';
+export type ChainType = 'solana' | 'evm' | 'bitcoin';
 
 /**
  * Client configuration options
@@ -17,7 +17,7 @@ export interface ClientConfig {
   /**
    * API key for authenticated requests (optional)
    */
-  apiKey?: string;
+  apiKey: string;
 
   /**
    * Blockchain network to use
@@ -27,17 +27,12 @@ export interface ClientConfig {
   /**
    * Wallet provider for signing transactions
    */
-  wallet?: WalletProvider;
+  wallet: WalletProvider;
 
   /**
    * API environment
    */
   environment?: Environment;
-
-  /**
-   * Custom API endpoint (optional)
-   */
-  endpoint?: string;
 
   /**
    * Request timeout in milliseconds

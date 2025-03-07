@@ -1,60 +1,88 @@
-import { ApiManager } from '../../utils/api';
 import {
   ClientConfig,
-  NFT,
-  NFTListing,
-  PaginationParams,
   TransactionResponse,
-  NFTCollection,
+  CreateLaunchpadParams,
+  UpdateLaunchpadParams,
+  MintParams,
+  ListParams,
+  CancelListingParams,
+  BuyParams,
+  MakeOfferParams,
+  CancelOfferParams,
+  TakeOfferParams,
+  TransferParams,
 } from '../../types';
-import { ApiError } from '../../errors';
 
 /**
  * Base class for NFT services
  */
 export abstract class BaseNftService {
-  protected readonly api: ApiManager;
   protected readonly config: ClientConfig;
 
-  constructor(api: ApiManager, config: ClientConfig) {
-    this.api = api;
+  constructor(config: ClientConfig) {
     this.config = config;
   }
 
   /**
-   * Gets an NFT by identifier
+   * Creates a new launchpad
    */
-  abstract getNft(identifier: string): Promise<NFT>;
+  async createLaunchpad(params: CreateLaunchpadParams): Promise<TransactionResponse> {
+    // 1. Get transaction instructions from API
+    const txInstructions = await this.getCreateLaunchpadInstructions(params);
+
+    // 2. Sign and send transaction using wallet
+    return this.config.wallet!.signAndSendTransaction(txInstructions);
+  }
 
   /**
-   * Gets NFTs owned by an address
+   * Get create launchpad transaction instructions from API
    */
-  abstract getByOwner(ownerAddress: string, params?: PaginationParams): Promise<NFT[]>;
+  protected abstract getCreateLaunchpadInstructions(params: CreateLaunchpadParams): Promise<any>;
 
   /**
-   * Gets a collection by identifier
+   * Updates an existing launchpad
    */
-  abstract getCollection(identifier: string): Promise<NFTCollection>;
+  async updateLaunchpad(
+    launchpadId: string,
+    params: UpdateLaunchpadParams,
+  ): Promise<TransactionResponse> {
+    // 1. Get transaction instructions from API
+    const txInstructions = await this.getUpdateLaunchpadInstructions(launchpadId, params);
+
+    // 2. Sign and send transaction using wallet
+    return this.config.wallet!.signAndSendTransaction(txInstructions);
+  }
 
   /**
-   * Gets listings for a collection
+   * Get update launchpad transaction instructions from API
    */
-  abstract getListings(identifier: string, params?: PaginationParams): Promise<NFTListing[]>;
+  protected abstract getUpdateLaunchpadInstructions(
+    launchpadId: string,
+    params: UpdateLaunchpadParams,
+  ): Promise<any>;
 
   /**
-   * Gets listings for a specific NFT
+   * Mints an NFT from a launchpad
    */
-  abstract getListingsByNft(identifier: string): Promise<NFTListing[]>;
+  async mint(launchpadId: string, params: MintParams): Promise<TransactionResponse> {
+    // 1. Get transaction instructions from API
+    const txInstructions = await this.getMintInstructions(launchpadId, params);
+
+    // 2. Sign and send transaction using wallet
+    return this.config.wallet!.signAndSendTransaction(txInstructions);
+  }
+
+  /**
+   * Get mint transaction instructions from API
+   */
+  protected abstract getMintInstructions(launchpadId: string, params: MintParams): Promise<any>;
 
   /**
    * Lists an NFT for sale
    */
-  async list(identifier: string, price: number, options?: any): Promise<TransactionResponse> {
-    this.requireApiKey('listing NFTs');
-    this.requireWallet('listing NFTs');
-
+  async list(identifier: string, params: ListParams): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getListInstructions(identifier, price, options);
+    const txInstructions = await this.getListInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
     return this.config.wallet!.signAndSendTransaction(txInstructions);
@@ -63,21 +91,17 @@ export abstract class BaseNftService {
   /**
    * Get list transaction instructions from API
    */
-  protected abstract getListInstructions(
-    identifier: string,
-    price: number,
-    options?: any,
-  ): Promise<any>;
+  protected abstract getListInstructions(identifier: string, params: ListParams): Promise<any>;
 
   /**
    * Cancels an NFT listing
    */
-  async cancelListing(identifier: string, options?: any): Promise<TransactionResponse> {
-    this.requireApiKey('canceling listings');
-    this.requireWallet('canceling listings');
-
+  async cancelListing(
+    identifier: string,
+    params: CancelListingParams,
+  ): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getCancelListingInstructions(identifier, options);
+    const txInstructions = await this.getCancelListingInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
     return this.config.wallet!.signAndSendTransaction(txInstructions);
@@ -86,17 +110,17 @@ export abstract class BaseNftService {
   /**
    * Get cancel listing transaction instructions from API
    */
-  protected abstract getCancelListingInstructions(identifier: string, options?: any): Promise<any>;
+  protected abstract getCancelListingInstructions(
+    identifier: string,
+    params: CancelListingParams,
+  ): Promise<any>;
 
   /**
    * Buys an NFT
    */
-  async buy(identifier: string, price: number, options?: any): Promise<TransactionResponse> {
-    this.requireApiKey('buying NFTs');
-    this.requireWallet('buying NFTs');
-
+  async buy(identifier: string, params: BuyParams): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getBuyInstructions(identifier, price, options);
+    const txInstructions = await this.getBuyInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
     return this.config.wallet!.signAndSendTransaction(txInstructions);
@@ -105,21 +129,14 @@ export abstract class BaseNftService {
   /**
    * Get buy transaction instructions from API
    */
-  protected abstract getBuyInstructions(
-    identifier: string,
-    price: number,
-    options?: any,
-  ): Promise<any>;
+  protected abstract getBuyInstructions(identifier: string, params: BuyParams): Promise<any>;
 
   /**
    * Makes an offer on an NFT
    */
-  async makeOffer(identifier: string, price: number, options?: any): Promise<TransactionResponse> {
-    this.requireApiKey('making offers');
-    this.requireWallet('making offers');
-
+  async makeOffer(identifier: string, params: MakeOfferParams): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getMakeOfferInstructions(identifier, price, options);
+    const txInstructions = await this.getMakeOfferInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
     return this.config.wallet!.signAndSendTransaction(txInstructions);
@@ -130,19 +147,15 @@ export abstract class BaseNftService {
    */
   protected abstract getMakeOfferInstructions(
     identifier: string,
-    price: number,
-    options?: any,
+    params: MakeOfferParams,
   ): Promise<any>;
 
   /**
    * Cancels an offer
    */
-  async cancelOffer(identifier: string, options?: any): Promise<TransactionResponse> {
-    this.requireApiKey('canceling offers');
-    this.requireWallet('canceling offers');
-
+  async cancelOffer(identifier: string, params: CancelOfferParams): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getCancelOfferInstructions(identifier, options);
+    const txInstructions = await this.getCancelOfferInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
     return this.config.wallet!.signAndSendTransaction(txInstructions);
@@ -151,17 +164,17 @@ export abstract class BaseNftService {
   /**
    * Get cancel offer transaction instructions from API
    */
-  protected abstract getCancelOfferInstructions(identifier: string, options?: any): Promise<any>;
+  protected abstract getCancelOfferInstructions(
+    identifier: string,
+    params: CancelOfferParams,
+  ): Promise<any>;
 
   /**
-   * Accepts an offer on an NFT
+   * Takes an offer on an NFT
    */
-  async acceptOffer(identifier: string, options?: any): Promise<TransactionResponse> {
-    this.requireApiKey('accepting offers');
-    this.requireWallet('accepting offers');
-
+  async takeOffer(identifier: string, params: TakeOfferParams): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getAcceptOfferInstructions(identifier, options);
+    const txInstructions = await this.getTakeOfferInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
     return this.config.wallet!.signAndSendTransaction(txInstructions);
@@ -170,17 +183,17 @@ export abstract class BaseNftService {
   /**
    * Get accept offer transaction instructions from API
    */
-  protected abstract getAcceptOfferInstructions(identifier: string, options?: any): Promise<any>;
+  protected abstract getTakeOfferInstructions(
+    identifier: string,
+    params: TakeOfferParams,
+  ): Promise<any>;
 
   /**
    * Transfers an NFT to another wallet
    */
-  async transfer(identifier: string, recipient: string): Promise<TransactionResponse> {
-    this.requireApiKey('transferring NFTs');
-    this.requireWallet('transferring NFTs');
-
+  async transfer(identifier: string, params: TransferParams): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getTransferInstructions(identifier, recipient);
+    const txInstructions = await this.getTransferInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
     return this.config.wallet!.signAndSendTransaction(txInstructions);
@@ -189,27 +202,8 @@ export abstract class BaseNftService {
   /**
    * Get transfer transaction instructions from API
    */
-  protected abstract getTransferInstructions(identifier: string, recipient: string): Promise<any>;
-
-  /**
-   * Checks if the API key is provided
-   */
-  protected requireApiKey(operation: string): void {
-    if (!this.config.apiKey) {
-      throw new ApiError(`API key is required for ${operation}`);
-    }
-  }
-
-  /**
-   * Checks if the wallet is provided
-   */
-  protected requireWallet(operation: string): void {
-    if (!this.config.wallet) {
-      throw new ApiError(`Wallet is required for ${operation}`);
-    }
-
-    if (!this.config.wallet.isConnected()) {
-      throw new ApiError(`Wallet must be connected for ${operation}`);
-    }
-  }
+  protected abstract getTransferInstructions(
+    identifier: string,
+    params: TransferParams,
+  ): Promise<any>;
 }

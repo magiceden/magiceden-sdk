@@ -1,215 +1,140 @@
 import { BaseNftService } from './base';
 import {
-  SolanaNFT,
-  NFTListing,
-  PaginationParams,
-  TransactionResponse,
-  NFTCollection,
+  CreateLaunchpadParams,
+  UpdateLaunchpadParams,
+  MintParams,
+  ListParams,
+  CancelListingParams,
+  BuyParams,
+  MakeOfferParams,
+  CancelOfferParams,
+  TakeOfferParams,
+  TransferParams,
 } from '../../types';
+import { ClientConfig } from '../../types';
+import { V4ApiClient } from '../../api/clients/v4';
+import { V2ApiClient } from '../../api/clients/v2';
 
 /**
  * Solana-specific NFT service implementation
  */
 export class SolanaNftService extends BaseNftService {
-  /**
-   * Gets an NFT by mint address
-   * @param mintAddress The mint address of the NFT
-   */
-  async getNft(mintAddress: string): Promise<SolanaNFT> {
-    return this.api.get<SolanaNFT>(`/tokens/${mintAddress}`);
+  private readonly v2ApiClient: V2ApiClient;
+  private readonly v4ApiClient: V4ApiClient;
+
+  constructor(config: ClientConfig) {
+    super(config);
+    
+    this.v2ApiClient = new V2ApiClient(config);
+    this.v4ApiClient = new V4ApiClient(config);
   }
 
   /**
-   * Gets NFTs owned by an address
-   * @param ownerAddress The owner's wallet address
-   * @param params Pagination parameters
+   * Get create launchpad transaction instructions from API
+   * @param params Launchpad creation parameters
    */
-  async getByOwner(ownerAddress: string, params: PaginationParams = {}): Promise<SolanaNFT[]> {
-    return this.api.get<SolanaNFT[]>(`/wallets/${ownerAddress}/tokens`, params);
+  protected async getCreateLaunchpadInstructions(params: CreateLaunchpadParams): Promise<any> {
+    const walletAddress = await this.config.wallet!.getAddress();
+    
+    return this.v4ApiClient.getCreateLaunchpadInstructions(params);
   }
 
   /**
-   * Gets a collection by symbol
-   * @param symbol The collection symbol
+   * Get update launchpad transaction instructions from API
+   * @param launchpadId The launchpad ID
+   * @param params Launchpad update parameters
    */
-  async getCollection(symbol: string): Promise<NFTCollection> {
-    return this.api.get<NFTCollection>(`/collections/${symbol}`);
+  protected async getUpdateLaunchpadInstructions(launchpadId: string, params: UpdateLaunchpadParams): Promise<any> {
+    const walletAddress = await this.config.wallet!.getAddress();
+    
+    return this.v4ApiClient.getUpdateLaunchpadInstructions(launchpadId, params);
   }
 
   /**
-   * Gets listings for a collection
-   * @param symbol The collection symbol
-   * @param params Pagination parameters
+   * Get mint transaction instructions from API
+   * @param launchpadId The launchpad ID
+   * @param params Mint parameters
    */
-  async getListings(symbol: string, params: PaginationParams = {}): Promise<NFTListing[]> {
-    return this.api.get<NFTListing[]>(`/collections/${symbol}/listings`, params);
-  }
-
-  /**
-   * Gets listings for a specific NFT
-   * @param mintAddress The mint address of the NFT
-   */
-  async getListingsByNft(mintAddress: string): Promise<NFTListing[]> {
-    return this.api.get<NFTListing[]>(`/tokens/${mintAddress}/listings`);
+  protected async getMintInstructions(launchpadId: string, params: MintParams): Promise<any> {
+    const walletAddress = await this.config.wallet!.getAddress();
+    
+    return this.v4ApiClient.getMintInstructions(launchpadId, params);
   }
 
   /**
    * Get list transaction instructions from API
    * @param mintAddress The mint address of the NFT
-   * @param price The price in SOL
-   * @param options Additional options like expiry
+   * @param params Listing parameters
    */
-  protected async getListInstructions(
-    mintAddress: string,
-    price: number,
-    options: { expiry?: number } = {},
-  ): Promise<any> {
+  protected async getListInstructions(mintAddress: string, params: ListParams): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post<any>('/instructions/list', {
-      mintAddress,
-      price,
-      sellerWallet: walletAddress,
-      expiry: options.expiry,
-    });
+    
+    return this.v2ApiClient.getListInstructions(mintAddress, params);
   }
 
   /**
    * Get cancel listing transaction instructions from API
    * @param mintAddress The mint address of the NFT
-   * @param options Additional options like price
+   * @param params Cancel listing parameters
    */
-  protected async getCancelListingInstructions(
-    mintAddress: string,
-    options: { price: number },
-  ): Promise<any> {
+  protected async getCancelListingInstructions(mintAddress: string, params: CancelListingParams): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post<any>('/instructions/cancel', {
-      mintAddress,
-      price: options.price,
-      sellerWallet: walletAddress,
-    });
+    
+    return this.v2ApiClient.getCancelListingInstructions(mintAddress, params);
   }
 
   /**
    * Get buy transaction instructions from API
    * @param mintAddress The mint address of the NFT
-   * @param price The price to pay in SOL
-   * @param options Additional options like sellerReferral
+   * @param params Buy parameters
    */
-  protected async getBuyInstructions(
-    mintAddress: string,
-    price: number,
-    options: { sellerReferral?: string } = {},
-  ): Promise<any> {
+  protected async getBuyInstructions(mintAddress: string, params: BuyParams): Promise<any> {
     const buyerWallet = await this.config.wallet!.getAddress();
-
-    return this.api.post<any>('/instructions/buy', {
-      mintAddress,
-      price,
-      buyerWallet,
-      sellerReferral: options.sellerReferral,
-    });
+    
+    return this.v2ApiClient.getBuyInstructions(mintAddress, params);
   }
 
   /**
    * Get make offer transaction instructions from API
    * @param mintAddress The mint address of the NFT
-   * @param price The offer price in SOL
-   * @param options Additional options like expiry
+   * @param params Make offer parameters
    */
-  protected async getMakeOfferInstructions(
-    mintAddress: string,
-    price: number,
-    options: { expiry?: number } = {},
-  ): Promise<any> {
+  protected async getMakeOfferInstructions(mintAddress: string, params: MakeOfferParams): Promise<any> {
     const buyerWallet = await this.config.wallet!.getAddress();
-
-    return this.api.post<any>('/instructions/offer', {
-      mintAddress,
-      price,
-      buyerWallet,
-      expiry: options.expiry,
-    });
+    
+    return this.v2ApiClient.getMakeOfferInstructions(mintAddress, params);
   }
 
   /**
    * Get cancel offer transaction instructions from API
    * @param mintAddress The mint address of the NFT
-   * @param options Additional options like price
+   * @param params Cancel offer parameters
    */
-  protected async getCancelOfferInstructions(
-    mintAddress: string,
-    options: { price: number },
-  ): Promise<any> {
+  protected async getCancelOfferInstructions(mintAddress: string, params: CancelOfferParams): Promise<any> {
     const buyerWallet = await this.config.wallet!.getAddress();
-
-    return this.api.post<any>('/instructions/cancelOffer', {
-      mintAddress,
-      price: options.price,
-      buyerWallet,
-    });
+    
+    return this.v2ApiClient.getCancelOfferInstructions(mintAddress, params);
   }
 
   /**
-   * Get accept offer transaction instructions from API
+   * Get take offer transaction instructions from API
    * @param mintAddress The mint address of the NFT
-   * @param options Additional options like buyer and price
+   * @param params Take offer parameters
    */
-  protected async getAcceptOfferInstructions(
-    mintAddress: string,
-    options: { buyer: string; price: number },
-  ): Promise<any> {
-    const sellerWallet = await this.config.wallet!.getAddress();
-
-    return this.api.post<any>('/instructions/acceptOffer', {
-      mintAddress,
-      price: options.price,
-      buyerWallet: options.buyer,
-      sellerWallet,
-    });
+  protected async getTakeOfferInstructions(mintAddress: string, params: TakeOfferParams): Promise<any> {
+    const buyerWallet = await this.config.wallet!.getAddress();
+    
+    return this.v2ApiClient.getTakeOfferInstructions(mintAddress, params);
   }
 
   /**
    * Get transfer transaction instructions from API
    * @param mintAddress The mint address of the NFT
-   * @param recipient The recipient's wallet address
+   * @param params Transfer parameters
    */
-  protected async getTransferInstructions(mintAddress: string, recipient: string): Promise<any> {
+  protected async getTransferInstructions(mintAddress: string, params: TransferParams): Promise<any> {
     const senderWallet = await this.config.wallet!.getAddress();
-
-    return this.api.post<any>('/instructions/transfer', {
-      mintAddress,
-      fromWallet: senderWallet,
-      toWallet: recipient,
-    });
-  }
-
-  /**
-   * Gets activities for a collection
-   * @param symbol The collection symbol
-   * @param params Pagination parameters
-   */
-  async getActivities(symbol: string, params: PaginationParams = {}): Promise<any[]> {
-    return this.api.get<any[]>(`/collections/${symbol}/activities`, params);
-  }
-
-  /**
-   * Gets activities for a specific NFT
-   * @param mintAddress The mint address of the NFT
-   * @param params Pagination parameters
-   */
-  async getActivitiesByMint(mintAddress: string, params: PaginationParams = {}): Promise<any[]> {
-    return this.api.get<any[]>(`/tokens/${mintAddress}/activities`, params);
-  }
-
-  /**
-   * Gets the floor price for a collection
-   * @param symbol The collection symbol
-   */
-  async getFloorPrice(symbol: string): Promise<{ floorPrice: number }> {
-    const collection = await this.getCollection(symbol);
-    return { floorPrice: collection.floorPrice || 0 };
+    
+    return this.v2ApiClient.getTransferInstructions(mintAddress, params);
   }
 }
