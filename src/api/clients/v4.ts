@@ -17,7 +17,7 @@ export class V4ApiClient extends BaseApiClient {
   async createLaunchpad(params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
-    return this.api.post('/launchpad/create', {
+    return this.api.post('/self_serve/nft/create_token', {
       ...params,
       creatorWallet: walletAddress,
     });
@@ -30,7 +30,7 @@ export class V4ApiClient extends BaseApiClient {
   async updateLaunchpad(launchpadId: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
-    return this.api.post(`/launchpad/${launchpadId}/update`, {
+    return this.api.post(`/self_serve/nft/update_token`, {
       ...params,
       creatorWallet: walletAddress,
     });
@@ -43,7 +43,7 @@ export class V4ApiClient extends BaseApiClient {
   async mint(launchpadId: string, params: any): Promise<any> {
     const walletAddress = await this.config.wallet!.getAddress();
 
-    return this.api.post(`/collections/${launchpadId}/mint`, {
+    return this.api.post(`/self_serve/nft/mint_token`, {
       ...params,
       minter: walletAddress,
     });
