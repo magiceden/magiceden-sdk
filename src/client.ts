@@ -34,6 +34,7 @@ export class MagicEdenClient {
    * Validates the provided configuration
    */
   private validateConfig(config: ClientConfig): ClientConfig {
+    // Just return the config as is for now
     return {
       environment: Environment.PRODUCTION,
       timeout: 30000,
