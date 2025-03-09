@@ -14,12 +14,8 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to list an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async list(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/sell', {
-      mintAddress,
-      sellerWallet: walletAddress,
+  async list(params: any): Promise<any> {
+    return this.api.get('/instructions/sell', {
       ...params,
     });
   }
@@ -28,12 +24,8 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to cancel a listing
    */
   @supportedOn([ChainType.SOLANA])
-  async cancelListing(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/sell_cancel', {
-      mintAddress,
-      sellerWallet: walletAddress,
+  async cancelListing(params: any): Promise<any> {
+    return this.api.get('/instructions/sell_cancel', {
       ...params,
     });
   }
@@ -42,12 +34,8 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to accept an offer
    */
   @supportedOn([ChainType.SOLANA])
-  async takeOffer(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/sell_now', {
-      mintAddress,
-      sellerWallet: walletAddress,
+  async takeOffer(params: any): Promise<any> {
+    return this.api.get('/instructions/sell_now', {
       ...params,
     });
   }
@@ -56,12 +44,8 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to make an offer on an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async makeOffer(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/buy', {
-      mintAddress,
-      buyerWallet: walletAddress,
+  async makeOffer(params: any): Promise<any> {
+    return this.api.get('/instructions/buy', {
       ...params,
     });
   }
@@ -70,12 +54,8 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to cancel an offer
    */
   @supportedOn([ChainType.SOLANA])
-  async cancelOffer(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/buy_cancel', {
-      mintAddress,
-      buyerWallet: walletAddress,
+  async cancelOffer(params: any): Promise<any> {
+    return this.api.get('/instructions/buy_cancel', {
       ...params,
     });
   }
@@ -84,12 +64,8 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to buy an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async buy(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/buy_now', {
-      mintAddress,
-      buyerWallet: walletAddress,
+  async buy(params: any): Promise<any> {
+    return this.api.get('/instructions/buy_now', {
       ...params,
     });
   }
@@ -98,12 +74,8 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to transfer an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async transfer(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/ocp/transfer', {
-      mintAddress,
-      fromWallet: walletAddress,
+  async transfer(params: any): Promise<any> {
+    return this.api.get('/instructions/ocp/transfer', {
       ...params,
     });
   }

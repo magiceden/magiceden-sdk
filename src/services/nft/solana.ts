@@ -57,56 +57,50 @@ export class SolanaNftService extends BaseNftService {
 
   /**
    * Get list transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Listing parameters
    */
-  protected async getListInstructions(mintAddress: string, params: ListParams): Promise<any> {
-    return this.v2ApiClient.list(mintAddress, params);
+  protected async getListInstructions(params: ListParams): Promise<any> {
+    return this.v2ApiClient.list(params);
   }
 
   /**
    * Get cancel listing transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Cancel listing parameters
    */
-  protected async getCancelListingInstructions(mintAddress: string, params: CancelListingParams): Promise<any> {
-    return this.v2ApiClient.cancelListing(mintAddress, params);
+  protected async getCancelListingInstructions(params: CancelListingParams): Promise<any> {
+    return this.v2ApiClient.cancelListing(params);
   }
 
   /**
    * Get buy transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Buy parameters
    */
-  protected async getBuyInstructions(mintAddress: string, params: BuyParams): Promise<any> {
-    return this.v2ApiClient.buy(mintAddress, params);
+  protected async getBuyInstructions(params: BuyParams): Promise<any> {
+    return this.v2ApiClient.buy(params);
   }
 
   /**
    * Get make offer transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Make offer parameters
    */
-  protected async getMakeOfferInstructions(mintAddress: string, params: MakeOfferParams): Promise<any> {
-    return this.v2ApiClient.makeOffer(mintAddress, params);
+  protected async getMakeOfferInstructions(params: MakeOfferParams): Promise<any> {
+    return this.v2ApiClient.makeOffer(params);
   }
 
   /**
    * Get cancel offer transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Cancel offer parameters
    */
-  protected async getCancelOfferInstructions(mintAddress: string, params: CancelOfferParams): Promise<any> {
-    return this.v2ApiClient.cancelOffer(mintAddress, params);
+  protected async getCancelOfferInstructions(params: CancelOfferParams): Promise<any> {
+    return this.v2ApiClient.cancelOffer(params);
   }
 
   /**
    * Get take offer transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Take offer parameters
    */
-  protected async getTakeOfferInstructions(mintAddress: string, params: TakeOfferParams): Promise<any> {
-    return this.v2ApiClient.takeOffer(mintAddress, params);
+  protected async getTakeOfferInstructions(params: TakeOfferParams): Promise<any> {
+    return this.v2ApiClient.takeOffer(params);
   }
 
   /**
@@ -114,7 +108,7 @@ export class SolanaNftService extends BaseNftService {
    * @param mintAddress The mint address of the NFT
    * @param params Transfer parameters
    */
-  protected async getTransferInstructions(mintAddress: string, params: TransferParams): Promise<any> {
-    return this.v2ApiClient.transfer(mintAddress, params);
+  protected async getTransferInstructions(params: TransferParams): Promise<any> {
+    return this.v2ApiClient.transfer(params);
   }
 }
