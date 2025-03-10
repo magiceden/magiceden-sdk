@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { ApiManager } from '../../../api/utils/apimanager';
+import { ApiManager } from '../../../api/utils/apiManager';
 import { 
   ApiError, 
   NetworkError, 
