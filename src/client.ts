@@ -5,7 +5,7 @@ import { ApiError } from './errors';
 /**
  * Magic Eden API client
  */
-export class MagicEdenSdk {
+export class MagicEdenClient {
   private readonly config: ClientConfig;
   private _nft: BaseNftService;
 
