@@ -1,5 +1,5 @@
 import { ClientConfig } from '../../types';
-import { ApiManager } from '../utils/apimanager';
+import { ApiManager } from '../utils/apiManager';
 
 /**
  * Common interface for all API clients

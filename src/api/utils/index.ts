@@ -1,1 +1,1 @@
-export * from './apimanager';
+export * from './apiManager';
