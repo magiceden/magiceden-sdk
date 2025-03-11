@@ -37,16 +37,3 @@ export interface TransactionResponse {
    */
   logs?: string[];
 }
-
-/**
- * Paginated response interface
- */
-export interface PaginatedResponse<T> {
-  data: T[];
-  pagination: {
-    total: number;
-    page: number;
-    perPage: number;
-    hasMore: boolean;
-  };
-}

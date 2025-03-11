@@ -1,33 +1,78 @@
-import { TransactionResponse } from '../types';
-
 /**
- * Abstract wallet provider interface
+ * WalletProvider is the abstract base class for all wallet providers.
+ *
+ * @abstract
+ * @template TxType - The transaction type
+ * @template SignedTxType - The signed transaction type
+ * @template TxHashType - The transaction hash/signature type
+ * @template TxReceiptType - The transaction receipt/confirmation type
  */
-export interface WalletProvider {
+export abstract class WalletProvider<
+  TxType = unknown,
+  SignedTxType = unknown,
+  TxHashType extends string = string,
+  TxReceiptType = unknown
+> {
   /**
-   * Get the wallet's public address
+   * Get the public address of the wallet provider.
+   *
+   * @returns The address of the wallet provider.
    */
-  getAddress(): Promise<string>;
+  abstract getAddress(): string;
 
   /**
-   * Sign and send a transaction
-   * @param transaction The transaction to sign and send
+   * Get the balance of the native asset of the network.
+   *
+   * @returns The balance of the native asset of the network.
    */
-  signAndSendTransaction(transaction: any): Promise<TransactionResponse>;
+  abstract getBalance(): Promise<bigint>;
 
   /**
-   * Sign a message
-   * @param message The message to sign
+   * Sign a message.
+   *
+   * @param message - The message to sign.
+   * @returns The signed message.
    */
-  signMessage(message: string): Promise<string>;
+  abstract signMessage(message: string | Uint8Array): Promise<string>;
 
   /**
-   * Check if the wallet is connected
+   * Transfer the native asset of the network.
+   *
+   * @param to - The destination address.
+   * @param value - The amount to transfer in whole units (e.g. ETH)
+   * @returns The transaction hash.
    */
-  isConnected(): boolean;
+  abstract nativeTransfer(to: string, value: string): Promise<TxHashType>;
 
   /**
-   * Get the chain ID (for EVM wallets)
+   * Sign a transaction.
+   *
+   * @param transaction - The transaction to sign.
+   * @returns The signed transaction.
    */
-  getChainId?(): Promise<number>;
+  abstract signTransaction(transaction: TxType): Promise<SignedTxType>;
+
+  /**
+   * Send a transaction.
+   *
+   * @param transaction - The transaction to send.
+   * @returns The transaction hash or signature.
+   */
+  abstract sendTransaction(transaction: TxType): Promise<TxHashType>;
+
+  /**
+   * Sign and send a transaction.
+   *
+   * @param transaction The transaction to sign and send.
+   * @returns The signature of the transaction.
+   */
+  abstract signAndSendTransaction(transaction: TxType): Promise<TxHashType>;
+
+  /**
+   * Wait for transaction confirmation.
+   *
+   * @param txIdentifier - The transaction identifier (hash or signature).
+   * @returns The confirmation result.
+   */
+  abstract waitForTransactionConfirmation(txIdentifier: TxHashType): Promise<TxReceiptType>;
 }

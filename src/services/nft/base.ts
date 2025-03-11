@@ -31,7 +31,7 @@ export abstract class BaseNftService {
     const txInstructions = await this.getCreateLaunchpadInstructions(params);
 
     // 2. Sign and send transaction using wallet
-    return this.config.wallet!.signAndSendTransaction(txInstructions);
+    return await this.txHashToTransactionResponse(await this.config.wallet!.signAndSendTransaction(txInstructions));
   }
 
   /**
@@ -50,7 +50,7 @@ export abstract class BaseNftService {
     const txInstructions = await this.getUpdateLaunchpadInstructions(launchpadId, params);
 
     // 2. Sign and send transaction using wallet
-    return this.config.wallet!.signAndSendTransaction(txInstructions);
+    return await this.txHashToTransactionResponse(await this.config.wallet!.signAndSendTransaction(txInstructions));
   }
 
   /**
@@ -69,7 +69,7 @@ export abstract class BaseNftService {
     const txInstructions = await this.getMintInstructions(launchpadId, params);
 
     // 2. Sign and send transaction using wallet
-    return this.config.wallet!.signAndSendTransaction(txInstructions);
+    return await this.txHashToTransactionResponse(await this.config.wallet!.signAndSendTransaction(txInstructions));
   }
 
   /**
@@ -85,7 +85,7 @@ export abstract class BaseNftService {
     const txInstructions = await this.getListInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
-    return this.config.wallet!.signAndSendTransaction(txInstructions);
+    return await this.txHashToTransactionResponse(await this.config.wallet!.signAndSendTransaction(txInstructions));
   }
 
   /**
@@ -104,7 +104,7 @@ export abstract class BaseNftService {
     const txInstructions = await this.getCancelListingInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
-    return this.config.wallet!.signAndSendTransaction(txInstructions);
+    return await this.txHashToTransactionResponse(await this.config.wallet!.signAndSendTransaction(txInstructions));
   }
 
   /**
@@ -123,7 +123,7 @@ export abstract class BaseNftService {
     const txInstructions = await this.getBuyInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
-    return this.config.wallet!.signAndSendTransaction(txInstructions);
+    return await this.txHashToTransactionResponse(await this.config.wallet!.signAndSendTransaction(txInstructions));
   }
 
   /**
@@ -132,58 +132,58 @@ export abstract class BaseNftService {
   protected abstract getBuyInstructions(identifier: string, params: BuyParams): Promise<any>;
 
   /**
-   * Makes an offer on an NFT
+   * Makes an item offer on an NFT
    */
-  async makeOffer(identifier: string, params: MakeOfferParams): Promise<TransactionResponse> {
+  async makeItemOffer(identifier: string, params: MakeOfferParams): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getMakeOfferInstructions(identifier, params);
+    const txInstructions = await this.getMakeItemOfferInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
-    return this.config.wallet!.signAndSendTransaction(txInstructions);
+    return await this.txHashToTransactionResponse(await this.config.wallet!.signAndSendTransaction(txInstructions));
   }
 
   /**
-   * Get make offer transaction instructions from API
+   * Get make item offer transaction instructions from API
    */
-  protected abstract getMakeOfferInstructions(
+  protected abstract getMakeItemOfferInstructions(
     identifier: string,
     params: MakeOfferParams,
   ): Promise<any>;
 
   /**
-   * Cancels an offer
+   * Cancels an item offer
    */
-  async cancelOffer(identifier: string, params: CancelOfferParams): Promise<TransactionResponse> {
+  async cancelItemOffer(identifier: string, params: CancelOfferParams): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getCancelOfferInstructions(identifier, params);
+    const txInstructions = await this.getCancelItemOfferInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
-    return this.config.wallet!.signAndSendTransaction(txInstructions);
+    return await this.txHashToTransactionResponse(await this.config.wallet!.signAndSendTransaction(txInstructions));
   }
 
   /**
-   * Get cancel offer transaction instructions from API
+   * Get cancel item offer transaction instructions from API
    */
-  protected abstract getCancelOfferInstructions(
+  protected abstract getCancelItemOfferInstructions(
     identifier: string,
     params: CancelOfferParams,
   ): Promise<any>;
 
   /**
-   * Takes an offer on an NFT
+   * Takes an item offer on an NFT
    */
-  async takeOffer(identifier: string, params: TakeOfferParams): Promise<TransactionResponse> {
+  async takeItemOffer(identifier: string, params: TakeOfferParams): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getTakeOfferInstructions(identifier, params);
+    const txInstructions = await this.getTakeItemOfferInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
-    return this.config.wallet!.signAndSendTransaction(txInstructions);
+    return await this.txHashToTransactionResponse(await this.config.wallet!.signAndSendTransaction(txInstructions));
   }
 
   /**
-   * Get accept offer transaction instructions from API
+   * Get take item offer transaction instructions from API
    */
-  protected abstract getTakeOfferInstructions(
+  protected abstract getTakeItemOfferInstructions(
     identifier: string,
     params: TakeOfferParams,
   ): Promise<any>;
@@ -196,8 +196,13 @@ export abstract class BaseNftService {
     const txInstructions = await this.getTransferInstructions(identifier, params);
 
     // 2. Sign and send transaction using wallet
-    return this.config.wallet!.signAndSendTransaction(txInstructions);
+    return await this.txHashToTransactionResponse(await this.config.wallet!.signAndSendTransaction(txInstructions));
   }
+
+  /**
+   * Convert a transaction hash to a transaction response
+   */
+  protected abstract txHashToTransactionResponse(txHash: string): Promise<TransactionResponse>;
 
   /**
    * Get transfer transaction instructions from API

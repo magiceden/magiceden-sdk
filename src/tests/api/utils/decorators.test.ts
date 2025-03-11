@@ -3,6 +3,8 @@ import { supportedOn } from '../../../api/utils/decorators';
 import { ApiError } from '../../../errors';
 import { BaseApiClient } from '../../../api/clients/base';
 import { ChainType } from '../../../types';
+import { MockSolanaWalletProvider } from '../../../wallet/solana/mockSolanaWalletProvider';
+import { MockEvmWalletProvider } from '../../../wallet/evm/mockEvmWalletProvider';
 
 // Mock class that extends BaseApiClient for testing
 class TestApiClient extends BaseApiClient {
@@ -10,14 +12,7 @@ class TestApiClient extends BaseApiClient {
     super({
       chain,
       apiKey: 'test-key',
-      wallet: {
-        getAddress: async () => '0x123',
-        isConnected: () => true,
-        signAndSendTransaction: async () => ({
-          txId: '0x123',
-        }),
-        signMessage: async () => '0x123',
-      },
+      wallet: chain === ChainType.SOLANA ? new MockSolanaWalletProvider() : new MockEvmWalletProvider(),
     });
   }
 

@@ -10,6 +10,7 @@ import {
   CancelOfferParams,
   TakeOfferParams,
   TransferParams,
+  TransactionResponse,
 } from '../../types';
 import { ClientConfig } from '../../types';
 import { V4ApiClient } from '../../api/clients/v4';
@@ -80,27 +81,27 @@ export class SolanaNftService extends BaseNftService {
   }
 
   /**
-   * Get make offer transaction instructions from API
-   * @param params Make offer parameters
+   * Get make item offer transaction instructions from API
+   * @param params Make item offer parameters
    */
-  protected async getMakeOfferInstructions(params: MakeOfferParams): Promise<any> {
-    return this.v2ApiClient.makeOffer(params);
+  protected async getMakeItemOfferInstructions(params: MakeOfferParams): Promise<any> {
+    return this.v2ApiClient.makeItemOffer(params);
   }
 
   /**
-   * Get cancel offer transaction instructions from API
-   * @param params Cancel offer parameters
+   * Get cancel item offer transaction instructions from API
+   * @param params Cancel item offer parameters
    */
-  protected async getCancelOfferInstructions(params: CancelOfferParams): Promise<any> {
-    return this.v2ApiClient.cancelOffer(params);
+  protected async getCancelItemOfferInstructions(params: CancelOfferParams): Promise<any> {
+    return this.v2ApiClient.cancelItemOffer(params);
   }
 
   /**
-   * Get take offer transaction instructions from API
-   * @param params Take offer parameters
+   * Get take item offer transaction instructions from API
+   * @param params Take item offer parameters
    */
-  protected async getTakeOfferInstructions(params: TakeOfferParams): Promise<any> {
-    return this.v2ApiClient.takeOffer(params);
+  protected async getTakeItemOfferInstructions(params: TakeOfferParams): Promise<any> {
+    return this.v2ApiClient.takeItemOffer(params);
   }
 
   /**
@@ -110,5 +111,15 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getTransferInstructions(params: TransferParams): Promise<any> {
     return this.v2ApiClient.transfer(params);
+  }
+
+  /**
+   * Convert a transaction hash to a transaction response
+   */
+  protected async txHashToTransactionResponse(txHash: string): Promise<TransactionResponse> {
+    return {
+      txId: txHash,
+      status: 'pending',
+    };
   }
 }

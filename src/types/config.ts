@@ -1,4 +1,4 @@
-import { WalletProvider } from '../wallet/provider';
+import { SupportedWalletProvider } from '../wallet';
 
 /**
  * Environment options
@@ -14,7 +14,6 @@ export enum Environment {
 export enum ChainType {
   SOLANA = 'solana',
   EVM = 'evm',
-  BITCOIN = 'bitcoin'
 }
 
 /**
@@ -34,7 +33,7 @@ export interface ClientConfig {
   /**
    * Wallet provider for signing transactions
    */
-  wallet: WalletProvider;
+  wallet: SupportedWalletProvider;
 
   /**
    * API environment

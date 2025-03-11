@@ -30,11 +30,32 @@ export class V2ApiClient extends BaseApiClient {
     });
   }
 
+  @supportedOn([ChainType.SOLANA])
+  async createCollectionOffer(params: any): Promise<any> {
+    return this.api.get('/instructions/mmm/create-pool', {
+      ...params,
+    });
+  }
+  
+  @supportedOn([ChainType.SOLANA])
+  async cancelCollectionOffer(params: any): Promise<any> {
+    return this.api.get('/instructions/mmm/sol-withdraw-buy', {
+      ...params,
+    });
+  }
+  
+  @supportedOn([ChainType.SOLANA])
+  async takeCollectionOffer(params: any): Promise<any> {
+    return this.api.get('/instructions/mmm/sol-fulfill-buy', {
+      ...params,
+    });
+  }
+
   /**
    * Gets instructions to accept an offer
    */
   @supportedOn([ChainType.SOLANA])
-  async takeOffer(params: any): Promise<any> {
+  async takeItemOffer(params: any): Promise<any> {
     return this.api.get('/instructions/sell_now', {
       ...params,
     });
@@ -44,17 +65,17 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to make an offer on an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async makeOffer(params: any): Promise<any> {
+  async makeItemOffer(params: any): Promise<any> {
     return this.api.get('/instructions/buy', {
       ...params,
     });
   }
-
+  
   /**
    * Gets instructions to cancel an offer
    */
   @supportedOn([ChainType.SOLANA])
-  async cancelOffer(params: any): Promise<any> {
+  async cancelItemOffer(params: any): Promise<any> {
     return this.api.get('/instructions/buy_cancel', {
       ...params,
     });
