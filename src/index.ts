@@ -1,5 +1,5 @@
 // Main entry point
-export { MagicEdenClient } from "./client";
+export { MagicEdenSdk as MagicEdenClient } from "./sdk";
 export * from "./types";
 export * from "./errors";
 export * from "./services";
