@@ -32,23 +32,26 @@ export class V2ApiClient extends BaseApiClient {
 
   @supportedOn([ChainType.SOLANA])
   async createCollectionOffer(params: any): Promise<any> {
-    return this.api.get('/instructions/mmm/create-pool', {
-      ...params,
-    });
+    throw new Error('Not implemented');
+    // return this.api.get('/instructions/mmm/create-pool', {
+    //   ...params,
+    // });
   }
   
   @supportedOn([ChainType.SOLANA])
   async cancelCollectionOffer(params: any): Promise<any> {
-    return this.api.get('/instructions/mmm/sol-withdraw-buy', {
-      ...params,
-    });
+    throw new Error('Not implemented');
+    // return this.api.get('/instructions/mmm/sol-withdraw-buy', {
+    //   ...params,
+    // });
   }
   
   @supportedOn([ChainType.SOLANA])
   async takeCollectionOffer(params: any): Promise<any> {
-    return this.api.get('/instructions/mmm/sol-fulfill-buy', {
-      ...params,
-    });
+    throw new Error('Not implemented');
+    // return this.api.get('/instructions/mmm/sol-fulfill-buy', {
+    //   ...params,
+    // });
   }
 
   /**
