@@ -36,11 +36,6 @@ export interface ClientConfig {
   wallet: SupportedWalletProvider;
 
   /**
-   * API environment
-   */
-  environment?: Environment;
-
-  /**
    * Request timeout in milliseconds
    */
   timeout?: number;

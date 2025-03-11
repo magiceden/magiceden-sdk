@@ -1,4 +1,4 @@
-import { ClientConfig, ChainType, Environment } from './types';
+import { ClientConfig, Environment } from './types';
 import { BaseNftService, NftServiceFactory } from './services/nft';
 import { ApiError } from './errors';
 
@@ -36,7 +36,6 @@ export class MagicEdenClient {
   private validateConfig(config: ClientConfig): ClientConfig {
     // Just return the config as is for now
     return {
-      environment: Environment.PRODUCTION,
       timeout: 30000,
       ...config,
     };

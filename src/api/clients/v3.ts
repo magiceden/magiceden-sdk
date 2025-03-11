@@ -13,8 +13,7 @@ export class V3ApiClient extends BaseApiClient {
 
   // Helper method for API URL
   getBaseUrl(): string {
-    const isDev = this.config.environment === 'development';
     // Same url for dev and prod
-    return isDev ? 'https://api-mainnet.magiceden.dev/v3' : 'https://api-mainnet.magiceden.dev/v3';
+    return 'https://api-mainnet.magiceden.dev/v3';
   }
 }
