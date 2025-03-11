@@ -1,3 +1,4 @@
 export * from './config';
-export * from './nft';
+export * from './services';
 export * from './transactions';
+export * from './api';
