@@ -85,7 +85,7 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   protected abstract getUpdateLaunchpadInstructions<T extends UpdateLaunchpadParams>(
     launchpadId: string,
     params: T,
-  ): Promise<any>;
+  ): Promise<ChainTransactionType[C]>;
 
   /**
    * Mints an NFT from a launchpad
@@ -106,7 +106,7 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   protected abstract getMintInstructions<T extends MintParams>(
     launchpadId: string,
     params: T,
-  ): Promise<any>;
+  ): Promise<ChainTransactionType[C]>;
 
   /**
    * Lists an NFT for sale
@@ -127,7 +127,7 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   protected abstract getListInstructions<T extends ListParams>(
     identifier: string,
     params: T,
-  ): Promise<any>;
+  ): Promise<ChainTransactionType[C]>;
 
   /**
    * Cancels an NFT listing
@@ -151,7 +151,7 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   protected abstract getCancelListingInstructions<T extends CancelListingParams>(
     identifier: string,
     params: T,
-  ): Promise<any>;
+  ): Promise<ChainTransactionType[C]>;
 
   /**
    * Makes an item offer on an NFT
@@ -175,7 +175,7 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   protected abstract getMakeItemOfferInstructions<T extends MakeItemOfferParams>(
     identifier: string,
     params: T,
-  ): Promise<any>;
+  ): Promise<ChainTransactionType[C]>;
 
   /**
    * Cancels an item offer
@@ -199,7 +199,7 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   protected abstract getCancelItemOfferInstructions<T extends CancelItemOfferParams>(
     identifier: string,
     params: T,
-  ): Promise<any>;
+  ): Promise<ChainTransactionType[C]>;
 
   /**
    * Takes an item offer on an NFT
@@ -223,7 +223,7 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   protected abstract getTakeItemOfferInstructions<T extends TakeItemOfferParams>(
     identifier: string,
     params: T,
-  ): Promise<any>;
+  ): Promise<ChainTransactionType[C]>;
 
   /**
    * Transfers an NFT to another wallet
@@ -244,7 +244,7 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   protected abstract getTransferInstructions<T extends TransferParams>(
     identifier: string,
     params: T,
-  ): Promise<any>;
+  ): Promise<ChainTransactionType[C]>;
 
   /**
    * Convert a transaction hash to a transaction response
