@@ -28,8 +28,9 @@ export class SolanaNftService extends BaseNftService<'solana'> {
    */
   protected async getCreateLaunchpadInstructions<T extends CreateLaunchpadParams>(
     params: T,
-  ): Promise<any> {
-    return this.v4ApiClient.createLaunchpad(params);
+  ): Promise<ChainTransactionType['solana']> {
+    throw new Error('Not implemented');
+    // return this.v4ApiClient.createLaunchpad(params);
   }
 
   /**
@@ -40,8 +41,9 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getUpdateLaunchpadInstructions<T extends UpdateLaunchpadParams>(
     launchpadId: string,
     params: T,
-  ): Promise<any> {
-    return this.v4ApiClient.updateLaunchpad(launchpadId, params);
+  ): Promise<ChainTransactionType['solana']> {
+    throw new Error('Not implemented');
+    // return this.v4ApiClient.updateLaunchpad(launchpadId, params);
   }
 
   /**
@@ -52,8 +54,9 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getMintInstructions<T extends MintParams>(
     launchpadId: string,
     params: T,
-  ): Promise<any> {
-    return this.v4ApiClient.mint(launchpadId, params);
+  ): Promise<ChainTransactionType['solana']> {
+    throw new Error('Not implemented');
+    // return this.v4ApiClient.mint(launchpadId, params);
   }
 
   /**
