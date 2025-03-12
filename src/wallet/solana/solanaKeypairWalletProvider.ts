@@ -198,57 +198,6 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
   }
 
   /**
-   * Transfer SOL from the wallet to another address
-   *
-   * @param to - The base58 encoded address to transfer the SOL to
-   * @param value - The amount of SOL to transfer (as a decimal string, e.g. "0.0001")
-   * @returns The signature
-   */
-  async nativeTransfer(to: string, value: string): Promise<string> {
-    const initialBalance = await this.getBalance();
-    const solAmount = parseFloat(value);
-    const lamports = BigInt(Math.floor(solAmount * LAMPORTS_PER_SOL));
-
-    // Check if we have enough balance (including estimated fees)
-    if (initialBalance < lamports + BigInt(5000)) {
-      throw new Error(
-        `Insufficient balance. Have ${Number(initialBalance) / LAMPORTS_PER_SOL} SOL, need ${
-          solAmount + 0.000005
-        } SOL (including fees)`,
-      );
-    }
-
-    const toPubkey = new PublicKey(to);
-    const instructions = [
-      ComputeBudgetProgram.setComputeUnitPrice({
-        microLamports: 10000,
-      }),
-      ComputeBudgetProgram.setComputeUnitLimit({
-        units: 2000,
-      }),
-      SystemProgram.transfer({
-        fromPubkey: this.keypair.publicKey,
-        toPubkey: toPubkey,
-        lamports: lamports,
-      }),
-    ];
-
-    const tx = new VersionedTransaction(
-      MessageV0.compile({
-        payerKey: this.keypair.publicKey,
-        instructions: instructions,
-        recentBlockhash: (await this.connection.getLatestBlockhash()).blockhash,
-      }),
-    );
-
-    tx.sign([this.keypair]);
-
-    const signature = await this.connection.sendTransaction(tx);
-    await this.waitForTransactionConfirmation(signature);
-    return signature;
-  }
-
-  /**
    * Request SOL tokens from the Solana faucet. This method only works on devnet and testnet networks.
    *
    * @param lamports - The amount of lamports (1 SOL = 1,000,000,000 lamports) to request from the faucet

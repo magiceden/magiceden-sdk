@@ -206,22 +206,6 @@ describe('SolanaKeypairWalletProvider', () => {
     });
   });
 
-  describe('nativeTransfer', () => {
-    it('should transfer SOL to another address', async () => {
-      const toAddress = 'mock-recipient-address';
-      const signature = await wallet.nativeTransfer(toAddress, '0.001');
-      expect(signature).toBe('mock-signature');
-    });
-
-    it('should throw an error if balance is insufficient', async () => {
-      // Mock getBalance to return a low balance
-      jest.spyOn(wallet, 'getBalance').mockResolvedValueOnce(BigInt(1000));
-      
-      const toAddress = 'mock-recipient-address';
-      await expect(wallet.nativeTransfer(toAddress, '0.001')).rejects.toThrow('Insufficient balance');
-    });
-  });
-
   describe('requestAirdrop', () => {
     it('should request an airdrop', async () => {
       const signature = await wallet.requestAirdrop(1000000000); // 1 SOL

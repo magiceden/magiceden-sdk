@@ -8,7 +8,6 @@ export class MockSolanaWalletProvider extends SolanaWalletProvider {
   getAddress = () => '0x123';
   getBalance = async () => BigInt(1000000);
   signMessage = async (message: string | Uint8Array) => '0x123';
-  nativeTransfer = async (to: string, value: string) => '0x123';
   signTransaction = async (transaction: any) => transaction;
   sendTransaction = async () => '0x123';
   signAndSendTransaction = async () => '0x123';
