@@ -54,6 +54,7 @@ export interface V2CancelListingRequest {
   exactPrioFeeLamports?: number;
 }
 
+// TODO: Implement these
 export interface V2CreateCollectionOfferRequest {}
 
 export interface V2CancelCollectionOfferRequest {}
