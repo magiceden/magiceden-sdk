@@ -1,4 +1,4 @@
-import { ClientConfig, Environment } from './types';
+import { ChainType, ClientConfig, Environment } from './types';
 import { BaseNftService, NftServiceFactory } from './services/nft';
 import { ApiError } from './errors';
 
@@ -24,9 +24,33 @@ export class MagicEdenClient {
   }
 
   /**
+   * Creates a new Magic Eden API client for Solana
+   * @param config Client configuration
+   * @returns A new Magic Eden API client for Solana
+   */
+  public static createSolanaClient(config: ClientConfig): MagicEdenClient {
+    return new MagicEdenClient({
+      ...config,
+      chain: ChainType.SOLANA,
+    });
+  }
+
+  /**
+   * Creates a new Magic Eden API client for EVM
+   * @param config Client configuration
+   * @returns A new Magic Eden API client for EVM
+   */
+  public static createEvmClient(config: ClientConfig): MagicEdenClient {
+    return new MagicEdenClient({
+      ...config,
+      chain: ChainType.EVM,
+    });
+  }
+
+  /**
    * Access NFT-related functionality
    */
-  get nft() {
+  public get nft() {
     return this._nft;
   }
 
