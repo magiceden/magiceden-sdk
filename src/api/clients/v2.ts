@@ -5,7 +5,7 @@ import {
   SolanaInstructionsResponse,
   V2ListRequest,
   V2CancelListingRequest,
-  V2CreateCollectionOfferRequest,
+  V2MakeCollectionOfferRequest,
   V2CancelCollectionOfferRequest,
   V2TakeCollectionOfferRequest,
   V2TakeItemOfferRequest,
@@ -45,8 +45,8 @@ export class V2ApiClient extends BaseApiClient {
   }
 
   @supportedOn([ChainType.SOLANA])
-  async createCollectionOffer(
-    request: V2CreateCollectionOfferRequest,
+  async makeCollectionOffer(
+    request: V2MakeCollectionOfferRequest,
   ): Promise<SolanaInstructionsResponse> {
     throw new Error('Not implemented');
     // return this.api.get<SolanaInstructionsResponse>('/instructions/mmm/create-pool', {

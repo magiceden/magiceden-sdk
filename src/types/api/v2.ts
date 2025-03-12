@@ -55,7 +55,7 @@ export interface V2CancelListingRequest {
 }
 
 // TODO: Implement these
-export interface V2CreateCollectionOfferRequest {}
+export interface V2MakeCollectionOfferRequest {}
 
 export interface V2CancelCollectionOfferRequest {}
 
