@@ -24,30 +24,6 @@ export class MagicEdenClient {
   }
 
   /**
-   * Creates a new Magic Eden API client for Solana
-   * @param config Client configuration
-   * @returns A new Magic Eden API client for Solana
-   */
-  public static createSolanaClient(config: ClientConfig): MagicEdenClient {
-    return new MagicEdenClient({
-      ...config,
-      chain: ChainType.SOLANA,
-    });
-  }
-
-  /**
-   * Creates a new Magic Eden API client for EVM
-   * @param config Client configuration
-   * @returns A new Magic Eden API client for EVM
-   */
-  public static createEvmClient(config: ClientConfig): MagicEdenClient {
-    return new MagicEdenClient({
-      ...config,
-      chain: ChainType.EVM,
-    });
-  }
-
-  /**
    * Access NFT-related functionality
    */
   public get nft() {
