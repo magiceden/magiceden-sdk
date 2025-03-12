@@ -1,4 +1,5 @@
 import { ChainTransactionType, WalletProvider } from '../wallet';
+import { ChainType } from './chain';
 
 /**
  * Environment options
@@ -6,14 +7,6 @@ import { ChainTransactionType, WalletProvider } from '../wallet';
 export enum Environment {
   PRODUCTION = 'production',
   DEVELOPMENT = 'development',
-}
-
-/**
- * Chain type
- */
-export enum ChainType {
-  SOLANA = 'solana',
-  EVM = 'evm',
 }
 
 /**
