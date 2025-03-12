@@ -1,5 +1,5 @@
-import { ClientConfig } from '../../types';
-import { ApiManager } from '../utils/apiManager';
+import { ChainType } from '../../types';
+import { ApiManager, ApiOptions } from '../utils/apiManager';
 
 /**
  * Common interface for all API clients
@@ -11,25 +11,29 @@ export interface ApiClient {
   getBaseUrl(): string;
 }
 
+export interface ApiClientOptions extends ApiOptions {
+  chain: ChainType;
+}
+
 /**
  * Base class for API clients with common implementation
  * T is the type of operations enum used by the specific API client
  */
 export abstract class BaseApiClient implements ApiClient {
-  public readonly config: ClientConfig;
   public readonly api: ApiManager;
+  public readonly chain: ChainType;
 
-  constructor(config: ClientConfig) {
-    this.config = config;
-
+  constructor(options: ApiClientOptions) {
+    this.chain = options.chain;
     // Initialize API manager with appropriate endpoint
     this.api = new ApiManager(this.getBaseUrl(), {
+      apiKey: options.apiKey,
       headers: {
         'Content-Type': 'application/json',
-        ...(config.apiKey && { Authorization: `Bearer ${config.apiKey}` }),
-        ...config.headers,
+        ...(options.apiKey && { Authorization: `Bearer ${options.apiKey}` }),
+        ...options.headers,
       },
-      timeout: config.timeout,
+      timeout: options.timeout,
     });
   }
 

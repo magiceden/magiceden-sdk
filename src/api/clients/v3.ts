@@ -1,20 +1,18 @@
-import { BaseApiClient } from './base';
-import { ClientConfig } from '../../types';
+import { BaseApiClient, ApiClientOptions } from './base';
 
 /**
  * V3 API client implementation (primarily for EVM chains)
  */
 export class V3ApiClient extends BaseApiClient {
-  constructor(config: ClientConfig) {
-    super(config);
+  constructor(options: ApiClientOptions) {
+    super(options);
   }
 
   // V3-specific implementation methods (completely different from V2)
 
   // Helper method for API URL
   getBaseUrl(): string {
-    const isDev = this.config.environment === 'development';
     // Same url for dev and prod
-    return isDev ? 'https://api-mainnet.magiceden.dev/v3' : 'https://api-mainnet.magiceden.dev/v3';
+    return 'https://api-mainnet.magiceden.dev/v3';
   }
 }

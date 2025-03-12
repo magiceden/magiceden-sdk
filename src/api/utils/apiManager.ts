@@ -5,6 +5,7 @@ import { NetworkError, AuthenticationError, RateLimitError, ApiError } from '../
  * API configuration options
  */
 export interface ApiOptions {
+  apiKey: string;
   headers?: Record<string, string>;
   timeout?: number;
 }
@@ -25,10 +26,14 @@ interface ErrorResponse {
 export class ApiManager {
   private readonly client: AxiosInstance;
 
-  constructor(baseURL: string, options: ApiOptions = {}) {
+  constructor(baseURL: string, options: ApiOptions) {
     this.client = axios.create({
       baseURL,
-      headers: options.headers || {},
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options.apiKey && { Authorization: `Bearer ${options.apiKey}` }),
+        ...options.headers,
+      },
       timeout: options.timeout || 30000,
     });
 

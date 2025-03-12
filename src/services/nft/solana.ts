@@ -1,120 +1,143 @@
 import { BaseNftService } from './base';
-import {
-  CreateLaunchpadParams,
-  UpdateLaunchpadParams,
-  MintParams,
-  ListParams,
-  CancelListingParams,
-  BuyParams,
-  MakeOfferParams,
-  CancelOfferParams,
-  TakeOfferParams,
-  TransferParams,
-} from '../../types';
+import { TransactionResponse, ChainMethodParams } from '../../types';
 import { ClientConfig } from '../../types';
-import { V4ApiClient } from '../../api/clients/v4';
-import { V2ApiClient } from '../../api/clients/v2';
+import { ChainTransaction } from '../../wallet';
+import { SolanaNftApiMappers } from '../../mappers/nft';
+import { SolanaTransactionAdapters } from '../../adapters/transactions';
 
 /**
  * Solana-specific NFT service implementation
  */
-export class SolanaNftService extends BaseNftService {
-  private readonly v2ApiClient: V2ApiClient;
-  private readonly v4ApiClient: V4ApiClient;
-
-  constructor(config: ClientConfig) {
+export class SolanaNftService extends BaseNftService<'solana'> {
+  constructor(config: ClientConfig<'solana'>) {
     super(config);
-    
-    this.v2ApiClient = new V2ApiClient(config);
-    this.v4ApiClient = new V4ApiClient(config);
   }
 
   /**
    * Get create launchpad transaction instructions from API
    * @param params Launchpad creation parameters
    */
-  protected async getCreateLaunchpadInstructions(params: CreateLaunchpadParams): Promise<any> {
-    return this.v4ApiClient.createLaunchpad(params);
+  protected async getCreateLaunchpadInstructions(
+    params: ChainMethodParams<'solana', 'createLaunchpad'>,
+  ): Promise<ChainTransaction<'solana'>> {
+    throw new Error('Not implemented');
+    // return this.v4ApiClient.createLaunchpad(params);
   }
 
   /**
    * Get update launchpad transaction instructions from API
-   * @param launchpadId The launchpad ID
    * @param params Launchpad update parameters
    */
-  protected async getUpdateLaunchpadInstructions(launchpadId: string, params: UpdateLaunchpadParams): Promise<any> {
-    return this.v4ApiClient.updateLaunchpad(launchpadId, params);
+  protected async getUpdateLaunchpadInstructions(
+    params: ChainMethodParams<'solana', 'updateLaunchpad'>,
+  ): Promise<ChainTransaction<'solana'>> {
+    throw new Error('Not implemented');
+    // return this.v4ApiClient.updateLaunchpad(launchpadId, params);
   }
 
   /**
    * Get mint transaction instructions from API
-   * @param launchpadId The launchpad ID
    * @param params Mint parameters
    */
-  protected async getMintInstructions(launchpadId: string, params: MintParams): Promise<any> {
-    return this.v4ApiClient.mint(launchpadId, params);
+  protected async getMintInstructions(
+    params: ChainMethodParams<'solana', 'mint'>,
+  ): Promise<ChainTransaction<'solana'>> {
+    throw new Error('Not implemented');
+    // return this.v4ApiClient.mint(launchpadId, params);
   }
 
   /**
    * Get list transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Listing parameters
    */
-  protected async getListInstructions(mintAddress: string, params: ListParams): Promise<any> {
-    return this.v2ApiClient.list(mintAddress, params);
+  protected async getListInstructions(
+    params: ChainMethodParams<'solana', 'list'>,
+  ): Promise<ChainTransaction<'solana'>> {
+    const response = await this.v2ApiClient.list(SolanaNftApiMappers.v2.listRequest(params));
+    return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
 
   /**
    * Get cancel listing transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Cancel listing parameters
    */
-  protected async getCancelListingInstructions(mintAddress: string, params: CancelListingParams): Promise<any> {
-    return this.v2ApiClient.cancelListing(mintAddress, params);
+  protected async getCancelListingInstructions(
+    params: ChainMethodParams<'solana', 'cancelListing'>,
+  ): Promise<ChainTransaction<'solana'>> {
+    const response = await this.v2ApiClient.cancelListing(
+      SolanaNftApiMappers.v2.cancelListingRequest(params),
+    );
+    return SolanaTransactionAdapters.fromInstructionsResponse(response);
+  }
+
+  /**
+   * Get make item offer transaction instructions from API
+   * @param params Make item offer parameters
+   */
+  protected async getMakeItemOfferInstructions(
+    params: ChainMethodParams<'solana', 'makeItemOffer'>,
+  ): Promise<ChainTransaction<'solana'>> {
+    const response = await this.v2ApiClient.makeItemOffer(
+      SolanaNftApiMappers.v2.makeItemOfferRequest(params),
+    );
+    return SolanaTransactionAdapters.fromInstructionsResponse(response);
+  }
+
+  /**
+   * Get take item offer transaction instructions from API
+   * @param params Take item offer parameters
+   */
+  protected async getTakeItemOfferInstructions(
+    params: ChainMethodParams<'solana', 'takeItemOffer'>,
+  ): Promise<ChainTransaction<'solana'>> {
+    const response = await this.v2ApiClient.takeItemOffer(
+      SolanaNftApiMappers.v2.takeItemOfferRequest(params),
+    );
+    return SolanaTransactionAdapters.fromInstructionsResponse(response);
+  }
+
+  /**
+   * Get cancel item offer transaction instructions from API
+   * @param params Cancel item offer parameters
+   */
+  protected async getCancelItemOfferInstructions(
+    params: ChainMethodParams<'solana', 'cancelItemOffer'>,
+  ): Promise<ChainTransaction<'solana'>> {
+    const response = await this.v2ApiClient.cancelItemOffer(
+      SolanaNftApiMappers.v2.cancelItemOfferRequest(params),
+    );
+    return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
 
   /**
    * Get buy transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Buy parameters
    */
-  protected async getBuyInstructions(mintAddress: string, params: BuyParams): Promise<any> {
-    return this.v2ApiClient.buy(mintAddress, params);
-  }
-
-  /**
-   * Get make offer transaction instructions from API
-   * @param mintAddress The mint address of the NFT
-   * @param params Make offer parameters
-   */
-  protected async getMakeOfferInstructions(mintAddress: string, params: MakeOfferParams): Promise<any> {
-    return this.v2ApiClient.makeOffer(mintAddress, params);
-  }
-
-  /**
-   * Get cancel offer transaction instructions from API
-   * @param mintAddress The mint address of the NFT
-   * @param params Cancel offer parameters
-   */
-  protected async getCancelOfferInstructions(mintAddress: string, params: CancelOfferParams): Promise<any> {
-    return this.v2ApiClient.cancelOffer(mintAddress, params);
-  }
-
-  /**
-   * Get take offer transaction instructions from API
-   * @param mintAddress The mint address of the NFT
-   * @param params Take offer parameters
-   */
-  protected async getTakeOfferInstructions(mintAddress: string, params: TakeOfferParams): Promise<any> {
-    return this.v2ApiClient.takeOffer(mintAddress, params);
+  protected async getBuyInstructions(
+    params: ChainMethodParams<'solana', 'buy'>,
+  ): Promise<ChainTransaction<'solana'>> {
+    const response = await this.v2ApiClient.buy(SolanaNftApiMappers.v2.buyRequest(params));
+    return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
 
   /**
    * Get transfer transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Transfer parameters
    */
-  protected async getTransferInstructions(mintAddress: string, params: TransferParams): Promise<any> {
-    return this.v2ApiClient.transfer(mintAddress, params);
+  protected async getTransferInstructions(
+    params: ChainMethodParams<'solana', 'transfer'>,
+  ): Promise<ChainTransaction<'solana'>> {
+    const response = await this.v2ApiClient.transfer(SolanaNftApiMappers.v2.transferRequest(params));
+    return SolanaTransactionAdapters.fromInstructionsResponse(response);
+  }
+
+  /**
+   * Convert a transaction hash to a transaction response
+   */
+  protected async txHashToTransactionResponse(txHash: string): Promise<TransactionResponse> {
+    return {
+      txId: txHash,
+      status: 'pending',
+    };
   }
 }

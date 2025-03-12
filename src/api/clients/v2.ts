@@ -1,26 +1,36 @@
 import { BaseApiClient } from './base';
-import { ChainType, ClientConfig } from '../../types';
+import { ChainType } from '../../types';
 import { supportedOn } from '../utils/decorators';
+import {
+  SolanaInstructionsResponse,
+  V2ListRequest,
+  V2CancelListingRequest,
+  V2MakeCollectionOfferRequest,
+  V2CancelCollectionOfferRequest,
+  V2TakeCollectionOfferRequest,
+  V2TakeItemOfferRequest,
+  V2MakeItemOfferRequest,
+  V2CancelItemOfferRequest,
+  V2BuyRequest,
+  V2TransferRequest,
+} from '../../types/api';
+import { ApiClientOptions } from './base';
 
 /**
  * V2 API client implementation (primarily for Solana marketplace operations)
  */
 export class V2ApiClient extends BaseApiClient {
-  constructor(config: ClientConfig) {
-    super(config);
+  constructor(options: ApiClientOptions) {
+    super(options);
   }
 
   /**
    * Gets instructions to list an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async list(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/sell', {
-      mintAddress,
-      sellerWallet: walletAddress,
-      ...params,
+  async list(request: V2ListRequest): Promise<SolanaInstructionsResponse> {
+    return this.api.get<SolanaInstructionsResponse>('/instructions/sell', {
+      ...request,
     });
   }
 
@@ -28,27 +38,49 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to cancel a listing
    */
   @supportedOn([ChainType.SOLANA])
-  async cancelListing(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/sell_cancel', {
-      mintAddress,
-      sellerWallet: walletAddress,
-      ...params,
+  async cancelListing(request: V2CancelListingRequest): Promise<SolanaInstructionsResponse> {
+    return this.api.get<SolanaInstructionsResponse>('/instructions/sell_cancel', {
+      ...request,
     });
+  }
+
+  @supportedOn([ChainType.SOLANA])
+  async makeCollectionOffer(
+    request: V2MakeCollectionOfferRequest,
+  ): Promise<SolanaInstructionsResponse> {
+    throw new Error('Not implemented');
+    // return this.api.get<SolanaInstructionsResponse>('/instructions/mmm/create-pool', {
+    //   ...request,
+    // });
+  }
+
+  @supportedOn([ChainType.SOLANA])
+  async cancelCollectionOffer(
+    request: V2CancelCollectionOfferRequest,
+  ): Promise<SolanaInstructionsResponse> {
+    throw new Error('Not implemented');
+    // return this.api.get<SolanaInstructionsResponse>('/instructions/mmm/sol-withdraw-buy', {
+    //   ...request,
+    // });
+  }
+
+  @supportedOn([ChainType.SOLANA])
+  async takeCollectionOffer(
+    request: V2TakeCollectionOfferRequest,
+  ): Promise<SolanaInstructionsResponse> {
+    throw new Error('Not implemented');
+    // return this.api.get<SolanaInstructionsResponse>('/instructions/mmm/sol-fulfill-buy', {
+    //   ...request,
+    // });
   }
 
   /**
    * Gets instructions to accept an offer
    */
   @supportedOn([ChainType.SOLANA])
-  async takeOffer(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/sell_now', {
-      mintAddress,
-      sellerWallet: walletAddress,
-      ...params,
+  async takeItemOffer(request: V2TakeItemOfferRequest): Promise<SolanaInstructionsResponse> {
+    return this.api.get<SolanaInstructionsResponse>('/instructions/sell_now', {
+      ...request,
     });
   }
 
@@ -56,13 +88,9 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to make an offer on an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async makeOffer(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/buy', {
-      mintAddress,
-      buyerWallet: walletAddress,
-      ...params,
+  async makeItemOffer(request: V2MakeItemOfferRequest): Promise<SolanaInstructionsResponse> {
+    return this.api.get<SolanaInstructionsResponse>('/instructions/buy', {
+      ...request,
     });
   }
 
@@ -70,13 +98,9 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to cancel an offer
    */
   @supportedOn([ChainType.SOLANA])
-  async cancelOffer(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/buy_cancel', {
-      mintAddress,
-      buyerWallet: walletAddress,
-      ...params,
+  async cancelItemOffer(request: V2CancelItemOfferRequest): Promise<SolanaInstructionsResponse> {
+    return this.api.get<SolanaInstructionsResponse>('/instructions/buy_cancel', {
+      ...request,
     });
   }
 
@@ -84,13 +108,9 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to buy an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async buy(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/buy_now', {
-      mintAddress,
-      buyerWallet: walletAddress,
-      ...params,
+  async buy(request: V2BuyRequest): Promise<SolanaInstructionsResponse> {
+    return this.api.get<SolanaInstructionsResponse>('/instructions/buy_now', {
+      ...request,
     });
   }
 
@@ -98,20 +118,15 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to transfer an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async transfer(mintAddress: string, params: any): Promise<any> {
-    const walletAddress = await this.config.wallet!.getAddress();
-
-    return this.api.post('/instructions/ocp/transfer', {
-      mintAddress,
-      fromWallet: walletAddress,
-      ...params,
+  async transfer(request: V2TransferRequest): Promise<SolanaInstructionsResponse> {
+    return this.api.get<SolanaInstructionsResponse>('/instructions/ocp/transfer', {
+      ...request,
     });
   }
 
   // Helper methods for API URLs
   getBaseUrl(): string {
-    const isDev = this.config.environment === 'development';
     // Same url for dev and prod
-    return isDev ? 'https://api-mainnet.magiceden.dev/v2' : 'https://api-mainnet.magiceden.dev/v2';
+    return 'https://api-mainnet.magiceden.dev/v2';
   }
 }

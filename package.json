@@ -38,7 +38,12 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "axios": "^1.6.7"
+    "@solana/web3.js": "^1.98.0",
+    "axios": "^1.6.7",
+    "bs58": "^6.0.0",
+    "tweetnacl": "^1.0.3",
+    "viem": "^2.23.9",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

@@ -1,26 +1,19 @@
-import { WalletProvider } from '../wallet/provider';
+import { SupportedChain } from './chain';
+import { WalletProvider, ChainTransaction } from '../wallet';
+import { ChainType } from './chain';
 
 /**
  * Environment options
  */
 export enum Environment {
   PRODUCTION = 'production',
-  DEVELOPMENT = 'development'
-}
-
-/**
- * Chain type
- */
-export enum ChainType {
-  SOLANA = 'solana',
-  EVM = 'evm',
-  BITCOIN = 'bitcoin'
+  DEVELOPMENT = 'development',
 }
 
 /**
  * Client configuration options
  */
-export interface ClientConfig {
+export interface ClientConfig<C extends SupportedChain = SupportedChain> {
   /**
    * API key for authenticated requests (optional)
    */
@@ -34,12 +27,7 @@ export interface ClientConfig {
   /**
    * Wallet provider for signing transactions
    */
-  wallet: WalletProvider;
-
-  /**
-   * API environment
-   */
-  environment?: Environment;
+  wallet: WalletProvider<ChainTransaction<C>>;
 
   /**
    * Request timeout in milliseconds
