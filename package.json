@@ -42,7 +42,8 @@
     "axios": "^1.6.7",
     "bs58": "^6.0.0",
     "tweetnacl": "^1.0.3",
-    "viem": "^2.23.9"
+    "viem": "^2.23.9",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
