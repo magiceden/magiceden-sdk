@@ -1,4 +1,4 @@
-import { ChainType, ClientConfig, Environment } from './types';
+import { ClientConfig } from './types';
 import { BaseNftService, NftServiceFactory } from './services/nft';
 import { ApiError } from './errors';
 
@@ -6,21 +6,16 @@ import { ApiError } from './errors';
  * Magic Eden API client
  */
 export class MagicEdenClient {
-  private readonly config: ClientConfig;
-  private _nft: BaseNftService;
+  private readonly _config: ClientConfig;
+  private readonly _nft: BaseNftService;
 
   /**
    * Creates a new Magic Eden API client
    * @param config Client configuration
    */
   constructor(config: ClientConfig) {
-    if (!config.chain) {
-      throw new ApiError('Chain type must be specified');
-    }
-
-    this.config = this.validateConfig(config);
-
-    this._nft = NftServiceFactory.create(this.config);
+    this._config = this.validateConfig(config);
+    this._nft = NftServiceFactory.create(this._config);
   }
 
   /**
@@ -34,9 +29,12 @@ export class MagicEdenClient {
    * Validates the provided configuration
    */
   private validateConfig(config: ClientConfig): ClientConfig {
+    if (!config.chain) {
+      throw new ApiError('Chain type must be specified');
+    }
+
     // Just return the config as is for now
     return {
-      timeout: 30000,
       ...config,
     };
   }

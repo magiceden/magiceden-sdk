@@ -3,7 +3,8 @@ import {
   ClientConfig,
   TransactionResponse,
 } from '../../types';
-import { ChainTransactionType } from '../../wallet';
+import { SupportedChain } from '../../types/chain';
+import { ChainTransaction } from '../../wallet';
 import { V2ApiClient } from '../../api/clients/v2';
 import { V4ApiClient } from '../../api/clients/v4';
 import { V3ApiClient } from '../../api/clients/v3';
@@ -12,7 +13,7 @@ import { ApiClientOptions } from '../../api/clients/base';
 /**
  * Base class for NFT services
  */
-export abstract class BaseNftService<C extends keyof ChainTransactionType = keyof ChainTransactionType> {
+export abstract class BaseNftService<C extends SupportedChain = SupportedChain> {
   protected readonly config: ClientConfig<C>;
 
   protected readonly v2ApiClient: V2ApiClient;
@@ -37,7 +38,7 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Creates a new launchpad
    */
-  async createLaunchpad<T extends CreateLaunchpadParams>(params: T): Promise<TransactionResponse> {
+  async createLaunchpad(params: ChainMethodParams<C, 'createLaunchpad'>): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
     const txInstructions = await this.getCreateLaunchpadInstructions(params);
 
@@ -50,19 +51,18 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Get create launchpad transaction instructions from API
    */
-  protected abstract getCreateLaunchpadInstructions<T extends CreateLaunchpadParams>(
-    params: T,
-  ): Promise<ChainTransactionType[C]>;
+  protected abstract getCreateLaunchpadInstructions(
+    params: ChainMethodParams<C, 'createLaunchpad'>,
+  ): Promise<ChainTransaction<C>>;
 
   /**
    * Updates an existing launchpad
    */
-  async updateLaunchpad<T extends UpdateLaunchpadParams>(
-    launchpadId: string,
-    params: T,
+  async updateLaunchpad(
+    params: ChainMethodParams<C, 'updateLaunchpad'>,
   ): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getUpdateLaunchpadInstructions(launchpadId, params);
+    const txInstructions = await this.getUpdateLaunchpadInstructions(params);
 
     // 2. Sign and send transaction using wallet
     return await this.txHashToTransactionResponse(
@@ -73,17 +73,16 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Get update launchpad transaction instructions from API
    */
-  protected abstract getUpdateLaunchpadInstructions<T extends UpdateLaunchpadParams>(
-    launchpadId: string,
-    params: T,
-  ): Promise<ChainTransactionType[C]>;
+  protected abstract getUpdateLaunchpadInstructions(
+    params: ChainMethodParams<C, 'updateLaunchpad'>,
+  ): Promise<ChainTransaction<C>>;
 
   /**
    * Mints an NFT from a launchpad
    */
-  async mint<T extends MintParams>(launchpadId: string, params: T): Promise<TransactionResponse> {
+  async mint(params: ChainMethodParams<C, 'mint'>): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getMintInstructions(launchpadId, params);
+    const txInstructions = await this.getMintInstructions(params);
 
     // 2. Sign and send transaction using wallet
     return await this.txHashToTransactionResponse(
@@ -94,10 +93,9 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Get mint transaction instructions from API
    */
-  protected abstract getMintInstructions<T extends MintParams>(
-    launchpadId: string,
-    params: T,
-  ): Promise<ChainTransactionType[C]>;
+  protected abstract getMintInstructions(
+    params: ChainMethodParams<C, 'mint'>,
+  ): Promise<ChainTransaction<C>>;
 
   /**
    * Lists an NFT for sale
@@ -117,17 +115,16 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
    */
   protected abstract getListInstructions(
     params: ChainMethodParams<C, 'list'>,
-  ): Promise<ChainTransactionType[C]>;
+  ): Promise<ChainTransaction<C>>;
 
   /**
    * Cancels an NFT listing
    */
-  async cancelListing<T extends CancelListingParams>(
-    identifier: string,
-    params: T,
+  async cancelListing(
+    params: ChainMethodParams<C, 'cancelListing'>,
   ): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getCancelListingInstructions(identifier, params);
+    const txInstructions = await this.getCancelListingInstructions(params);
 
     // 2. Sign and send transaction using wallet
     return await this.txHashToTransactionResponse(
@@ -138,20 +135,18 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Get cancel listing transaction instructions from API
    */
-  protected abstract getCancelListingInstructions<T extends CancelListingParams>(
-    identifier: string,
-    params: T,
-  ): Promise<ChainTransactionType[C]>;
+  protected abstract getCancelListingInstructions(
+    params: ChainMethodParams<C, 'cancelListing'>,
+  ): Promise<ChainTransaction<C>>;
 
   /**
    * Makes an item offer on an NFT
    */
-  async makeItemOffer<T extends MakeItemOfferParams>(
-    identifier: string,
-    params: T,
+  async makeItemOffer(
+    params: ChainMethodParams<C, 'makeItemOffer'>,
   ): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getMakeItemOfferInstructions(identifier, params);
+    const txInstructions = await this.getMakeItemOfferInstructions(params);
 
     // 2. Sign and send transaction using wallet
     return await this.txHashToTransactionResponse(
@@ -162,20 +157,18 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Get make item offer transaction instructions from API
    */
-  protected abstract getMakeItemOfferInstructions<T extends MakeItemOfferParams>(
-    identifier: string,
-    params: T,
-  ): Promise<ChainTransactionType[C]>;
+  protected abstract getMakeItemOfferInstructions(
+    params: ChainMethodParams<C, 'makeItemOffer'>,
+  ): Promise<ChainTransaction<C>>;
 
   /**
    * Cancels an item offer
    */
-  async cancelItemOffer<T extends CancelItemOfferParams>(
-    identifier: string,
-    params: T,
+  async cancelItemOffer(
+    params: ChainMethodParams<C, 'cancelItemOffer'>,
   ): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getCancelItemOfferInstructions(identifier, params);
+    const txInstructions = await this.getCancelItemOfferInstructions(params);
 
     // 2. Sign and send transaction using wallet
     return await this.txHashToTransactionResponse(
@@ -186,20 +179,18 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Get cancel item offer transaction instructions from API
    */
-  protected abstract getCancelItemOfferInstructions<T extends CancelItemOfferParams>(
-    identifier: string,
-    params: T,
-  ): Promise<ChainTransactionType[C]>;
+  protected abstract getCancelItemOfferInstructions(
+    params: ChainMethodParams<C, 'cancelItemOffer'>,
+  ): Promise<ChainTransaction<C>>;
 
   /**
    * Takes an item offer on an NFT
    */
-  async takeItemOffer<T extends TakeItemOfferParams>(
-    identifier: string,
-    params: T,
+  async takeItemOffer(
+    params: ChainMethodParams<C, 'takeItemOffer'>,
   ): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getTakeItemOfferInstructions(identifier, params);
+    const txInstructions = await this.getTakeItemOfferInstructions(params);
 
     // 2. Sign and send transaction using wallet
     return await this.txHashToTransactionResponse(
@@ -210,17 +201,16 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Get take item offer transaction instructions from API
    */
-  protected abstract getTakeItemOfferInstructions<T extends TakeItemOfferParams>(
-    identifier: string,
-    params: T,
-  ): Promise<ChainTransactionType[C]>;
+  protected abstract getTakeItemOfferInstructions(
+    params: ChainMethodParams<C, 'takeItemOffer'>,
+  ): Promise<ChainTransaction<C>>;
 
   /**
    * Transfers an NFT to another wallet
    */
-  async transfer<T extends TransferParams>(identifier: string, params: T): Promise<TransactionResponse> {
+  async transfer(params: ChainMethodParams<C, 'transfer'>): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getTransferInstructions(identifier, params);
+    const txInstructions = await this.getTransferInstructions(params);
 
     // 2. Sign and send transaction using wallet
     return await this.txHashToTransactionResponse(
@@ -231,10 +221,9 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Get transfer transaction instructions from API
    */
-  protected abstract getTransferInstructions<T extends TransferParams>(
-    identifier: string,
-    params: T,
-  ): Promise<ChainTransactionType[C]>;
+  protected abstract getTransferInstructions(
+    params: ChainMethodParams<C, 'transfer'>,
+  ): Promise<ChainTransaction<C>>;
 
   /**
    * Convert a transaction hash to a transaction response

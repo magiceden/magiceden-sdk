@@ -1,3 +1,4 @@
+import { SupportedChain } from '../../chain';
 import { ChainTransactionType } from '../../../wallet';
 import { EvmCreateLaunchpadParams, SolanaCreateLaunchpadParams } from './createLaunchpad';
 import { EvmUpdateLaunchpadParams, SolanaUpdateLaunchpadParams } from './updateLaunchpad';
@@ -54,6 +55,6 @@ export interface ChainParamTypes {
  * Helper type to get the parameter type for a specific method and chain
  */
 export type ChainMethodParams<
-  C extends keyof ChainTransactionType,
+  C extends SupportedChain,
   M extends keyof ChainParamTypes[C]
 > = ChainParamTypes[C][M];

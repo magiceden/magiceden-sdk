@@ -8,4 +8,4 @@ export enum ChainType {
 /**
  * Type for supported chain keys
  */
-export type SupportedChain = keyof typeof ChainType;
+export type SupportedChain = 'solana' | 'evm';
