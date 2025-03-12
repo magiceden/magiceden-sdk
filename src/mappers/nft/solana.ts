@@ -24,9 +24,10 @@ import {
  * Provides mapping functions from service parameters to API requests
  */
 export const SolanaNftApiMappers = {
-  /**
-   * Maps generic list parameters to Solana-specific API request
-   */
+  v2: {
+    /**
+     * Maps generic list parameters to Solana-specific API request
+     */
   listRequest: (params: SolanaListParams): V2ListRequest => ({
     seller: params.seller,
     tokenMint: params.tokenAddress,
@@ -132,9 +133,10 @@ export const SolanaNftApiMappers = {
    * Maps generic transfer parameters to Solana-specific API request
    */
   transferRequest: (params: SolanaTransferParams): V2TransferRequest => ({
-    from: params.from,
-    to: params.to,
-    mint: params.tokenAddress,
-    isCompressed: params.isCompressed,
-  }),
+      from: params.from,
+      to: params.to,
+      mint: params.tokenAddress,
+      isCompressed: params.isCompressed,
+    }),
+  },
 };
