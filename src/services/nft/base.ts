@@ -140,6 +140,28 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   ): Promise<ChainTransaction<C>>;
 
   /**
+   * Takes an item offer on an NFT
+   */
+  async takeItemOffer(
+    params: ChainMethodParams<C, 'takeItemOffer'>,
+  ): Promise<TransactionResponse> {
+    // 1. Get transaction instructions from API
+    const txInstructions = await this.getTakeItemOfferInstructions(params);
+
+    // 2. Sign and send transaction using wallet
+    return await this.txHashToTransactionResponse(
+      await this.config.wallet!.signAndSendTransaction(txInstructions),
+    );
+  }
+
+  /**
+   * Get take item offer transaction instructions from API
+   */
+  protected abstract getTakeItemOfferInstructions(
+    params: ChainMethodParams<C, 'takeItemOffer'>,
+  ): Promise<ChainTransaction<C>>;
+
+  /**
    * Makes an item offer on an NFT
    */
   async makeItemOffer(
@@ -184,13 +206,11 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   ): Promise<ChainTransaction<C>>;
 
   /**
-   * Takes an item offer on an NFT
+   * Buys an NFT
    */
-  async takeItemOffer(
-    params: ChainMethodParams<C, 'takeItemOffer'>,
-  ): Promise<TransactionResponse> {
+  async buy(params: ChainMethodParams<C, 'buy'>): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getTakeItemOfferInstructions(params);
+    const txInstructions = await this.getBuyInstructions(params);
 
     // 2. Sign and send transaction using wallet
     return await this.txHashToTransactionResponse(
@@ -199,10 +219,10 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   }
 
   /**
-   * Get take item offer transaction instructions from API
+   * Get transfer transaction instructions from API
    */
-  protected abstract getTakeItemOfferInstructions(
-    params: ChainMethodParams<C, 'takeItemOffer'>,
+  protected abstract getBuyInstructions(
+    params: ChainMethodParams<C, 'buy'>,
   ): Promise<ChainTransaction<C>>;
 
   /**

@@ -1,5 +1,4 @@
 import { SupportedChain } from '../../chain';
-import { ChainTransactionType } from '../../../wallet';
 import { EvmCreateLaunchpadParams, SolanaCreateLaunchpadParams } from './createLaunchpad';
 import { EvmUpdateLaunchpadParams, SolanaUpdateLaunchpadParams } from './updateLaunchpad';
 import { EvmMintParams, SolanaMintParams } from './mint';
@@ -9,6 +8,7 @@ import { EvmMakeItemOfferParams, SolanaMakeItemOfferParams } from './makeItemOff
 import { EvmTakeItemOfferParams, SolanaTakeItemOfferParams } from './takeItemOffer';
 import { EvmCancelItemOfferParams, SolanaCancelItemOfferParams } from './cancelItemOffer';
 import { EvmTransferParams, SolanaTransferParams } from './transfer';
+import { EvmBuyParams, SolanaBuyParams } from './buy';
 
 
 export * from './createLaunchpad';
@@ -20,7 +20,7 @@ export * from './makeItemOffer';
 export * from './takeItemOffer';
 export * from './cancelItemOffer';
 export * from './transfer';
-
+export * from './buy';
 
 /**
  * Chain-specific parameter types mapping
@@ -37,6 +37,7 @@ export interface ChainParamTypes {
     cancelItemOffer: SolanaCancelItemOfferParams;
     takeItemOffer: SolanaTakeItemOfferParams;
     transfer: SolanaTransferParams;
+    buy: SolanaBuyParams;
   };
   evm: {
     createLaunchpad: EvmCreateLaunchpadParams;
@@ -48,6 +49,7 @@ export interface ChainParamTypes {
     cancelItemOffer: EvmCancelItemOfferParams;
     takeItemOffer: EvmTakeItemOfferParams;
     transfer: EvmTransferParams;
+    buy: EvmBuyParams;
   };
 }
 
