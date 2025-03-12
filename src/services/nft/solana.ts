@@ -1,19 +1,8 @@
 import { BaseNftService } from './base';
-import {
-  CreateLaunchpadParams,
-  UpdateLaunchpadParams,
-  MintParams,
-  ListParams,
-  CancelListingParams,
-  MakeItemOfferParams,
-  CancelItemOfferParams,
-  TakeItemOfferParams,
-  TransferParams,
-  TransactionResponse,
-  ChainMethodParams,
-} from '../../types';
+import { TransactionResponse, ChainMethodParams } from '../../types';
 import { ClientConfig } from '../../types';
 import { ChainTransaction } from '../../wallet';
+import { SolanaNftMappers } from '../../mappers/nft';
 
 /**
  * Solana-specific NFT service implementation
@@ -63,21 +52,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getListInstructions(
     params: ChainMethodParams<'solana', 'list'>,
   ): Promise<ChainTransaction<'solana'>> {
-    // Map parameters to V2ListRequest
-    return this.v2ApiClient.list({
-      seller: params.seller,
-      tokenMint: params.tokenAddress,
-      auctionHouseAddress: params.auctionHouseAddress,
-      tokenAccount: params.tokenAccount,
-      price: params.price,
-      splPrice: params.splPrice,
-      sellerReferral: params.sellerReferral,
-      expiry: params.expiry,
-      prioFeeMicroLamports: params.prioFeeMicroLamports,
-      maxPrioFeeLamports: params.maxPrioFeeLamports,
-      exactPrioFeeLamports: params.exactPrioFeeLamports,
-      txFeePayer: params.txFeePayer,
-    });
+    return this.v2ApiClient.list(SolanaNftMappers.listRequest(params));
   }
 
   /**
@@ -87,19 +62,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getCancelListingInstructions(
     params: ChainMethodParams<'solana', 'cancelListing'>,
   ): Promise<ChainTransaction<'solana'>> {
-    // Map parameters to V2CancelListingRequest
-    return this.v2ApiClient.cancelListing({
-      seller: params.seller,
-      tokenMint: params.tokenAddress,
-      auctionHouseAddress: params.auctionHouseAddress,
-      tokenAccount: params.tokenAccount,
-      price: params.price,
-      sellerReferral: params.sellerReferral,
-      expiry: params.expiry,
-      prioFeeMicroLamports: params.prioFeeMicroLamports,
-      maxPrioFeeLamports: params.maxPrioFeeLamports,
-      exactPrioFeeLamports: params.exactPrioFeeLamports,
-    });
+    return this.v2ApiClient.cancelListing(SolanaNftMappers.cancelListingRequest(params));
   }
 
   /**
@@ -109,20 +72,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getMakeItemOfferInstructions(
     params: ChainMethodParams<'solana', 'makeItemOffer'>,
   ): Promise<ChainTransaction<'solana'>> {
-    // Map parameters to V2MakeItemOfferRequest
-    return this.v2ApiClient.makeItemOffer({
-      buyer: params.buyer,
-      tokenMint: params.tokenAddress,
-      auctionHouseAddress: params.auctionHouseAddress,
-      price: params.price,
-      buyerReferral: params.buyerReferral,
-      expiry: params.expiry,
-      useBuyV2: params.useBuyV2,
-      buyerCreatorRoyaltyPercent: params.buyerCreatorRoyaltyPercent,
-      prioFeeMicroLamports: params.prioFeeMicroLamports,
-      maxPrioFeeLamports: params.maxPrioFeeLamports,
-      exactPrioFeeLamports: params.exactPrioFeeLamports,
-    });
+    return this.v2ApiClient.makeItemOffer(SolanaNftMappers.makeItemOfferRequest(params));
   }
 
   /**
@@ -132,23 +82,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getTakeItemOfferInstructions(
     params: ChainMethodParams<'solana', 'takeItemOffer'>,
   ): Promise<ChainTransaction<'solana'>> {
-    // Map parameters to V2TakeItemOfferRequest
-    return this.v2ApiClient.takeItemOffer({
-      auctionHouseAddress: params.auctionHouseAddress,
-      buyer: params.buyer,
-      seller: params.seller,
-      tokenMint: params.tokenAddress,
-      tokenATA: params.tokenATA,
-      price: params.price,
-      newPrice: params.newPrice,
-      buyerReferral: params.buyerReferral,
-      sellerReferral: params.sellerReferral,
-      buyerExpiry: params.buyerExpiry,
-      sellerExpiry: params.sellerExpiry,
-      prioFeeMicroLamports: params.prioFeeMicroLamports,
-      maxPrioFeeLamports: params.maxPrioFeeLamports,
-      exactPrioFeeLamports: params.exactPrioFeeLamports,
-    });
+    return this.v2ApiClient.takeItemOffer(SolanaNftMappers.takeItemOfferRequest(params));
   }
 
   /**
@@ -158,18 +92,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getCancelItemOfferInstructions(
     params: ChainMethodParams<'solana', 'cancelItemOffer'>,
   ): Promise<ChainTransaction<'solana'>> {
-    // Map parameters to V2CancelItemOfferRequest
-    return this.v2ApiClient.cancelItemOffer({
-      buyer: params.buyer,
-      tokenMint: params.tokenAddress,
-      auctionHouseAddress: params.auctionHouseAddress,
-      price: params.price,
-      buyerReferral: params.buyerReferral,
-      expiry: params.expiry,
-      prioFeeMicroLamports: params.prioFeeMicroLamports,
-      maxPrioFeeLamports: params.maxPrioFeeLamports,
-      exactPrioFeeLamports: params.exactPrioFeeLamports,
-    });
+    return this.v2ApiClient.cancelItemOffer(SolanaNftMappers.cancelItemOfferRequest(params));
   }
 
   /**
@@ -179,21 +102,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getBuyInstructions(
     params: ChainMethodParams<'solana', 'buy'>,
   ): Promise<ChainTransaction<'solana'>> {
-    // Map parameters to V2BuyRequest
-    return this.v2ApiClient.buy({
-      auctionHouseAddress: params.auctionHouseAddress,
-      buyer: params.buyer,
-      seller: params.seller,
-      tokenMint: params.tokenAddress,
-      tokenATA: params.tokenATA,
-      price: params.price,
-      buyerReferral: params.buyerReferral,
-      sellerReferral: params.sellerReferral,
-      buyerExpiry: params.buyerExpiry,
-      sellerExpiry: params.sellerExpiry,
-      buyerCreatorRoyaltyPercent: params.buyerCreatorRoyaltyPercent,
-      splPrice: params.splPrice,
-    });
+    return this.v2ApiClient.buy(SolanaNftMappers.buyRequest(params));
   }
 
   /**
@@ -203,13 +112,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getTransferInstructions(
     params: ChainMethodParams<'solana', 'transfer'>,
   ): Promise<ChainTransaction<'solana'>> {
-    // Map parameters to V2TransferRequest
-    return this.v2ApiClient.transfer({
-      from: params.from,
-      to: params.to,
-      mint: params.tokenAddress,
-      isCompressed: params.isCompressed,
-    });
+    return this.v2ApiClient.transfer(SolanaNftMappers.transferRequest(params));
   }
 
   /**
