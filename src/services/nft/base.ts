@@ -1,3 +1,4 @@
+import { VersionedTransaction } from '@solana/web3.js';
 import {
   ClientConfig,
   TransactionResponse,
@@ -11,15 +12,35 @@ import {
   TakeItemOfferParams,
   TransferParams,
 } from '../../types';
+import { ChainTransactionType } from '../../wallet';
+import { V2ApiClient } from '../../api/clients/v2';
+import { V4ApiClient } from '../../api/clients/v4';
+import { V3ApiClient } from '../../api/clients/v3';
+import { ApiClientOptions } from '../../api/clients/base';
 
 /**
  * Base class for NFT services
  */
-export abstract class BaseNftService {
-  protected readonly config: ClientConfig;
+export abstract class BaseNftService<C extends keyof ChainTransactionType = keyof ChainTransactionType> {
+  protected readonly config: ClientConfig<C>;
 
-  constructor(config: ClientConfig) {
+  protected readonly v2ApiClient: V2ApiClient;
+  protected readonly v3ApiClient: V3ApiClient;
+  protected readonly v4ApiClient: V4ApiClient;
+
+  constructor(config: ClientConfig<C>) {
     this.config = config;
+
+    const apiOptions: ApiClientOptions = {
+      chain: config.chain,
+      apiKey: config.apiKey,
+      headers: config.headers,
+      timeout: config.timeout,
+    };
+
+    this.v2ApiClient = new V2ApiClient(apiOptions);
+    this.v3ApiClient = new V3ApiClient(apiOptions);
+    this.v4ApiClient = new V4ApiClient(apiOptions);
   }
 
   /**
@@ -40,7 +61,7 @@ export abstract class BaseNftService {
    */
   protected abstract getCreateLaunchpadInstructions<T extends CreateLaunchpadParams>(
     params: T,
-  ): Promise<any>;
+  ): Promise<ChainTransactionType[C]>;
 
   /**
    * Updates an existing launchpad

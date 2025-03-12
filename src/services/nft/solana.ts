@@ -12,21 +12,14 @@ import {
   TransactionResponse,
 } from '../../types';
 import { ClientConfig } from '../../types';
-import { V4ApiClient } from '../../api/clients/v4';
-import { V2ApiClient } from '../../api/clients/v2';
+import { ChainTransactionType } from '../../wallet';
 
 /**
  * Solana-specific NFT service implementation
  */
-export class SolanaNftService extends BaseNftService {
-  private readonly v2ApiClient: V2ApiClient;
-  private readonly v4ApiClient: V4ApiClient;
-
-  constructor(config: ClientConfig) {
+export class SolanaNftService extends BaseNftService<'solana'> {
+  constructor(config: ClientConfig<'solana'>) {
     super(config);
-    
-    this.v2ApiClient = new V2ApiClient(config);
-    this.v4ApiClient = new V4ApiClient(config);
   }
 
   /**
@@ -69,7 +62,7 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getListInstructions<T extends ListParams>(
     params: T,
-  ): Promise<any> {
+  ): Promise<ChainTransactionType['solana']> {
     return this.v2ApiClient.list(params);
   }
 
@@ -79,7 +72,7 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getCancelListingInstructions<T extends CancelListingParams>(
     params: T,
-  ): Promise<any> {
+  ): Promise<ChainTransactionType['solana']> {
     return this.v2ApiClient.cancelListing(params);
   }
 
@@ -89,7 +82,7 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getMakeItemOfferInstructions<T extends MakeItemOfferParams>(
     params: T,
-  ): Promise<any> {
+  ): Promise<ChainTransactionType['solana']> {
     return this.v2ApiClient.makeItemOffer(params);
   }
 
@@ -99,7 +92,7 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getCancelItemOfferInstructions<T extends CancelItemOfferParams>(
     params: T,
-  ): Promise<any> {
+  ): Promise<ChainTransactionType['solana']> {
     return this.v2ApiClient.cancelItemOffer(params);
   }
 
@@ -109,7 +102,7 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getTakeItemOfferInstructions<T extends TakeItemOfferParams>(
     params: T,
-  ): Promise<any> {
+  ): Promise<ChainTransactionType['solana']> {
     return this.v2ApiClient.takeItemOffer(params);
   }
 
@@ -119,7 +112,7 @@ export class SolanaNftService extends BaseNftService {
    */
   protected async getTransferInstructions<T extends TransferParams>(
     params: T,
-  ): Promise<any> {
+  ): Promise<ChainTransactionType['solana']> {
     return this.v2ApiClient.transfer(params);
   }
 

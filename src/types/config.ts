@@ -1,11 +1,11 @@
-import { SupportedWalletProvider } from '../wallet';
+import { ChainTransactionType, WalletProvider } from '../wallet';
 
 /**
  * Environment options
  */
 export enum Environment {
   PRODUCTION = 'production',
-  DEVELOPMENT = 'development'
+  DEVELOPMENT = 'development',
 }
 
 /**
@@ -19,7 +19,7 @@ export enum ChainType {
 /**
  * Client configuration options
  */
-export interface ClientConfig {
+export interface ClientConfig<C extends keyof ChainTransactionType = keyof ChainTransactionType> {
   /**
    * API key for authenticated requests (optional)
    */
@@ -33,7 +33,7 @@ export interface ClientConfig {
   /**
    * Wallet provider for signing transactions
    */
-  wallet: SupportedWalletProvider;
+  wallet: WalletProvider<ChainTransactionType[C]>;
 
   /**
    * Request timeout in milliseconds

@@ -18,7 +18,7 @@ export class MagicEdenSDK {
   public static createSolanaClient<T extends SolanaWalletProvider>(
     apiKey: string,
     walletProvider: T,
-    clientConfig: Partial<Omit<ClientConfig, 'apiKey'>> = {}
+    clientConfig: Partial<Omit<ClientConfig<'solana'>, 'apiKey'>> = {}
   ): MagicEdenClient {
     if (!apiKey) {
       throw new Error('API key is required to create a Magic Eden client');
@@ -46,7 +46,7 @@ export class MagicEdenSDK {
     keypair: Keypair,
     options?: {
       rpcUrl?: string;
-      clientConfig?: Partial<Omit<ClientConfig, 'apiKey'>>;
+      clientConfig?: Partial<Omit<ClientConfig<'solana'>, 'apiKey'>>;
     }
   ): MagicEdenClient {
     const rpcUrl = options?.rpcUrl || 'https://api.mainnet-beta.solana.com';

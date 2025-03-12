@@ -1,5 +1,5 @@
 import { BaseApiClient } from './base';
-import { ChainType, ClientConfig } from '../../types';
+import { ChainType } from '../../types';
 import { supportedOn } from '../utils/decorators';
 import {
   SolanaInstructionsResponse,
@@ -14,13 +14,14 @@ import {
   V2BuyRequest,
   V2TransferRequest,
 } from '../../types/api';
+import { ApiClientOptions } from './base';
 
 /**
  * V2 API client implementation (primarily for Solana marketplace operations)
  */
 export class V2ApiClient extends BaseApiClient {
-  constructor(config: ClientConfig) {
-    super(config);
+  constructor(options: ApiClientOptions) {
+    super(options);
   }
 
   /**
