@@ -2,7 +2,7 @@ import { BaseNftService } from './base';
 import { TransactionResponse, ChainMethodParams } from '../../types';
 import { ClientConfig } from '../../types';
 import { ChainTransaction } from '../../wallet';
-import { SolanaNftMappers } from '../../mappers/nft';
+import { SolanaNftApiMappers } from '../../mappers/nft';
 
 /**
  * Solana-specific NFT service implementation
@@ -52,7 +52,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getListInstructions(
     params: ChainMethodParams<'solana', 'list'>,
   ): Promise<ChainTransaction<'solana'>> {
-    return this.v2ApiClient.list(SolanaNftMappers.listRequest(params));
+    return this.v2ApiClient.list(SolanaNftApiMappers.listRequest(params));
   }
 
   /**
@@ -62,7 +62,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getCancelListingInstructions(
     params: ChainMethodParams<'solana', 'cancelListing'>,
   ): Promise<ChainTransaction<'solana'>> {
-    return this.v2ApiClient.cancelListing(SolanaNftMappers.cancelListingRequest(params));
+    return this.v2ApiClient.cancelListing(SolanaNftApiMappers.cancelListingRequest(params));
   }
 
   /**
@@ -72,7 +72,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getMakeItemOfferInstructions(
     params: ChainMethodParams<'solana', 'makeItemOffer'>,
   ): Promise<ChainTransaction<'solana'>> {
-    return this.v2ApiClient.makeItemOffer(SolanaNftMappers.makeItemOfferRequest(params));
+    return this.v2ApiClient.makeItemOffer(SolanaNftApiMappers.makeItemOfferRequest(params));
   }
 
   /**
@@ -82,7 +82,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getTakeItemOfferInstructions(
     params: ChainMethodParams<'solana', 'takeItemOffer'>,
   ): Promise<ChainTransaction<'solana'>> {
-    return this.v2ApiClient.takeItemOffer(SolanaNftMappers.takeItemOfferRequest(params));
+    return this.v2ApiClient.takeItemOffer(SolanaNftApiMappers.takeItemOfferRequest(params));
   }
 
   /**
@@ -92,7 +92,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getCancelItemOfferInstructions(
     params: ChainMethodParams<'solana', 'cancelItemOffer'>,
   ): Promise<ChainTransaction<'solana'>> {
-    return this.v2ApiClient.cancelItemOffer(SolanaNftMappers.cancelItemOfferRequest(params));
+    return this.v2ApiClient.cancelItemOffer(SolanaNftApiMappers.cancelItemOfferRequest(params));
   }
 
   /**
@@ -102,7 +102,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getBuyInstructions(
     params: ChainMethodParams<'solana', 'buy'>,
   ): Promise<ChainTransaction<'solana'>> {
-    return this.v2ApiClient.buy(SolanaNftMappers.buyRequest(params));
+    return this.v2ApiClient.buy(SolanaNftApiMappers.buyRequest(params));
   }
 
   /**
@@ -112,7 +112,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getTransferInstructions(
     params: ChainMethodParams<'solana', 'transfer'>,
   ): Promise<ChainTransaction<'solana'>> {
-    return this.v2ApiClient.transfer(SolanaNftMappers.transferRequest(params));
+    return this.v2ApiClient.transfer(SolanaNftApiMappers.transferRequest(params));
   }
 
   /**

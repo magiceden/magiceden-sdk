@@ -12,7 +12,7 @@ import {
  * Ethereum NFT Service Mappers
  * Provides mapping functions from service parameters to API requests
  */
-export const EvmNftMappers = {
+export const EvmNftApiMappers = {
   /**
    * Maps generic list parameters to Ethereum-specific API request
    */

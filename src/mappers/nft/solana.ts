@@ -23,7 +23,7 @@ import {
  * Solana NFT Service Mappers
  * Provides mapping functions from service parameters to API requests
  */
-export const SolanaNftMappers = {
+export const SolanaNftApiMappers = {
   /**
    * Maps generic list parameters to Solana-specific API request
    */
