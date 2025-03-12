@@ -10,6 +10,7 @@ import {
   TakeItemOfferParams,
   TransferParams,
   TransactionResponse,
+  ChainMethodParams,
 } from '../../types';
 import { ClientConfig } from '../../types';
 import { ChainTransactionType } from '../../wallet';
@@ -63,8 +64,8 @@ export class SolanaNftService extends BaseNftService<'solana'> {
    * Get list transaction instructions from API
    * @param params Listing parameters
    */
-  protected async getListInstructions<T extends ListParams>(
-    params: T,
+  protected async getListInstructions(
+    params: ChainMethodParams<'solana', 'list'>,
   ): Promise<ChainTransactionType['solana']> {
     return this.v2ApiClient.list(params);
   }

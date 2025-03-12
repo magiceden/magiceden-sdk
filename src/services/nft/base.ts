@@ -1,16 +1,7 @@
-import { VersionedTransaction } from '@solana/web3.js';
 import {
+  ChainMethodParams,
   ClientConfig,
   TransactionResponse,
-  CreateLaunchpadParams,
-  UpdateLaunchpadParams,
-  MintParams,
-  ListParams,
-  CancelListingParams,
-  MakeItemOfferParams,
-  CancelItemOfferParams,
-  TakeItemOfferParams,
-  TransferParams,
 } from '../../types';
 import { ChainTransactionType } from '../../wallet';
 import { V2ApiClient } from '../../api/clients/v2';
@@ -111,9 +102,9 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Lists an NFT for sale
    */
-  async list<T extends ListParams>(identifier: string, params: T): Promise<TransactionResponse> {
+  async list(params: ChainMethodParams<C, 'list'>): Promise<TransactionResponse> {
     // 1. Get transaction instructions from API
-    const txInstructions = await this.getListInstructions(identifier, params);
+    const txInstructions = await this.getListInstructions(params);
 
     // 2. Sign and send transaction using wallet
     return await this.txHashToTransactionResponse(
@@ -124,9 +115,8 @@ export abstract class BaseNftService<C extends keyof ChainTransactionType = keyo
   /**
    * Get list transaction instructions from API
    */
-  protected abstract getListInstructions<T extends ListParams>(
-    identifier: string,
-    params: T,
+  protected abstract getListInstructions(
+    params: ChainMethodParams<C, 'list'>,
   ): Promise<ChainTransactionType[C]>;
 
   /**
