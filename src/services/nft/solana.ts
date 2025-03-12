@@ -5,10 +5,9 @@ import {
   MintParams,
   ListParams,
   CancelListingParams,
-  BuyParams,
-  MakeOfferParams,
-  CancelOfferParams,
-  TakeOfferParams,
+  MakeItemOfferParams,
+  CancelItemOfferParams,
+  TakeItemOfferParams,
   TransferParams,
   TransactionResponse,
 } from '../../types';
@@ -34,7 +33,9 @@ export class SolanaNftService extends BaseNftService {
    * Get create launchpad transaction instructions from API
    * @param params Launchpad creation parameters
    */
-  protected async getCreateLaunchpadInstructions(params: CreateLaunchpadParams): Promise<any> {
+  protected async getCreateLaunchpadInstructions<T extends CreateLaunchpadParams>(
+    params: T,
+  ): Promise<any> {
     return this.v4ApiClient.createLaunchpad(params);
   }
 
@@ -43,7 +44,10 @@ export class SolanaNftService extends BaseNftService {
    * @param launchpadId The launchpad ID
    * @param params Launchpad update parameters
    */
-  protected async getUpdateLaunchpadInstructions(launchpadId: string, params: UpdateLaunchpadParams): Promise<any> {
+  protected async getUpdateLaunchpadInstructions<T extends UpdateLaunchpadParams>(
+    launchpadId: string,
+    params: T,
+  ): Promise<any> {
     return this.v4ApiClient.updateLaunchpad(launchpadId, params);
   }
 
@@ -52,7 +56,10 @@ export class SolanaNftService extends BaseNftService {
    * @param launchpadId The launchpad ID
    * @param params Mint parameters
    */
-  protected async getMintInstructions(launchpadId: string, params: MintParams): Promise<any> {
+  protected async getMintInstructions<T extends MintParams>(
+    launchpadId: string,
+    params: T,
+  ): Promise<any> {
     return this.v4ApiClient.mint(launchpadId, params);
   }
 
@@ -60,7 +67,9 @@ export class SolanaNftService extends BaseNftService {
    * Get list transaction instructions from API
    * @param params Listing parameters
    */
-  protected async getListInstructions(params: ListParams): Promise<any> {
+  protected async getListInstructions<T extends ListParams>(
+    params: T,
+  ): Promise<any> {
     return this.v2ApiClient.list(params);
   }
 
@@ -68,23 +77,19 @@ export class SolanaNftService extends BaseNftService {
    * Get cancel listing transaction instructions from API
    * @param params Cancel listing parameters
    */
-  protected async getCancelListingInstructions(params: CancelListingParams): Promise<any> {
+  protected async getCancelListingInstructions<T extends CancelListingParams>(
+    params: T,
+  ): Promise<any> {
     return this.v2ApiClient.cancelListing(params);
-  }
-
-  /**
-   * Get buy transaction instructions from API
-   * @param params Buy parameters
-   */
-  protected async getBuyInstructions(params: BuyParams): Promise<any> {
-    return this.v2ApiClient.buy(params);
   }
 
   /**
    * Get make item offer transaction instructions from API
    * @param params Make item offer parameters
    */
-  protected async getMakeItemOfferInstructions(params: MakeOfferParams): Promise<any> {
+  protected async getMakeItemOfferInstructions<T extends MakeItemOfferParams>(
+    params: T,
+  ): Promise<any> {
     return this.v2ApiClient.makeItemOffer(params);
   }
 
@@ -92,7 +97,9 @@ export class SolanaNftService extends BaseNftService {
    * Get cancel item offer transaction instructions from API
    * @param params Cancel item offer parameters
    */
-  protected async getCancelItemOfferInstructions(params: CancelOfferParams): Promise<any> {
+  protected async getCancelItemOfferInstructions<T extends CancelItemOfferParams>(
+    params: T,
+  ): Promise<any> {
     return this.v2ApiClient.cancelItemOffer(params);
   }
 
@@ -100,16 +107,19 @@ export class SolanaNftService extends BaseNftService {
    * Get take item offer transaction instructions from API
    * @param params Take item offer parameters
    */
-  protected async getTakeItemOfferInstructions(params: TakeOfferParams): Promise<any> {
+  protected async getTakeItemOfferInstructions<T extends TakeItemOfferParams>(
+    params: T,
+  ): Promise<any> {
     return this.v2ApiClient.takeItemOffer(params);
   }
 
   /**
    * Get transfer transaction instructions from API
-   * @param mintAddress The mint address of the NFT
    * @param params Transfer parameters
    */
-  protected async getTransferInstructions(params: TransferParams): Promise<any> {
+  protected async getTransferInstructions<T extends TransferParams>(
+    params: T,
+  ): Promise<any> {
     return this.v2ApiClient.transfer(params);
   }
 

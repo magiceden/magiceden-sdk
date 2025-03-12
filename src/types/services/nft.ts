@@ -24,24 +24,24 @@ export interface ListParams {}
 export interface CancelListingParams {}
 
 /**
- * Parameters for buying an NFT
+ * Parameters for taking an NFT offer
  */
-export interface BuyParams {}
+export interface TakeItemOfferParams {}
 
 /**
  * Parameters for making an offer on an NFT
  */
-export interface MakeOfferParams {}
+export interface MakeItemOfferParams {}
 
 /**
  * Parameters for canceling an offer
  */
-export interface CancelOfferParams {}
+export interface CancelItemOfferParams {}
 
 /**
  * Parameters for accepting an offer
  */
-export interface TakeOfferParams {}
+export interface TakeItemOfferParams {}
 
 /**
  * Parameters for transferring an NFT
