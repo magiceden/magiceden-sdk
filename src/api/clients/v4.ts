@@ -19,7 +19,7 @@ export class V4ApiClient extends BaseApiClient {
    * Gets instructions to create a launchpad
    */
   @supportedOn([ChainType.SOLANA, ChainType.EVM])
-  async createLaunchpad<T extends V4CreateLaunchpadRequest>(params: T): Promise<any> {
+  async createLaunchpad(params: V4CreateLaunchpadRequest): Promise<any> {
     return this.api.post('/self_serve/nft/create_token', {
       ...params,
     });
@@ -29,14 +29,14 @@ export class V4ApiClient extends BaseApiClient {
    * Gets instructions to update a launchpad
    */
   @supportedOn([ChainType.SOLANA, ChainType.EVM])
-  async updateLaunchpad<T extends V4UpdateLaunchpadRequest>(params: T): Promise<any> {
+  async updateLaunchpad(params: V4UpdateLaunchpadRequest): Promise<any> {
     return this.api.post(`/self_serve/nft/update_token`, {
       ...params,
     });
   }
 
   @supportedOn([ChainType.SOLANA])
-  async publishLaunchpad<T extends V4PublishLaunchpadRequest>(params: T): Promise<any> {
+  async publishLaunchpad(params: V4PublishLaunchpadRequest): Promise<any> {
     return this.api.post(`/self_serve/nft/publish`, {
       ...params,
     });
@@ -46,7 +46,7 @@ export class V4ApiClient extends BaseApiClient {
    * Gets instructions to mint from a launchpad
    */
   @supportedOn([ChainType.SOLANA, ChainType.EVM])
-  async mint<T extends V4MintRequest>(params: T): Promise<any> {
+  async mint(params: V4MintRequest): Promise<any> {
     return this.api.post(`/self_serve/nft/mint_token`, {
       ...params,
     });
