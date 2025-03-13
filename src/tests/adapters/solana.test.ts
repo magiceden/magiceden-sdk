@@ -24,7 +24,8 @@ describe('SolanaTransactionAdapters', () => {
       const result = SolanaTransactionAdapters.fromInstructionsResponse(mockResponse as any);
 
       expect(deserializeSpy).toHaveBeenCalled();
-      expect(result).toEqual({ mockTransaction: true });
+      expect(result).toBeInstanceOf(Array);
+      expect(result[0]).toEqual({ mockTransaction: true });
 
       deserializeSpy.mockRestore();
     });
@@ -50,7 +51,7 @@ describe('SolanaTransactionAdapters', () => {
       const result = SolanaTransactionAdapters.fromInstructionsResponse(mockResponse as any);
 
       expect(deserializeSpy).toHaveBeenCalled();
-      expect(result).toEqual({ mockTransaction: true });
+      expect(result[0]).toEqual({ mockTransaction: true });
 
       deserializeSpy.mockRestore();
     });
@@ -89,7 +90,8 @@ describe('SolanaTransactionAdapters', () => {
       const result = SolanaTransactionAdapters.fromBuffer(mockBuffer);
 
       expect(deserializeSpy).toHaveBeenCalledWith(mockBuffer);
-      expect(result).toEqual({ mockTransaction: true });
+      expect(result).toBeInstanceOf(Array);
+      expect(result[0]).toEqual({ mockTransaction: true });
 
       deserializeSpy.mockRestore();
     });

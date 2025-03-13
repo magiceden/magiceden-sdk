@@ -14,8 +14,6 @@ export class MockSolanaWalletProvider extends SolanaWalletProvider {
   waitForTransactionConfirmation = async (txIdentifier: string) => ({
     txId: txIdentifier,
     status: 'confirmed' as any,
-    context: { slot: 1 },
-    value: { err: null },
   });
   getConnection = () => ({}) as any;
   getSignatureStatus = async (signature: string) => ({

@@ -38,7 +38,12 @@ describe('SolanaNftService', () => {
 
     // Create mock wallet
     mockWallet = {
-      signAndSendTransaction: jest.fn().mockResolvedValue('mockTxHash123'),
+      getAddress: jest.fn().mockReturnValue('mock-address'),
+      signAndSendTransaction: jest.fn().mockResolvedValue('mock-signature'),
+      waitForTransactionConfirmation: jest.fn().mockResolvedValue({
+        txId: 'mock-signature',
+        status: 'confirmed'
+      })
     };
 
     // Create service instance
@@ -82,7 +87,7 @@ describe('SolanaNftService', () => {
       expect(mockV2ApiClient.list).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
-      expect(result).toEqual({ txId: 'mockTxHash123', status: 'pending' });
+      expect(result).toEqual([{ txId: 'mock-signature', status: 'confirmed' }]);
     });
 
     it('should handle API errors', async () => {
@@ -148,7 +153,7 @@ describe('SolanaNftService', () => {
       expect(mockV2ApiClient.cancelListing).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
-      expect(result).toEqual({ txId: 'mockTxHash123', status: 'pending' });
+      expect(result).toEqual([{ txId: 'mock-signature', status: 'confirmed' }]);
     });
   });
 
@@ -177,7 +182,7 @@ describe('SolanaNftService', () => {
       expect(mockV2ApiClient.makeItemOffer).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
-      expect(result).toEqual({ txId: 'mockTxHash123', status: 'pending' });
+      expect(result).toEqual([{ txId: 'mock-signature', status: 'confirmed' }]);
     });
   });
 
@@ -206,7 +211,7 @@ describe('SolanaNftService', () => {
       expect(mockV2ApiClient.cancelItemOffer).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
-      expect(result).toEqual({ txId: 'mockTxHash123', status: 'pending' });
+      expect(result).toEqual([{ txId: 'mock-signature', status: 'confirmed' }]);
     });
   });
 
@@ -239,7 +244,7 @@ describe('SolanaNftService', () => {
       expect(mockV2ApiClient.takeItemOffer).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
-      expect(result).toEqual({ txId: 'mockTxHash123', status: 'pending' });
+      expect(result).toEqual([{ txId: 'mock-signature', status: 'confirmed' }]);
     });
   });
 
@@ -270,7 +275,7 @@ describe('SolanaNftService', () => {
       expect(mockV2ApiClient.buy).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
-      expect(result).toEqual({ txId: 'mockTxHash123', status: 'pending' });
+      expect(result).toEqual([{ txId: 'mock-signature', status: 'confirmed' }]);
     });
   });
 
@@ -297,7 +302,7 @@ describe('SolanaNftService', () => {
       expect(mockV2ApiClient.transfer).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
-      expect(result).toEqual({ txId: 'mockTxHash123', status: 'pending' });
+      expect(result).toEqual([{ txId: 'mock-signature', status: 'confirmed' }]);
     });
   });
 

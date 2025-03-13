@@ -55,10 +55,10 @@ export const SolanaTransactionAdapters = {
    * @param data Raw transaction data buffer
    * @returns A properly formatted Solana transaction
    */
-  fromBuffer: (data: Buffer): ChainTransaction<'solana'> => {
+  fromBuffer: (data: Buffer): ChainTransaction<'solana'>[] => {
     try {
       // Try to deserialize as a versioned transaction first
-      return VersionedTransaction.deserialize(data);
+      return [VersionedTransaction.deserialize(data)];
     } catch (e) {
       throw new Error('Invalid transaction data, only versioned transactions are supported');
     }
