@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { WalletProvider } from '../provider';
+import { WalletProvider, WalletTxReceipt } from '../provider';
 import {
   Connection,
   RpcResponseAndContext,
@@ -14,7 +12,7 @@ export abstract class SolanaWalletProvider extends WalletProvider<
   VersionedTransaction,
   VersionedTransaction,
   string,
-  RpcResponseAndContext<SignatureResult>
+  WalletTxReceipt
 > {
   /**
    * Get the connection to the Solana network.
@@ -33,12 +31,4 @@ export abstract class SolanaWalletProvider extends WalletProvider<
     signature: string,
     options?: SignatureStatusConfig,
   ): Promise<RpcResponseAndContext<SignatureStatus | null>>;
-
-  /**
-   * Wait for the signature result of a transaction.
-   *
-   * @param signature The signature of the transaction.
-   * @returns The signature result of the transaction.
-   */
-  abstract waitForSignatureResult(signature: string): Promise<RpcResponseAndContext<SignatureResult>>;
 }
