@@ -53,7 +53,7 @@ describe('SolanaNftService', () => {
       .instances[0] as jest.Mocked<V2ApiClient>;
 
     // Setup default mock implementations
-    (SolanaTransactionAdapters.fromInstructionsResponse as jest.Mock).mockReturnValue(mockTransaction);
+    (SolanaTransactionAdapters.fromInstructionsResponse as jest.Mock).mockReturnValue([mockTransaction]);
   });
 
   describe('list', () => {

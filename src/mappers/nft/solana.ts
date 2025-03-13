@@ -8,6 +8,8 @@ import {
   SolanaBuyParams,
   SolanaTransferParams,
   SolanaCreateLaunchpadParams,
+  SolanaUpdateLaunchpadParams,
+  SolanaMintParams,
 } from '../../types/services/nft';
 
 import {
@@ -19,6 +21,8 @@ import {
   V2BuyRequest,
   V2TransferRequest,
   V4CreateLaunchpadRequest,
+  V4UpdateLaunchpadRequest,
+  V4MintRequest,
 } from '../../types/api';
 
 /**
@@ -154,6 +158,20 @@ export const SolanaApiMappers = {
      */
     createLaunchpadRequest: (params: SolanaCreateLaunchpadParams): V4CreateLaunchpadRequest => ({
       // All variables have the same name
+      ...params
+    }),
+
+    /**
+     * Maps Solana update launchpad parameters to V4 update launchpad request
+     */
+    updateLaunchpadRequest: (params: SolanaUpdateLaunchpadParams): V4UpdateLaunchpadRequest => ({
+      ...params
+    }),
+
+    /**
+     * Maps Solana mint parameters to V4 mint request
+     */
+    mintRequest: (params: SolanaMintParams): V4MintRequest => ({
       ...params
     }),
   },

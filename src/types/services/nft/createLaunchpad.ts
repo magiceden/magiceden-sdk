@@ -2,14 +2,9 @@ import { z } from 'zod';
 import { Blockchain, ZodEvmBlockchain } from '../../chain';
 import { EvmProtocolType, SolProtocolType, TokenProtocolType } from '../../protocol';
 import { SolanaSymbol, zSolanaAddress } from '../../solana/primitives';
-import { SOL_MAX_NAME_LENGTH } from '../../../constants/nft';
+import { MAX_NAME_LENGTH, MAX_ROYALTY_BPS, MAX_SYMBOL_LENGTH, MIN_ROYALTY_BPS, SOL_MAX_NAME_LENGTH } from '../../../constants/nft';
 import { zSolNonFungibleCreator } from '../../solana/nft';
 import { MintStages } from './shared';
-
-const MAX_NAME_LENGTH = 120;
-const MAX_SYMBOL_LENGTH = 30;
-const MIN_ROYALTY_BPS = 0;
-const MAX_ROYALTY_BPS = 1000;
 
 /**
  * Parameters for creating a launchpad
