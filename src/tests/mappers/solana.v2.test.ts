@@ -1,7 +1,7 @@
 import { SolanaApiMappers } from '../../mappers/nft/solana';
 import { SplAmount } from '../../types/solana';
 
-describe('SolanaNftApiMappers', () => {
+describe('SolanaApiMappers V2', () => {
   describe('listRequest', () => {
     it('should correctly map list parameters', () => {
       const params = {
