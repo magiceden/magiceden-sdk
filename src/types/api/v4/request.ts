@@ -1,5 +1,5 @@
-import { Blockchain } from "../chain";
-import { TokenProtocolType } from "../protocol";
+import { Blockchain } from '../../chain';
+import { TokenProtocolType } from '../../protocol';
 
 export interface SolanaTransactionParams {
   feePayer: string;

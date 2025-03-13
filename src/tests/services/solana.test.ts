@@ -1,5 +1,5 @@
 import { SolanaNftService } from '../../services/nft/solana';
-import { SolanaNftApiMappers } from '../../mappers/nft/solana';
+import { SolanaApiMappers } from '../../mappers/nft/solana';
 import { SolanaTransactionAdapters } from '../../adapters/transactions/solana';
 import { V2ApiClient } from '../../api/clients/v2';
 import { ChainType } from '../../types';
@@ -71,14 +71,14 @@ describe('SolanaNftService', () => {
       const mockApiRequest = { tokenMint: 'mockTokenMint' /* other fields */ };
       
       // Setup mock implementations
-      (SolanaNftApiMappers.v2.listRequest as jest.Mock).mockReturnValue(mockApiRequest);
+      (SolanaApiMappers.v2.listRequest as jest.Mock).mockReturnValue(mockApiRequest);
       mockV2ApiClient.list.mockResolvedValue(mockApiResponse);
 
       // Call the method
       const result = await service.list(mockParams);
 
       // Verify the flow
-      expect(SolanaNftApiMappers.v2.listRequest).toHaveBeenCalledWith(mockParams);
+      expect(SolanaApiMappers.v2.listRequest).toHaveBeenCalledWith(mockParams);
       expect(mockV2ApiClient.list).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
@@ -137,14 +137,14 @@ describe('SolanaNftService', () => {
       const mockApiRequest = { tokenMint: 'mockTokenMint' /* other fields */ };
       
       // Setup mock implementations
-      (SolanaNftApiMappers.v2.cancelListingRequest as jest.Mock).mockReturnValue(mockApiRequest);
+      (SolanaApiMappers.v2.cancelListingRequest as jest.Mock).mockReturnValue(mockApiRequest);
       mockV2ApiClient.cancelListing.mockResolvedValue(mockApiResponse);
 
       // Call the method
       const result = await service.cancelListing(mockParams);
 
       // Verify the flow
-      expect(SolanaNftApiMappers.v2.cancelListingRequest).toHaveBeenCalledWith(mockParams);
+      expect(SolanaApiMappers.v2.cancelListingRequest).toHaveBeenCalledWith(mockParams);
       expect(mockV2ApiClient.cancelListing).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
@@ -166,14 +166,14 @@ describe('SolanaNftService', () => {
       const mockApiRequest = { tokenMint: 'mockTokenMint' /* other fields */ };
       
       // Setup mock implementations
-      (SolanaNftApiMappers.v2.makeItemOfferRequest as jest.Mock).mockReturnValue(mockApiRequest);
+      (SolanaApiMappers.v2.makeItemOfferRequest as jest.Mock).mockReturnValue(mockApiRequest);
       mockV2ApiClient.makeItemOffer.mockResolvedValue(mockApiResponse);
 
       // Call the method
       const result = await service.makeItemOffer(mockParams);
 
       // Verify the flow
-      expect(SolanaNftApiMappers.v2.makeItemOfferRequest).toHaveBeenCalledWith(mockParams);
+      expect(SolanaApiMappers.v2.makeItemOfferRequest).toHaveBeenCalledWith(mockParams);
       expect(mockV2ApiClient.makeItemOffer).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
@@ -195,14 +195,14 @@ describe('SolanaNftService', () => {
       const mockApiRequest = { tokenMint: 'mockTokenMint' /* other fields */ };
       
       // Setup mock implementations
-      (SolanaNftApiMappers.v2.cancelItemOfferRequest as jest.Mock).mockReturnValue(mockApiRequest);
+      (SolanaApiMappers.v2.cancelItemOfferRequest as jest.Mock).mockReturnValue(mockApiRequest);
       mockV2ApiClient.cancelItemOffer.mockResolvedValue(mockApiResponse);
 
       // Call the method
       const result = await service.cancelItemOffer(mockParams);
 
       // Verify the flow
-      expect(SolanaNftApiMappers.v2.cancelItemOfferRequest).toHaveBeenCalledWith(mockParams);
+      expect(SolanaApiMappers.v2.cancelItemOfferRequest).toHaveBeenCalledWith(mockParams);
       expect(mockV2ApiClient.cancelItemOffer).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
@@ -228,14 +228,14 @@ describe('SolanaNftService', () => {
       const mockApiRequest = { tokenMint: 'mockTokenMint' /* other fields */ };
       
       // Setup mock implementations
-      (SolanaNftApiMappers.v2.takeItemOfferRequest as jest.Mock).mockReturnValue(mockApiRequest);
+      (SolanaApiMappers.v2.takeItemOfferRequest as jest.Mock).mockReturnValue(mockApiRequest);
       mockV2ApiClient.takeItemOffer.mockResolvedValue(mockApiResponse);
 
       // Call the method
       const result = await service.takeItemOffer(mockParams);
 
       // Verify the flow
-      expect(SolanaNftApiMappers.v2.takeItemOfferRequest).toHaveBeenCalledWith(mockParams);
+      expect(SolanaApiMappers.v2.takeItemOfferRequest).toHaveBeenCalledWith(mockParams);
       expect(mockV2ApiClient.takeItemOffer).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
@@ -259,14 +259,14 @@ describe('SolanaNftService', () => {
       const mockApiRequest = { tokenMint: 'mockTokenMint' /* other fields */ };
       
       // Setup mock implementations
-      (SolanaNftApiMappers.v2.buyRequest as jest.Mock).mockReturnValue(mockApiRequest);
+      (SolanaApiMappers.v2.buyRequest as jest.Mock).mockReturnValue(mockApiRequest);
       mockV2ApiClient.buy.mockResolvedValue(mockApiResponse);
 
       // Call the method
       const result = await service.buy(mockParams);
 
       // Verify the flow
-      expect(SolanaNftApiMappers.v2.buyRequest).toHaveBeenCalledWith(mockParams);
+      expect(SolanaApiMappers.v2.buyRequest).toHaveBeenCalledWith(mockParams);
       expect(mockV2ApiClient.buy).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
@@ -286,14 +286,14 @@ describe('SolanaNftService', () => {
       const mockApiRequest = { mint: 'mockTokenMint' /* other fields */ };
       
       // Setup mock implementations
-      (SolanaNftApiMappers.v2.transferRequest as jest.Mock).mockReturnValue(mockApiRequest);
+      (SolanaApiMappers.v2.transferRequest as jest.Mock).mockReturnValue(mockApiRequest);
       mockV2ApiClient.transfer.mockResolvedValue(mockApiResponse);
 
       // Call the method
       const result = await service.transfer(mockParams);
 
       // Verify the flow
-      expect(SolanaNftApiMappers.v2.transferRequest).toHaveBeenCalledWith(mockParams);
+      expect(SolanaApiMappers.v2.transferRequest).toHaveBeenCalledWith(mockParams);
       expect(mockV2ApiClient.transfer).toHaveBeenCalledWith(mockApiRequest);
       expect(SolanaTransactionAdapters.fromInstructionsResponse).toHaveBeenCalledWith(mockApiResponse);
       expect(mockWallet.signAndSendTransaction).toHaveBeenCalledWith(mockTransaction);
@@ -334,7 +334,7 @@ describe('SolanaNftService', () => {
       };
 
       // Setup mapper to throw error
-      (SolanaNftApiMappers.v2.listRequest as jest.Mock).mockImplementation(() => {
+      (SolanaApiMappers.v2.listRequest as jest.Mock).mockImplementation(() => {
         throw new Error('Invalid transaction response format');
       });
 

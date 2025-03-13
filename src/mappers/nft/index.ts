@@ -1,3 +1,2 @@
-// src/mappers/nft/index.ts
-export { SolanaNftApiMappers } from './solana';
-export { EvmNftApiMappers } from './ethereum';
+export { SolanaApiMappers } from './solana';
+export { EvmApiMappers } from './ethereum';

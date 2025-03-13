@@ -20,7 +20,6 @@ import {
   V2TransferRequest,
   V4CreateLaunchpadRequest,
 } from '../../types/api';
-import { Blockchain } from '../../types/chain';
 
 /**
  * Solana NFT Service Mappers

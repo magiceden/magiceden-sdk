@@ -2,7 +2,7 @@ import { BaseNftService } from './base';
 import { TransactionResponse, ChainMethodParams } from '../../types';
 import { ClientConfig } from '../../types';
 import { ChainTransaction } from '../../wallet';
-import { SolanaNftApiMappers } from '../../mappers/nft';
+import { SolanaApiMappers } from '../../mappers/nft';
 import { SolanaTransactionAdapters } from '../../adapters/transactions';
 
 /**
@@ -53,7 +53,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getListInstructions(
     params: ChainMethodParams<'solana', 'list'>,
   ): Promise<ChainTransaction<'solana'>> {
-    const response = await this.v2ApiClient.list(SolanaNftApiMappers.v2.listRequest(params));
+    const response = await this.v2ApiClient.list(SolanaApiMappers.v2.listRequest(params));
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
 
@@ -65,7 +65,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     params: ChainMethodParams<'solana', 'cancelListing'>,
   ): Promise<ChainTransaction<'solana'>> {
     const response = await this.v2ApiClient.cancelListing(
-      SolanaNftApiMappers.v2.cancelListingRequest(params),
+      SolanaApiMappers.v2.cancelListingRequest(params),
     );
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
@@ -78,7 +78,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     params: ChainMethodParams<'solana', 'makeItemOffer'>,
   ): Promise<ChainTransaction<'solana'>> {
     const response = await this.v2ApiClient.makeItemOffer(
-      SolanaNftApiMappers.v2.makeItemOfferRequest(params),
+      SolanaApiMappers.v2.makeItemOfferRequest(params),
     );
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
@@ -91,7 +91,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     params: ChainMethodParams<'solana', 'takeItemOffer'>,
   ): Promise<ChainTransaction<'solana'>> {
     const response = await this.v2ApiClient.takeItemOffer(
-      SolanaNftApiMappers.v2.takeItemOfferRequest(params),
+      SolanaApiMappers.v2.takeItemOfferRequest(params),
     );
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
@@ -104,7 +104,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     params: ChainMethodParams<'solana', 'cancelItemOffer'>,
   ): Promise<ChainTransaction<'solana'>> {
     const response = await this.v2ApiClient.cancelItemOffer(
-      SolanaNftApiMappers.v2.cancelItemOfferRequest(params),
+      SolanaApiMappers.v2.cancelItemOfferRequest(params),
     );
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
@@ -116,7 +116,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getBuyInstructions(
     params: ChainMethodParams<'solana', 'buy'>,
   ): Promise<ChainTransaction<'solana'>> {
-    const response = await this.v2ApiClient.buy(SolanaNftApiMappers.v2.buyRequest(params));
+    const response = await this.v2ApiClient.buy(SolanaApiMappers.v2.buyRequest(params));
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
 
@@ -127,7 +127,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getTransferInstructions(
     params: ChainMethodParams<'solana', 'transfer'>,
   ): Promise<ChainTransaction<'solana'>> {
-    const response = await this.v2ApiClient.transfer(SolanaNftApiMappers.v2.transferRequest(params));
+    const response = await this.v2ApiClient.transfer(SolanaApiMappers.v2.transferRequest(params));
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
 
