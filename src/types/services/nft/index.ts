@@ -21,6 +21,7 @@ export * from './takeItemOffer';
 export * from './cancelItemOffer';
 export * from './transfer';
 export * from './buy';
+export * from './shared';
 
 /**
  * Chain-specific parameter types mapping
