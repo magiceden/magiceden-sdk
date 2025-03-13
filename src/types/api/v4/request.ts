@@ -1,16 +1,6 @@
 import { Blockchain } from '../../chain';
 import { TokenProtocolType } from '../../protocol';
 
-export interface SolanaTransactionParams {
-  feePayer: string;
-  transactions: EncodedSolanaTransaction[];
-}
-
-export interface EncodedSolanaTransaction {
-  transaction: string; // base64 encoded transaction
-  signers: string[];
-}
-
 export interface V4CreateLaunchpadRequest {
   chain: Blockchain;
   protocol: TokenProtocolType;
