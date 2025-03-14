@@ -18,7 +18,7 @@ export interface TransactionOptions {
   /**
    * Transaction strategy
    */
-  strategy: TransactionStrategy;
+  strategy?: TransactionStrategy;
 }
 
 /**
