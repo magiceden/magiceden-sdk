@@ -2,12 +2,7 @@ import { SolanaWalletProvider } from './solanaWalletProvider';
 import {
   Connection,
   Keypair,
-  PublicKey,
   VersionedTransaction,
-  LAMPORTS_PER_SOL,
-  SystemProgram,
-  MessageV0,
-  ComputeBudgetProgram,
   RpcResponseAndContext,
   SignatureResult,
   SignatureStatus,
@@ -15,6 +10,7 @@ import {
 } from '@solana/web3.js';
 import bs58 from 'bs58';
 import nacl from 'tweetnacl';
+import { WalletTxReceipt } from '../provider';
 
 /**
  * SolanaKeypairWalletProvider is a wallet provider that uses a local Solana keypair.
@@ -160,23 +156,23 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
    */
   async waitForTransactionConfirmation(
     signature: string,
-  ): Promise<RpcResponseAndContext<SignatureResult>> {
+  ): Promise<WalletTxReceipt> {
     const { blockhash, lastValidBlockHeight } = await this.connection.getLatestBlockhash();
-    return this.connection.confirmTransaction({
+    const receipt = await this.connection.confirmTransaction({
       signature: signature,
       lastValidBlockHeight,
       blockhash,
     });
-  }
-
-  /**
-   * Wait for signature result (alias for waitForTransactionConfirmation for backward compatibility)
-   *
-   * @param signature - The signature
-   * @returns The confirmation response
-   */
-  async waitForSignatureResult(signature: string): Promise<RpcResponseAndContext<SignatureResult>> {
-    return this.waitForTransactionConfirmation(signature);
+    
+    return {
+      txId: signature,
+      status: receipt.value.err ? 'failed' : 'confirmed',
+      error: receipt.value.err?.toString(),
+      metadata: {
+        blockhash,
+        lastValidBlockHeight,
+      },
+    };
   }
 
   /**

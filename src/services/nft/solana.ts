@@ -1,8 +1,8 @@
 import { BaseNftService } from './base';
-import { TransactionResponse, ChainMethodParams } from '../../types';
+import { ChainMethodParams } from '../../types';
 import { ClientConfig } from '../../types';
 import { ChainTransaction } from '../../wallet';
-import { SolanaNftApiMappers } from '../../mappers/nft';
+import { SolanaApiMappers } from '../../mappers/nft';
 import { SolanaTransactionAdapters } from '../../adapters/transactions';
 
 /**
@@ -13,47 +13,60 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     super(config);
   }
 
+  protected async getPublishLaunchpadResponse(
+    params: ChainMethodParams<'solana', 'publishLaunchpad'>,
+  ): Promise<boolean> {
+    const response = await this.v4ApiClient.publishLaunchpad(SolanaApiMappers.v4.publishLaunchpadRequest(params));
+    return response.success;
+  }
+
   /**
    * Get create launchpad transaction instructions from API
    * @param params Launchpad creation parameters
    */
-  protected async getCreateLaunchpadInstructions(
+  protected async getCreateLaunchpadTransactions(
     params: ChainMethodParams<'solana', 'createLaunchpad'>,
-  ): Promise<ChainTransaction<'solana'>> {
-    throw new Error('Not implemented');
-    // return this.v4ApiClient.createLaunchpad(params);
+  ): Promise<ChainTransaction<'solana'>[]> {
+    // TODO: Later on, properly implement extra signers for the launchpad routes
+    // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
+    const response = await this.v4ApiClient.createLaunchpad(SolanaApiMappers.v4.createLaunchpadRequest(params));
+    return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }
 
   /**
    * Get update launchpad transaction instructions from API
    * @param params Launchpad update parameters
    */
-  protected async getUpdateLaunchpadInstructions(
+  protected async getUpdateLaunchpadTransactions(
     params: ChainMethodParams<'solana', 'updateLaunchpad'>,
-  ): Promise<ChainTransaction<'solana'>> {
-    throw new Error('Not implemented');
-    // return this.v4ApiClient.updateLaunchpad(launchpadId, params);
+  ): Promise<ChainTransaction<'solana'>[]> {
+    // TODO: Later on, properly implement extra signers for the launchpad routes
+    // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
+    const response = await this.v4ApiClient.updateLaunchpad(SolanaApiMappers.v4.updateLaunchpadRequest(params));
+    return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }
 
   /**
    * Get mint transaction instructions from API
    * @param params Mint parameters
    */
-  protected async getMintInstructions(
+  protected async getMintTransactions(
     params: ChainMethodParams<'solana', 'mint'>,
-  ): Promise<ChainTransaction<'solana'>> {
-    throw new Error('Not implemented');
-    // return this.v4ApiClient.mint(launchpadId, params);
+  ): Promise<ChainTransaction<'solana'>[]> {
+    // TODO: Later on, properly implement extra signers for the mint routes
+    // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
+    const response = await this.v4ApiClient.mint(SolanaApiMappers.v4.mintRequest(params));
+    return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }
 
   /**
    * Get list transaction instructions from API
    * @param params Listing parameters
    */
-  protected async getListInstructions(
+  protected async getListTransactions(
     params: ChainMethodParams<'solana', 'list'>,
-  ): Promise<ChainTransaction<'solana'>> {
-    const response = await this.v2ApiClient.list(SolanaNftApiMappers.v2.listRequest(params));
+  ): Promise<ChainTransaction<'solana'>[]> {
+    const response = await this.v2ApiClient.list(SolanaApiMappers.v2.listRequest(params));
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
 
@@ -61,11 +74,11 @@ export class SolanaNftService extends BaseNftService<'solana'> {
    * Get cancel listing transaction instructions from API
    * @param params Cancel listing parameters
    */
-  protected async getCancelListingInstructions(
+  protected async getCancelListingTransactions(
     params: ChainMethodParams<'solana', 'cancelListing'>,
-  ): Promise<ChainTransaction<'solana'>> {
+  ): Promise<ChainTransaction<'solana'>[]> {
     const response = await this.v2ApiClient.cancelListing(
-      SolanaNftApiMappers.v2.cancelListingRequest(params),
+      SolanaApiMappers.v2.cancelListingRequest(params),
     );
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
@@ -74,11 +87,11 @@ export class SolanaNftService extends BaseNftService<'solana'> {
    * Get make item offer transaction instructions from API
    * @param params Make item offer parameters
    */
-  protected async getMakeItemOfferInstructions(
+  protected async getMakeItemOfferTransactions(
     params: ChainMethodParams<'solana', 'makeItemOffer'>,
-  ): Promise<ChainTransaction<'solana'>> {
+  ): Promise<ChainTransaction<'solana'>[]> {
     const response = await this.v2ApiClient.makeItemOffer(
-      SolanaNftApiMappers.v2.makeItemOfferRequest(params),
+      SolanaApiMappers.v2.makeItemOfferRequest(params),
     );
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
@@ -87,11 +100,11 @@ export class SolanaNftService extends BaseNftService<'solana'> {
    * Get take item offer transaction instructions from API
    * @param params Take item offer parameters
    */
-  protected async getTakeItemOfferInstructions(
+  protected async getTakeItemOfferTransactions(
     params: ChainMethodParams<'solana', 'takeItemOffer'>,
-  ): Promise<ChainTransaction<'solana'>> {
+  ): Promise<ChainTransaction<'solana'>[]> {
     const response = await this.v2ApiClient.takeItemOffer(
-      SolanaNftApiMappers.v2.takeItemOfferRequest(params),
+      SolanaApiMappers.v2.takeItemOfferRequest(params),
     );
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
@@ -100,11 +113,11 @@ export class SolanaNftService extends BaseNftService<'solana'> {
    * Get cancel item offer transaction instructions from API
    * @param params Cancel item offer parameters
    */
-  protected async getCancelItemOfferInstructions(
+  protected async getCancelItemOfferTransactions(
     params: ChainMethodParams<'solana', 'cancelItemOffer'>,
-  ): Promise<ChainTransaction<'solana'>> {
+  ): Promise<ChainTransaction<'solana'>[]> {
     const response = await this.v2ApiClient.cancelItemOffer(
-      SolanaNftApiMappers.v2.cancelItemOfferRequest(params),
+      SolanaApiMappers.v2.cancelItemOfferRequest(params),
     );
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
@@ -113,10 +126,10 @@ export class SolanaNftService extends BaseNftService<'solana'> {
    * Get buy transaction instructions from API
    * @param params Buy parameters
    */
-  protected async getBuyInstructions(
+  protected async getBuyTransactions(
     params: ChainMethodParams<'solana', 'buy'>,
-  ): Promise<ChainTransaction<'solana'>> {
-    const response = await this.v2ApiClient.buy(SolanaNftApiMappers.v2.buyRequest(params));
+  ): Promise<ChainTransaction<'solana'>[]> {
+    const response = await this.v2ApiClient.buy(SolanaApiMappers.v2.buyRequest(params));
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
 
@@ -124,20 +137,10 @@ export class SolanaNftService extends BaseNftService<'solana'> {
    * Get transfer transaction instructions from API
    * @param params Transfer parameters
    */
-  protected async getTransferInstructions(
+  protected async getTransferTransactions(
     params: ChainMethodParams<'solana', 'transfer'>,
-  ): Promise<ChainTransaction<'solana'>> {
-    const response = await this.v2ApiClient.transfer(SolanaNftApiMappers.v2.transferRequest(params));
+  ): Promise<ChainTransaction<'solana'>[]> {
+    const response = await this.v2ApiClient.transfer(SolanaApiMappers.v2.transferRequest(params));
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
-  }
-
-  /**
-   * Convert a transaction hash to a transaction response
-   */
-  protected async txHashToTransactionResponse(txHash: string): Promise<TransactionResponse> {
-    return {
-      txId: txHash,
-      status: 'pending',
-    };
   }
 }

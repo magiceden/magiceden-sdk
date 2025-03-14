@@ -1,6 +1,7 @@
 import { SupportedChain } from './chain';
 import { WalletProvider, ChainTransaction } from '../wallet';
 import { ChainType } from './chain';
+import { TransactionStrategy } from './transactions';
 
 /**
  * Environment options
@@ -8,6 +9,16 @@ import { ChainType } from './chain';
 export enum Environment {
   PRODUCTION = 'production',
   DEVELOPMENT = 'development',
+}
+
+/**
+ * Transaction options
+ */
+export interface TransactionOptions {
+  /**
+   * Transaction strategy
+   */
+  strategy?: TransactionStrategy;
 }
 
 /**
@@ -28,6 +39,14 @@ export interface ClientConfig<C extends SupportedChain = SupportedChain> {
    * Wallet provider for signing transactions
    */
   wallet: WalletProvider<ChainTransaction<C>>;
+
+  /**
+   * Transaction options
+   *
+   * Default options for transactions:
+   * - strategy: Sign and send transactions immediately
+   */
+  transactionOptions?: TransactionOptions;
 
   /**
    * Request timeout in milliseconds

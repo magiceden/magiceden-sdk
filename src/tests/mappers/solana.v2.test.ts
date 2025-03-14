@@ -1,7 +1,7 @@
-import { SolanaNftApiMappers } from '../../mappers/nft/solana';
+import { SolanaApiMappers } from '../../mappers/nft/solana';
 import { SplAmount } from '../../types/solana';
 
-describe('SolanaNftApiMappers', () => {
+describe('SolanaApiMappers V2', () => {
   describe('listRequest', () => {
     it('should correctly map list parameters', () => {
       const params = {
@@ -18,7 +18,7 @@ describe('SolanaNftApiMappers', () => {
         txFeePayer: 'feePayer123'
       };
 
-      const result = SolanaNftApiMappers.v2.listRequest(params);
+      const result = SolanaApiMappers.v2.listRequest(params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -45,7 +45,7 @@ describe('SolanaNftApiMappers', () => {
         expiry: 1234567890
       };
 
-      const result = SolanaNftApiMappers.v2.listRequest(params);
+      const result = SolanaApiMappers.v2.listRequest(params);
 
       expect(result.sellerReferral).toBeUndefined();
       expect(result.prioFeeMicroLamports).toBeUndefined();
@@ -71,7 +71,7 @@ describe('SolanaNftApiMappers', () => {
         splPrice
       };
 
-      const result = SolanaNftApiMappers.v2.listRequest(params);
+      const result = SolanaApiMappers.v2.listRequest(params);
 
       expect(result.splPrice).toEqual(splPrice);
     });
@@ -92,7 +92,7 @@ describe('SolanaNftApiMappers', () => {
         exactPrioFeeLamports: 7500
       };
 
-      const result = SolanaNftApiMappers.v2.cancelListingRequest(params);
+      const result = SolanaApiMappers.v2.cancelListingRequest(params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -118,7 +118,7 @@ describe('SolanaNftApiMappers', () => {
         expiry: 1234567890
       };
 
-      const result = SolanaNftApiMappers.v2.cancelListingRequest(params);
+      const result = SolanaApiMappers.v2.cancelListingRequest(params);
 
       expect(result.sellerReferral).toBeUndefined();
       expect(result.prioFeeMicroLamports).toBeUndefined();
@@ -143,7 +143,7 @@ describe('SolanaNftApiMappers', () => {
         exactPrioFeeLamports: 7500
       };
 
-      const result = SolanaNftApiMappers.v2.makeItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.makeItemOfferRequest(params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -169,7 +169,7 @@ describe('SolanaNftApiMappers', () => {
         expiry: 1234567890
       };
 
-      const result = SolanaNftApiMappers.v2.makeItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.makeItemOfferRequest(params);
 
       expect(result.buyerReferral).toBeUndefined();
       expect(result.useBuyV2).toBeUndefined();
@@ -194,7 +194,7 @@ describe('SolanaNftApiMappers', () => {
         exactPrioFeeLamports: 7500
       };
 
-      const result = SolanaNftApiMappers.v2.cancelItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.cancelItemOfferRequest(params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -218,7 +218,7 @@ describe('SolanaNftApiMappers', () => {
         expiry: 1234567890
       };
 
-      const result = SolanaNftApiMappers.v2.cancelItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.cancelItemOfferRequest(params);
 
       expect(result.buyerReferral).toBeUndefined();
       expect(result.prioFeeMicroLamports).toBeUndefined();
@@ -246,7 +246,7 @@ describe('SolanaNftApiMappers', () => {
         exactPrioFeeLamports: 7500
       };
 
-      const result = SolanaNftApiMappers.v2.takeItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.takeItemOfferRequest(params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -277,7 +277,7 @@ describe('SolanaNftApiMappers', () => {
         sellerExpiry: 1234567891
       };
 
-      const result = SolanaNftApiMappers.v2.takeItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.takeItemOfferRequest(params);
 
       expect(result.price).toBeUndefined();
       expect(result.buyerReferral).toBeUndefined();
@@ -312,7 +312,7 @@ describe('SolanaNftApiMappers', () => {
         splPrice
       };
 
-      const result = SolanaNftApiMappers.v2.buyRequest(params);
+      const result = SolanaApiMappers.v2.buyRequest(params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -341,7 +341,7 @@ describe('SolanaNftApiMappers', () => {
         sellerExpiry: 1234567891
       };
 
-      const result = SolanaNftApiMappers.v2.buyRequest(params);
+      const result = SolanaApiMappers.v2.buyRequest(params);
 
       expect(result.buyerReferral).toBeUndefined();
       expect(result.sellerReferral).toBeUndefined();
@@ -360,7 +360,7 @@ describe('SolanaNftApiMappers', () => {
         isCompressed: true
       };
 
-      const result = SolanaNftApiMappers.v2.transferRequest(params);
+      const result = SolanaApiMappers.v2.transferRequest(params);
 
       expect(result).toEqual({
         mint: 'tokenMintAddress123',
@@ -377,7 +377,7 @@ describe('SolanaNftApiMappers', () => {
         to: 'toAddress123'
       };
 
-      const result = SolanaNftApiMappers.v2.transferRequest(params);
+      const result = SolanaApiMappers.v2.transferRequest(params);
 
       expect(result.isCompressed).toBeUndefined();
     });

@@ -217,8 +217,12 @@ describe('SolanaKeypairWalletProvider', () => {
     it('should wait for transaction confirmation', async () => {
       const result = await wallet.waitForTransactionConfirmation('mock-signature');
       expect(result).toEqual({
-        context: { slot: 1 },
-        value: { err: null },
+        txId: 'mock-signature',
+        status: 'confirmed',
+        metadata: {
+          blockhash: 'mock-blockhash',
+          lastValidBlockHeight: 123456,
+        }
       });
     });
   });

@@ -1,5 +1,3 @@
-import { SolanaWalletProvider } from './solana';
-import { EvmWalletProvider } from './evm';
 import { VersionedTransaction } from '@solana/web3.js';
 import { TransactionRequest } from 'viem';
 import { SupportedChain } from '../types/chain';
@@ -18,8 +16,3 @@ export type ChainTransactionType = {
  * Helper type to get the transaction type for a specific chain
  */
 export type ChainTransaction<C extends SupportedChain> = ChainTransactionType[C];
-
-// Update SupportedWalletProvider to be a type that depends on the chain
-export type SupportedWalletProvider<
-  C extends SupportedChain = SupportedChain,
-> = C extends 'solana' ? SolanaWalletProvider : EvmWalletProvider;

@@ -1,3 +1,10 @@
+export interface WalletTxReceipt {
+  txId: string;
+  status: 'confirmed' | 'pending' | 'failed';
+  error?: string;
+  metadata?: Record<string, unknown>;
+}
+
 /**
  * WalletProvider is the abstract base class for all wallet providers.
  *
@@ -11,7 +18,7 @@ export abstract class WalletProvider<
   TxType = unknown,
   SignedTxType = unknown,
   TxHashType extends string = string,
-  TxReceiptType = unknown
+  TxReceiptType extends WalletTxReceipt = WalletTxReceipt
 > {
   /**
    * Get the public address of the wallet provider.
