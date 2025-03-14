@@ -57,14 +57,27 @@ describe('SolanaApiMappers V4', () => {
       expect(result.chain).toBe(Blockchain.SOLANA);
       expect(result.protocol).toBe(SolProtocolType.METAPLEX_CORE);
       expect(result.creator).toBe('creatorAddress123');
+      expect(result.social?.discordUrl).toBe('https://discord.com/test');
+      expect(result.social?.externalUrl).toBe('https://example.com');
+      expect(result.social?.twitterUsername).toBe('testuser');
+      expect(result.name).toBe('Test Collection');
       expect(result.symbol).toBe('TEST');
+      expect(result.imageUrl).toBe('https://example.com/image.png');
+      expect(result.description).toBe('Test description');
+      expect(result.royaltyBps).toBe(500);
+      expect(result.royaltyRecipients).toHaveLength(2);
+      expect(result.payoutRecipient).toBe('payoutAddress123');
+      expect(result.nftMetadataUrl).toBe('https://example.com/metadata.json');
+      expect(result.tokenImageUrl).toBe('https://example.com/token.png');
       expect(result.isOpenEdition).toBe(false);
       
       // Verify mint stages
+      expect(result.mintStages).toBeDefined();
       expect(result.mintStages.stages).toHaveLength(1);
       expect(result.mintStages.stages[0].kind).toBe(MintStageKind.Public);
       expect(result.mintStages.stages[0].price.currency).toBe('SOL');
       expect(result.mintStages.stages[0].price.raw).toBe('1000000000');
+      expect(result.mintStages.maxSupply).toBe(100);
     });
   });
 
