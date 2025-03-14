@@ -171,7 +171,6 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
       metadata: {
         blockhash,
         lastValidBlockHeight,
-        ...(receipt.value.err && { err: receipt.value.err }),
       },
     };
   }
