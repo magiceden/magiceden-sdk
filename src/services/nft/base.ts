@@ -32,6 +32,22 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   }
 
   /**
+   * Publish a launchpad
+   * 
+   * Only available for Solana. Meant to be called after calling createLaunchpad and creating a launchpad on-chain.
+   */
+  public async publishLaunchpad(params: ChainMethodParams<C, 'publishLaunchpad'>): Promise<boolean> {
+    return await this.getPublishLaunchpadResponse(params);
+  }
+
+  /**
+   * Get publish launchpad response from API
+   */
+  protected abstract getPublishLaunchpadResponse(
+    params: ChainMethodParams<C, 'publishLaunchpad'>,
+  ): Promise<boolean>;
+
+  /**
    * Creates a new launchpad
    */
   async createLaunchpad(

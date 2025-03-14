@@ -10,6 +10,7 @@ import {
   SolanaCreateLaunchpadParams,
   SolanaUpdateLaunchpadParams,
   SolanaMintParams,
+  SolanaPublishLaunchpadParams,
 } from '../../types/services/nft';
 
 import {
@@ -23,6 +24,7 @@ import {
   V4CreateLaunchpadRequest,
   V4UpdateLaunchpadRequest,
   V4MintRequest,
+  V4PublishLaunchpadRequest,
 } from '../../types/api';
 
 /**
@@ -153,6 +155,13 @@ export const SolanaApiMappers = {
    * Mappers for V4 API
    */
   v4: {
+    /**
+     * Maps Solana publish launchpad parameters to V4 publish launchpad request
+     */
+    publishLaunchpadRequest: (params: SolanaPublishLaunchpadParams): V4PublishLaunchpadRequest => ({
+      ...params
+    }),
+
     /**
      * Maps Solana create launchpad parameters to V4 create launchpad request
      */

@@ -73,7 +73,16 @@ export interface V4UpdateLaunchpadRequest {
   signature?: string;
 }
 
-export interface V4PublishLaunchpadRequest {}
+export interface V4PublishLaunchpadRequest {
+  chain: Blockchain;
+  candyMachineId?: string;
+  symbol?: string;
+  authorization?: {
+    signature: string;
+    signer: string;
+    timestamp: string;
+  };
+}
 
 export interface V4MintRequest {
   chain: Blockchain;

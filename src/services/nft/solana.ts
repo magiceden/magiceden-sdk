@@ -13,6 +13,13 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     super(config);
   }
 
+  protected async getPublishLaunchpadResponse(
+    params: ChainMethodParams<'solana', 'publishLaunchpad'>,
+  ): Promise<boolean> {
+    const response = await this.v4ApiClient.publishLaunchpad(SolanaApiMappers.v4.publishLaunchpadRequest(params));
+    return response.success;
+  }
+
   /**
    * Get create launchpad transaction instructions from API
    * @param params Launchpad creation parameters

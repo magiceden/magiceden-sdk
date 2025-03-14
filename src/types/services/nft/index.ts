@@ -9,7 +9,7 @@ import { EvmTakeItemOfferParams, SolanaTakeItemOfferParams } from './takeItemOff
 import { EvmCancelItemOfferParams, SolanaCancelItemOfferParams } from './cancelItemOffer';
 import { EvmTransferParams, SolanaTransferParams } from './transfer';
 import { EvmBuyParams, SolanaBuyParams } from './buy';
-
+import { EvmPublishLaunchpadParams, SolanaPublishLaunchpadParams } from './publishLaunchpad';
 
 export * from './createLaunchpad';
 export * from './updateLaunchpad';
@@ -22,6 +22,7 @@ export * from './cancelItemOffer';
 export * from './transfer';
 export * from './buy';
 export * from './shared';
+export * from './publishLaunchpad';
 
 /**
  * Chain-specific parameter types mapping
@@ -29,6 +30,7 @@ export * from './shared';
  */
 export interface ChainParamTypes {
   solana: {
+    publishLaunchpad: SolanaPublishLaunchpadParams;
     createLaunchpad: SolanaCreateLaunchpadParams;
     updateLaunchpad: SolanaUpdateLaunchpadParams;
     mint: SolanaMintParams;
@@ -41,6 +43,7 @@ export interface ChainParamTypes {
     buy: SolanaBuyParams;
   };
   evm: {
+    publishLaunchpad: EvmPublishLaunchpadParams;
     createLaunchpad: EvmCreateLaunchpadParams;
     updateLaunchpad: EvmUpdateLaunchpadParams;
     mint: EvmMintParams;
