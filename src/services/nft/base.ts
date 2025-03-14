@@ -1,4 +1,9 @@
-import { ChainMethodParams, ClientConfig, TransactionResponse } from '../../types';
+import {
+  ChainMethodParams,
+  ClientConfig,
+  TransactionResponse,
+  TransactionStrategy,
+} from '../../types';
 import { SupportedChain } from '../../types/chain';
 import { ChainTransaction, WalletTxReceipt } from '../../wallet';
 import { V2ApiClient } from '../../api/clients/v2';
@@ -33,10 +38,12 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
 
   /**
    * Publish a launchpad
-   * 
+   *
    * Only available for Solana. Meant to be called after calling createLaunchpad and creating a launchpad on-chain.
    */
-  public async publishLaunchpad(params: ChainMethodParams<C, 'publishLaunchpad'>): Promise<boolean> {
+  public async publishLaunchpad(
+    params: ChainMethodParams<C, 'publishLaunchpad'>,
+  ): Promise<boolean> {
     return await this.getPublishLaunchpadResponse(params);
   }
 
@@ -219,21 +226,25 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
 
     for (const tx of transactions) {
       const signature = await this.config.wallet!.signAndSendTransaction(tx);
-      const txReceipt = await this.config.wallet!.waitForTransactionConfirmation(signature);
-
-      results.push(await this.txHashToTransactionResponse(txReceipt));
+      switch (this.config.transactionOptions?.strategy || TransactionStrategy.SignSendAndConfirm) {
+        case TransactionStrategy.SignSendAndConfirm:
+          const txReceipt = await this.config.wallet!.waitForTransactionConfirmation(signature);
+          results.push({
+            txId: txReceipt.txId,
+            status: txReceipt.status,
+            error: txReceipt.error,
+            metadata: txReceipt.metadata,
+          });
+          break;
+        case TransactionStrategy.SignAndSend:
+          results.push({
+            txId: signature,
+            status: 'pending',
+          });
+          break;
+      }
     }
 
     return results;
-  }
-
-  /**
-   * Convert a transaction hash to a transaction response
-   */
-  private async txHashToTransactionResponse(txReceipt: WalletTxReceipt): Promise<TransactionResponse> {
-    return {
-      txId: txReceipt.txId,
-      status: txReceipt.status,
-    };
   }
 }

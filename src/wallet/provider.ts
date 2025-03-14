@@ -1,6 +1,7 @@
 export interface WalletTxReceipt {
   txId: string;
   status: 'confirmed' | 'pending' | 'failed';
+  error?: string;
   metadata?: Record<string, unknown>;
 }
 
