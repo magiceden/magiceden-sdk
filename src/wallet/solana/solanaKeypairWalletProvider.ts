@@ -167,6 +167,7 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
     return {
       txId: signature,
       status: receipt.value.err ? 'failed' : 'confirmed',
+      error: receipt.value.err?.toString(),
       metadata: {
         blockhash,
         lastValidBlockHeight,
