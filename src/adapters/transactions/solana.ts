@@ -1,7 +1,7 @@
 import { VersionedTransaction } from '@solana/web3.js';
 import { SolanaInstructionsResponse, V4TransactionResponse } from '../../types/api';
 import { ChainTransaction } from '../../wallet';
-import { SolanaTransactionParams, SolanaTransactionStep } from '../../types';
+import { Blockchain, SolanaTransactionParams } from '../../types';
 
 /**
  * Solana Transaction Adapters
@@ -28,26 +28,56 @@ export const SolanaTransactionAdapters = {
     );
   },
 
-  fromV4TransactionResponse: <T extends V4TransactionResponse>(
-    response: T,
-  ): ChainTransaction<'solana'>[] => {
-    const steps = response.steps.map((step) => {
-      const solanaTransactionStep = SolanaTransactionStep.safeParse(step);
-      if (solanaTransactionStep.success && step.method === 'signAllAndSendTransactions') {
-        const transactionParams = SolanaTransactionParams.safeParse(solanaTransactionStep.data);
-        if (transactionParams.success) {
-          // TODO: Later on, properly implement the feePayer so we are checking that the feePayer is the wallet address
-          // Right now there is limited risk of this being incorrect since it's all handled by the MagicEdenClient
-          // Still, checking this and handling this properly would be good to do
-          // Same goes for tx.signerPubkeys (which are only used if you decide to use some custom keypairs for the launchpad routes)
-          return transactionParams.data.transactions.map((tx) =>
-            VersionedTransaction.deserialize(Buffer.from(tx.transaction, 'base64')),
-          );
-        }
+  /**
+   * Process a V4 transaction response and extract Solana transactions
+   * @param response The API response containing transaction data
+   * @returns An array of properly formatted Solana transactions
+   */
+  fromV4TransactionResponse(response: V4TransactionResponse): VersionedTransaction[] {
+    if (!response.steps || response.steps.length === 0) {
+      throw new Error(
+        'Invalid transaction response format, only Solana transactions are supported',
+      );
+    }
+
+    // Filter for valid Solana steps with signAllAndSendTransactions method
+    const validSteps = response.steps.filter((step) => {
+      if (step.chain !== Blockchain.SOLANA || step.method !== 'signAllAndSendTransactions') {
+        return false;
       }
+
+      const result = SolanaTransactionParams.safeParse(step.params);
+      return result.success;
     });
 
-    throw new Error('Invalid transaction response format, only Solana transactions are supported');
+    if (validSteps.length === 0) {
+      throw new Error(
+        'Invalid transaction response format, only Solana transactions are supported',
+      );
+    }
+
+    const transactions: VersionedTransaction[] = [];
+
+    for (const step of validSteps) {
+      const result = SolanaTransactionParams.safeParse(step.params);
+      if (!result.success) {
+        continue; // Skip non-Solana steps
+      }
+
+      const solanaParams = result.data;
+      const stepTransactions = solanaParams.transactions.map((tx) => {
+        try {
+          const txBuffer = Buffer.from(tx.transaction, 'base64');
+          return VersionedTransaction.deserialize(txBuffer);
+        } catch (error) {
+          throw error;
+        }
+      });
+
+      transactions.push(...stepTransactions);
+    }
+
+    return transactions;
   },
 
   /**
