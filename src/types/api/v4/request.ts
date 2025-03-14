@@ -1,16 +1,18 @@
 import { Blockchain } from '../../chain';
 import { TokenProtocolType } from '../../protocol';
 
+interface SocialAccountDetails {
+  discordUrl?: string;
+  externalUrl?: string;
+  telegramUrl?: string;
+  twitterUsername?: string;
+}
+
 export interface V4CreateLaunchpadRequest {
   chain: Blockchain;
   protocol: TokenProtocolType;
   creator: string;
-  social?: {
-    discordUrl?: string;
-    externalUrl?: string;
-    telegramUrl?: string;
-    twitterUsername?: string;
-  };
+  social?: SocialAccountDetails;
   name: string;
   symbol: string;
   imageUrl?: string;
@@ -38,12 +40,7 @@ export interface V4UpdateLaunchpadRequest {
   owner: string;
   chain: Blockchain;
   protocol: TokenProtocolType;
-  social?: {
-    discordUrl?: string;
-    externalUrl?: string;
-    telegramUrl?: string;
-    twitterUsername?: string;
-  };
+  social?: SocialAccountDetails;
   name?: string;
   imageUrl?: string;
   description?: string;
