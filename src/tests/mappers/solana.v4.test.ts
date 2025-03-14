@@ -119,20 +119,47 @@ describe('SolanaApiMappers V4', () => {
       // Verify the result is a valid V4UpdateLaunchpadRequest
       expect(result).toBeDefined();
       
-      // Verify required Solana-specific properties
+      // Verify chain and protocol
       expect(result.chain).toBe(Blockchain.SOLANA);
       expect(result.protocol).toBe(SolProtocolType.METAPLEX_CORE);
+      
+      // Verify collection and owner identifiers
       expect(result.collection).toBe('collectionAddress123');
       expect(result.owner).toBe('ownerAddress123');
+      
+      // Verify social media links
+      expect(result.social?.discordUrl).toBe('https://discord.com/test');
+      expect(result.social?.externalUrl).toBe('https://example.com');
+      expect(result.social?.twitterUsername).toBe('testuser');
+      
+      // Verify metadata updates
+      expect(result.name).toBe('Updated Collection');
+      expect(result.imageUrl).toBe('https://example.com/updated-image.png');
+      expect(result.description).toBe('Updated description');
+      expect(result.externalLink).toBe('https://example.com/external');
+      
+      // Verify royalty updates
+      expect(result.royaltyBps).toBe(700);
+      expect(result.royaltyRecipients).toHaveLength(2);
+      expect(result.royaltyRecipients![0].address).toBe('recipient1');
+      expect(result.royaltyRecipients![0].share).toBe(70);
+      expect(result.royaltyRecipients![1].address).toBe('recipient2');
+      expect(result.royaltyRecipients![1].share).toBe(30);
+      
+      // Verify payout recipient
+      expect(result.payoutRecipient).toBe('updatedPayoutAddress123');
+      
+      // Verify Solana-specific properties
+      expect(result.candyMachineId).toBe('candyMachineId123');
       expect(result.symbol).toBe('TEST');
       expect(result.newSymbol).toBe('UPDT');
-      expect(result.candyMachineId).toBe('candyMachineId123');
       expect(result.payer).toBe('payerAddress123');
       
       // Verify authorization
-      expect(result.authorization?.signature).toBe('signature123');
-      expect(result.authorization?.signer).toBe('signerAddress123');
-      expect(result.authorization?.timestamp).toBe('timestamp123');
+      expect(result.authorization).toBeDefined();
+      expect(result.authorization!.signature).toBe('signature123');
+      expect(result.authorization!.signer).toBe('signerAddress123');
+      expect(result.authorization!.timestamp).toBe('timestamp123');
     });
   });
 
