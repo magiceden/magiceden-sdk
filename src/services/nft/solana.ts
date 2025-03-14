@@ -28,7 +28,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     params: ChainMethodParams<'solana', 'createLaunchpad'>,
   ): Promise<ChainTransaction<'solana'>[]> {
     // TODO: Later on, properly implement extra signers for the launchpad routes
-    // This needs to be done in both the schema (keypair) as well as here
+    // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
     const response = await this.v4ApiClient.createLaunchpad(SolanaApiMappers.v4.createLaunchpadRequest(params));
     return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }
@@ -41,7 +41,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     params: ChainMethodParams<'solana', 'updateLaunchpad'>,
   ): Promise<ChainTransaction<'solana'>[]> {
     // TODO: Later on, properly implement extra signers for the launchpad routes
-    // This needs to be done in both the schema (keypair) as well as here
+    // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
     const response = await this.v4ApiClient.updateLaunchpad(SolanaApiMappers.v4.updateLaunchpadRequest(params));
     return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }
@@ -54,7 +54,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     params: ChainMethodParams<'solana', 'mint'>,
   ): Promise<ChainTransaction<'solana'>[]> {
     // TODO: Later on, properly implement extra signers for the mint routes
-    // This needs to be done in both the schema (keypair) as well as here
+    // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
     const response = await this.v4ApiClient.mint(SolanaApiMappers.v4.mintRequest(params));
     return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }

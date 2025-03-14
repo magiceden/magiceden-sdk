@@ -62,14 +62,16 @@ export const SolanaCreateLaunchpadParams = z.object({
   protocol: z.literal(SolProtocolType.METAPLEX_CORE).describe('Token protocol type'),
   payoutRecipient: zSolanaAddress.describe('Payout recipient address of mint proceeds'),
   creator: zSolanaAddress.describe('Creator wallet address'),
-  accounts: z
-    .object({
-      collectionAccount: zSolanaAddress,
-      configAccount: zSolanaAddress,
-      orderInfoAccount: zSolanaAddress,
-    })
-    .optional()
-    .describe('Accounts for the launchpad'),
+  // TODO: Uncomment the accounts once we properly implement a way for signerPubkeys to sign the VersionedTransaction
+  // See the comments in src/adapters/transactions/solana.ts for more details
+  // accounts: z
+  //   .object({
+  //     collectionAccount: zSolanaAddress,
+  //     configAccount: zSolanaAddress,
+  //     orderInfoAccount: zSolanaAddress,
+  //   })
+  //   .optional()
+  //   .describe('Accounts for the launchpad'),
   name: z.string().max(SOL_MAX_NAME_LENGTH).describe('Collection name'),
   symbol: SolanaSymbol.describe('Collection symbol'),
   royaltyRecipients: z
