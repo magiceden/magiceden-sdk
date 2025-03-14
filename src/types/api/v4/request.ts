@@ -58,6 +58,7 @@ export interface V4UpdateLaunchpadRequest {
   tokenImageUrl?: string;
   tokenId?: number;
   // Solana-specific fields
+  payer?: string;
   candyMachineId?: string;
   symbol?: string;
   newSymbol?: string;

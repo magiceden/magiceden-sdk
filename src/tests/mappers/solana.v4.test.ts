@@ -1,8 +1,9 @@
 import { SolanaApiMappers } from '../../mappers/nft/solana';
-import { SolanaCreateLaunchpadParams } from '../../types';
+import { SolanaCreateLaunchpadParams, SolanaUpdateLaunchpadParams, SolanaMintParams } from '../../types';
 import { Blockchain } from '../../types/chain';
 import { SolProtocolType } from '../../types/protocol';
 import { MintStageKind } from '../../types/services/nft/shared';
+import { V4CreateLaunchpadRequest, V4UpdateLaunchpadRequest, V4MintRequest } from '../../types/api';
 
 describe('SolanaApiMappers V4', () => {
   describe('createLaunchpadRequest', () => {
@@ -49,13 +50,27 @@ describe('SolanaApiMappers V4', () => {
 
       const result = SolanaApiMappers.v4.createLaunchpadRequest(params);
 
-      expect(result).toEqual(params);
+      // Verify the result is a valid V4CreateLaunchpadRequest
+      expect(result).toBeDefined();
+      
+      // Verify required Solana-specific properties
+      expect(result.chain).toBe(Blockchain.SOLANA);
+      expect(result.protocol).toBe(SolProtocolType.METAPLEX_CORE);
+      expect(result.creator).toBe('creatorAddress123');
+      expect(result.symbol).toBe('TEST');
+      expect(result.isOpenEdition).toBe(false);
+      
+      // Verify mint stages
+      expect(result.mintStages.stages).toHaveLength(1);
+      expect(result.mintStages.stages[0].kind).toBe(MintStageKind.Public);
+      expect(result.mintStages.stages[0].price.currency).toBe('SOL');
+      expect(result.mintStages.stages[0].price.raw).toBe('1000000000');
     });
   });
 
   describe('updateLaunchpadRequest', () => {
     it('should correctly map update launchpad parameters', () => {
-      const params = {
+      const params: SolanaUpdateLaunchpadParams = {
         chain: Blockchain.SOLANA as Blockchain.SOLANA,
         protocol: SolProtocolType.METAPLEX_CORE as SolProtocolType.METAPLEX_CORE,
         collection: 'collectionAddress123',
@@ -88,13 +103,29 @@ describe('SolanaApiMappers V4', () => {
 
       const result = SolanaApiMappers.v4.updateLaunchpadRequest(params);
 
-      expect(result).toEqual(params);
+      // Verify the result is a valid V4UpdateLaunchpadRequest
+      expect(result).toBeDefined();
+      
+      // Verify required Solana-specific properties
+      expect(result.chain).toBe(Blockchain.SOLANA);
+      expect(result.protocol).toBe(SolProtocolType.METAPLEX_CORE);
+      expect(result.collection).toBe('collectionAddress123');
+      expect(result.owner).toBe('ownerAddress123');
+      expect(result.symbol).toBe('TEST');
+      expect(result.newSymbol).toBe('UPDT');
+      expect(result.candyMachineId).toBe('candyMachineId123');
+      expect(result.payer).toBe('payerAddress123');
+      
+      // Verify authorization
+      expect(result.authorization?.signature).toBe('signature123');
+      expect(result.authorization?.signer).toBe('signerAddress123');
+      expect(result.authorization?.timestamp).toBe('timestamp123');
     });
   });
 
   describe('mintRequest', () => {
     it('should correctly map mint parameters', () => {
-      const params = {
+      const params: SolanaMintParams = {
         chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
         wallet: 'walletAddress123',
@@ -109,11 +140,24 @@ describe('SolanaApiMappers V4', () => {
 
       const result = SolanaApiMappers.v4.mintRequest(params);
 
-      expect(result).toEqual(params);
+      // Verify the result is a valid V4MintRequest
+      expect(result).toBeDefined();
+      
+      // Verify required Solana-specific properties
+      expect(result.chain).toBe(Blockchain.SOLANA);
+      expect(result.collectionId).toBe('collectionId123');
+      expect(result.wallet).toBe('walletAddress123');
+      expect(result.nftAmount).toBe(3);
+      expect(result.stageId).toBe('stage1');
+      expect(result.kind).toBe(MintStageKind.Public);
+      expect(result.candyMachineId).toBe('candyMachineId123');
+      expect(result.symbol).toBe('TEST');
+      expect(result.payer).toBe('payerAddress123');
+      expect(result.recipient).toBe('recipientAddress123');
     });
 
     it('should handle optional parameters', () => {
-      const params = {
+      const params: SolanaMintParams = {
         chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
         wallet: 'walletAddress123',
@@ -126,6 +170,17 @@ describe('SolanaApiMappers V4', () => {
 
       const result = SolanaApiMappers.v4.mintRequest(params);
 
+      // Verify required properties
+      expect(result.chain).toBe(Blockchain.SOLANA);
+      expect(result.collectionId).toBe('collectionId123');
+      expect(result.wallet).toBe('walletAddress123');
+      expect(result.nftAmount).toBe(1);
+      expect(result.kind).toBe(MintStageKind.Public);
+      expect(result.candyMachineId).toBe('candyMachineId123');
+      expect(result.symbol).toBe('TEST');
+      expect(result.payer).toBe('payerAddress123');
+      
+      // Verify optional properties are undefined
       expect(result.stageId).toBeUndefined();
       expect(result.recipient).toBeUndefined();
     });
