@@ -1,4 +1,4 @@
-import { ClientConfig } from './types';
+import { ClientConfig, TransactionStrategy } from './types';
 import { BaseNftService, NftServiceFactory } from './services/nft';
 import { ApiError } from './errors';
 
@@ -33,9 +33,13 @@ export class MagicEdenClient {
       throw new ApiError('Chain type must be specified');
     }
 
-    // Just return the config as is for now
     return {
       ...config,
+      transactionOptions: {
+        ...(config.transactionOptions || {}),
+        // Default to signing and sending transactions, then waiting for confirmation
+        strategy: config.transactionOptions?.strategy || TransactionStrategy.SignSendAndConfirm,
+      },
     };
   }
 }
