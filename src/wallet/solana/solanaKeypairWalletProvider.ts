@@ -27,7 +27,7 @@ export type KeypairWalletConfig = {
  * A Solana wallet implementation using a local keypair
  */
 export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
-  private readonly rpc: Connection;
+  private readonly connection: Connection;
   private readonly keypair: Keypair;
 
   /**
@@ -37,7 +37,7 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
     super();
 
     // Initialize the RPC connection
-    this.rpc = new Connection(config.rpcEndpoint, 'confirmed');
+    this.connection = new Connection(config.rpcEndpoint, 'confirmed');
 
     // Create the keypair from the provided secret
     this.keypair = this.createKeyFromSecret(config.secretKey);
@@ -47,7 +47,7 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
    * Gets the RPC connection
    */
   getConnection(): Connection {
-    return this.rpc;
+    return this.connection;
   }
 
   /**
@@ -61,10 +61,7 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
    * Gets the wallet's SOL balance
    */
   async getBalance(): Promise<bigint> {
-    const lamports = await this.rpc.getBalance(this.keypair.publicKey, {
-      commitment: 'confirmed',
-    });
-    return BigInt(lamports);
+    return this.connection.getBalance(this.keypair.publicKey).then((balance) => BigInt(balance));
   }
 
   /**
@@ -98,7 +95,7 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
    */
   async signAndSendTransaction(transaction: VersionedTransaction): Promise<string> {
     const signedTransaction = await this.signTransaction(transaction);
-    return await this.rpc.sendTransaction(signedTransaction);
+    return await this.connection.sendTransaction(signedTransaction);
   }
 
   /**
@@ -112,7 +109,7 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
     signature: string,
     options?: SignatureStatusConfig,
   ): Promise<RpcResponseAndContext<SignatureStatus | null>> {
-    return this.rpc.getSignatureStatus(signature, options);
+    return this.connection.getSignatureStatus(signature, options);
   }
 
   /**
@@ -124,12 +121,12 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
   async waitForTransactionConfirmation(signature: string): Promise<WalletTxReceipt> {
     try {
       // Get the latest blockhash for transaction confirmation
-      const { blockhash, lastValidBlockHeight } = await this.rpc.getLatestBlockhash({
+      const { blockhash, lastValidBlockHeight } = await this.connection.getLatestBlockhash({
         commitment: 'confirmed',
       });
 
       // Wait for confirmation
-      const confirmResult = await this.rpc.confirmTransaction(
+      const confirmResult = await this.connection.confirmTransaction(
         {
           blockhash,
           lastValidBlockHeight,
