@@ -11,7 +11,10 @@ export class MockEvmWalletProvider extends EvmWalletProvider {
   signTransaction = async (transaction: any) => '0x123' as `0x${string}`;
   sendTransaction = async () => '0x123' as `0x${string}`;
   signAndSendTransaction = async () => '0x123' as `0x${string}`;
-  waitForTransactionConfirmation = async (txIdentifier: `0x${string}`) => ({});
+  waitForTransactionConfirmation = async (txIdentifier: `0x${string}`) => ({
+    txId: txIdentifier,
+    status: 'confirmed' as any,
+  });
   signTypedData = async (typedData: any) => '0x123' as `0x${string}`;
   waitForTransactionReceipt = async (txHash: `0x${string}`) => ({});
   readContract = async (params: any) => ({}) as any;

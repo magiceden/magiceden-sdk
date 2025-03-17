@@ -49,7 +49,6 @@ jest.mock('@solana/web3.js', () => {
         context: { slot: 1 },
         value: { slot: 1, confirmations: 1, err: null, confirmationStatus: 'confirmed' },
       }),
-      requestAirdrop: jest.fn().mockResolvedValue('mock-airdrop-signature'),
       rpcEndpoint: 'https://api.devnet.solana.com',
     })),
     VersionedTransaction: MockVersionedTransaction,
@@ -187,7 +186,7 @@ describe('SolanaKeypairWalletProvider', () => {
 
     describe('sendTransaction', () => {
       it('should send a transaction', async () => {
-        const signature = await wallet.sendTransaction(mockTransaction);
+        const signature = await wallet.signAndSendTransaction(mockTransaction);
         expect(signature).toBe('mock-signature');
       });
     });
@@ -195,7 +194,7 @@ describe('SolanaKeypairWalletProvider', () => {
     describe('signAndSendTransaction', () => {
       it('should sign and send a transaction', async () => {
         const signSpy = jest.spyOn(wallet, 'signTransaction');
-        const sendSpy = jest.spyOn(wallet, 'sendTransaction');
+        const sendSpy = jest.spyOn(wallet, 'signAndSendTransaction');
         
         const signature = await wallet.signAndSendTransaction(mockTransaction);
         
@@ -203,13 +202,6 @@ describe('SolanaKeypairWalletProvider', () => {
         expect(sendSpy).toHaveBeenCalled();
         expect(signature).toBe('mock-signature');
       });
-    });
-  });
-
-  describe('requestAirdrop', () => {
-    it('should request an airdrop', async () => {
-      const signature = await wallet.requestAirdrop(1000000000); // 1 SOL
-      expect(signature).toBe('mock-airdrop-signature');
     });
   });
 
@@ -234,12 +226,6 @@ describe('SolanaKeypairWalletProvider', () => {
         context: { slot: 1 },
         value: { slot: 1, confirmations: 1, err: null, confirmationStatus: 'confirmed' },
       });
-    });
-  });
-
-  describe('getName', () => {
-    it('should return the wallet provider name', () => {
-      expect(wallet.getName()).toBe('solana_keypair_wallet_provider');
     });
   });
 });

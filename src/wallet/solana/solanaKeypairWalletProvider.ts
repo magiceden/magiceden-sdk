@@ -112,18 +112,6 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
   }
 
   /**
-   * Send a transaction
-   *
-   * @param transaction - The transaction to send
-   * @returns The signature
-   */
-  async sendTransaction(transaction: VersionedTransaction): Promise<string> {
-    const signature = await this.connection.sendTransaction(transaction);
-    await this.waitForTransactionConfirmation(signature);
-    return signature;
-  }
-
-  /**
    * Sign and send a transaction
    *
    * @param transaction - The transaction to sign and send
@@ -131,7 +119,7 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
    */
   async signAndSendTransaction(transaction: VersionedTransaction): Promise<string> {
     const signedTransaction = await this.signTransaction(transaction);
-    return this.sendTransaction(signedTransaction);
+    return await this.connection.sendTransaction(signedTransaction);
   }
 
   /**
@@ -176,30 +164,11 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
   }
 
   /**
-   * Get the name of the wallet provider
-   *
-   * @returns The name of the wallet provider
-   */
-  getName(): string {
-    return 'solana_keypair_wallet_provider';
-  }
-
-  /**
    * Get the balance of the wallet
    *
    * @returns The balance of the wallet
    */
   getBalance(): Promise<bigint> {
     return this.connection.getBalance(this.keypair.publicKey).then((balance) => BigInt(balance));
-  }
-
-  /**
-   * Request SOL tokens from the Solana faucet. This method only works on devnet and testnet networks.
-   *
-   * @param lamports - The amount of lamports (1 SOL = 1,000,000,000 lamports) to request from the faucet
-   * @returns A Promise that resolves to the signature of the airdrop
-   */
-  async requestAirdrop(lamports: number): Promise<string> {
-    return await this.connection.requestAirdrop(this.keypair.publicKey, lamports);
   }
 }
