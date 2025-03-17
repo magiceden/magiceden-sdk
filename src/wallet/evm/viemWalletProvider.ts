@@ -14,54 +14,64 @@ import { EvmWalletProvider } from './evmWalletProvider';
 import { WalletTxReceipt } from '../provider';
 
 /**
- * Configuration options for transaction gas parameters
- */
-export type GasConfiguration = {
-  /**
-   * Multiplier for estimated gas limit (default: 1.2)
-   */
-  limitMultiplier?: number;
-  
-  /**
-   * Multiplier for estimated gas fees (default: 1.0)
-   */
-  feeMultiplier?: number;
-};
-
-/**
  * Options for the ViewWalletProvider
  */
-export type ViewWalletProviderOptions = {
+export type ViemWalletProviderOptions = {
   /**
    * Gas configuration options
    */
-  gas?: GasConfiguration;
+  gas?: {
+    /**
+     * Multiplier for estimated gas limit (default: 1.2)
+     */
+    limitMultiplier?: number;
+
+    /**
+     * Multiplier for estimated gas fees (default: 1.0)
+     */
+    feeMultiplier?: number;
+  };
+};
+
+/**
+ * Configuration for the ViemWalletProvider
+ */
+export type ViemWalletProviderConfig = {
+  /**
+   * The wallet client to use
+   */
+  walletClient: WalletClient;
+
+  /**
+   * Options for the ViemWalletProvider
+   */
+  options?: ViemWalletProviderOptions;
 };
 
 /**
  * Implementation of EvmWalletProvider using Viem library
  */
-export class ViewWalletProvider extends EvmWalletProvider {
+export class ViemWalletProvider extends EvmWalletProvider {
   private readonly wallet: WalletClient;
   private readonly rpcClient: PublicClient;
-  private readonly gasConfig: Required<GasConfiguration>;
+  private readonly gasOptions: Required<ViemWalletProviderOptions['gas']>;
 
   /**
    * Creates a new Ethereum wallet adapter using Viem
    */
-  constructor(client: WalletClient, options?: ViewWalletProviderOptions) {
+  constructor(config: ViemWalletProviderConfig) {
     super();
-    
-    this.wallet = client;
+
+    this.wallet = config.walletClient;
     this.rpcClient = createPublicClient({
-      chain: client.chain,
+      chain: config.walletClient.chain,
       transport: http(),
     });
-    
+
     // Set gas configuration with defaults
-    this.gasConfig = {
-      limitMultiplier: Math.max(options?.gas?.limitMultiplier ?? 1.2, 1),
-      feeMultiplier: Math.max(options?.gas?.feeMultiplier ?? 1, 1),
+    this.gasOptions = {
+      limitMultiplier: Math.max(config.options?.gas?.limitMultiplier ?? 1.2, 1),
+      feeMultiplier: Math.max(config.options?.gas?.feeMultiplier ?? 1, 1),
     };
   }
 
@@ -93,7 +103,7 @@ export class ViewWalletProvider extends EvmWalletProvider {
    */
   async signTypedData(data: any): Promise<`0x${string}`> {
     const account = this.validateAccount();
-    
+
     return this.wallet.signTypedData({
       account,
       domain: data.domain!,
@@ -108,7 +118,7 @@ export class ViewWalletProvider extends EvmWalletProvider {
    */
   async signTransaction(tx: TransactionRequest): Promise<`0x${string}`> {
     const account = this.validateAccount();
-    
+
     return this.wallet.signTransaction({
       account,
       to: tx.to,
@@ -126,7 +136,10 @@ export class ViewWalletProvider extends EvmWalletProvider {
     const chain = this.validateChain();
 
     // Calculate gas parameters with multipliers
-    const { gas, maxFeePerGas, maxPriorityFeePerGas } = await this.calculateGasParameters(tx, account);
+    const { gas, maxFeePerGas, maxPriorityFeePerGas } = await this.calculateGasParameters(
+      tx,
+      account,
+    );
 
     return this.wallet.sendTransaction({
       account,
@@ -145,7 +158,7 @@ export class ViewWalletProvider extends EvmWalletProvider {
    */
   async waitForTransactionConfirmation(txHash: `0x${string}`): Promise<WalletTxReceipt> {
     const receipt = await this.rpcClient.waitForTransactionReceipt({ hash: txHash });
-    
+
     return {
       txId: txHash,
       status: receipt.status === 'success' ? 'confirmed' : 'failed',
@@ -164,7 +177,7 @@ export class ViewWalletProvider extends EvmWalletProvider {
         type: receipt.type,
         gasUsed: receipt.gasUsed,
         effectiveGasPrice: receipt.effectiveGasPrice,
-        cumulativeGasUsed: receipt.cumulativeGasUsed
+        cumulativeGasUsed: receipt.cumulativeGasUsed,
       },
     };
   }
@@ -207,16 +220,19 @@ export class ViewWalletProvider extends EvmWalletProvider {
   /**
    * Calculate gas parameters with configured multipliers
    */
-  private async calculateGasParameters(tx: TransactionRequest, account: NonNullable<WalletClient['account']>) {
+  private async calculateGasParameters(
+    tx: TransactionRequest,
+    account: NonNullable<WalletClient['account']>,
+  ) {
     // Estimate gas fees
     const feeData = await this.rpcClient.estimateFeesPerGas();
-    const maxFeePerGas = BigInt(Math.round(
-      Number(feeData.maxFeePerGas) * this.gasConfig.feeMultiplier
-    ));
-    const maxPriorityFeePerGas = BigInt(Math.round(
-      Number(feeData.maxPriorityFeePerGas) * this.gasConfig.feeMultiplier
-    ));
-    
+    const maxFeePerGas = BigInt(
+      Math.round(Number(feeData?.maxFeePerGas) * this.gasOptions!.feeMultiplier),
+    );
+    const maxPriorityFeePerGas = BigInt(
+      Math.round(Number(feeData?.maxPriorityFeePerGas) * this.gasOptions!.feeMultiplier),
+    );
+
     // Estimate gas limit
     const gasEstimate = await this.rpcClient.estimateGas({
       account,
@@ -224,10 +240,8 @@ export class ViewWalletProvider extends EvmWalletProvider {
       value: tx.value,
       data: tx.data,
     });
-    const gas = BigInt(Math.round(
-      Number(gasEstimate) * this.gasConfig.limitMultiplier
-    ));
-    
+    const gas = BigInt(Math.round(Number(gasEstimate) * this.gasOptions!.limitMultiplier));
+
     return { gas, maxFeePerGas, maxPriorityFeePerGas };
   }
 }

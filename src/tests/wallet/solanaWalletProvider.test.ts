@@ -96,44 +96,25 @@ describe('SolanaKeypairWalletProvider', () => {
     // Generate a new keypair for each test
     keypair = Keypair.generate();
     wallet = new SolanaKeypairWalletProvider({
-      keypair: new Uint8Array(64).fill(1), // Mock secret key
-      rpcUrl: 'https://api.devnet.solana.com',
+      secretKey: new Uint8Array(64).fill(1), // Mock secret key
+      rpcEndpoint: 'https://api.devnet.solana.com',
     });
   });
 
   describe('constructor', () => {
     it('should create a wallet from a Uint8Array secret key', () => {
       const wallet = new SolanaKeypairWalletProvider({
-        keypair: new Uint8Array(64).fill(1),
-        rpcUrl: 'https://api.devnet.solana.com',
+        secretKey: new Uint8Array(64).fill(1),
+        rpcEndpoint: 'https://api.devnet.solana.com',
       });
       expect(wallet.getAddress()).toBe('mock-public-key');
     });
 
     it('should create a wallet from a base58 encoded secret key', () => {
       const wallet = new SolanaKeypairWalletProvider({
-        keypair: 'mock-base58-key',
-        rpcUrl: 'https://api.devnet.solana.com',
+        secretKey: 'mock-base58-key',
+        rpcEndpoint: 'https://api.devnet.solana.com',
       });
-      expect(wallet.getAddress()).toBe('mock-public-key');
-    });
-  });
-
-  describe('static factory methods', () => {
-    it('should create a wallet from an RPC URL', async () => {
-      const wallet = await SolanaKeypairWalletProvider.fromRpcUrl(
-        'https://api.devnet.solana.com',
-        new Uint8Array(64).fill(1)
-      );
-      expect(wallet.getAddress()).toBe('mock-public-key');
-    });
-
-    it('should create a wallet from a Connection', async () => {
-      const connection = new Connection('https://api.devnet.solana.com');
-      const wallet = await SolanaKeypairWalletProvider.fromConnection(
-        connection,
-        new Uint8Array(64).fill(1)
-      );
       expect(wallet.getAddress()).toBe('mock-public-key');
     });
   });
@@ -211,6 +192,7 @@ describe('SolanaKeypairWalletProvider', () => {
       expect(result).toEqual({
         txId: 'mock-signature',
         status: 'confirmed',
+        error: undefined,
         metadata: {
           blockhash: 'mock-blockhash',
           lastValidBlockHeight: 123456,
