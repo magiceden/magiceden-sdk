@@ -1,9 +1,9 @@
 import {
-  WalletClient as ViemWalletClient,
+  WalletClient,
   createPublicClient,
   http,
   TransactionRequest,
-  PublicClient as ViemPublicClient,
+  PublicClient,
   ReadContractParameters,
   ReadContractReturnType,
   Abi,
@@ -14,170 +14,138 @@ import { EvmWalletProvider } from './evmWalletProvider';
 import { WalletTxReceipt } from '../provider';
 
 /**
- * Configuration for gas multipliers.
+ * Configuration options for transaction gas parameters
  */
-export interface ViemWalletProviderGasConfig {
+export type GasConfiguration = {
   /**
-   * An internal multiplier on gas limit estimation.
+   * Multiplier for estimated gas limit (default: 1.2)
    */
-  gasLimitMultiplier?: number;
-
+  limitMultiplier?: number;
+  
   /**
-   * An internal multiplier on fee per gas estimation.
+   * Multiplier for estimated gas fees (default: 1.0)
    */
-  feePerGasMultiplier?: number;
-}
+  feeMultiplier?: number;
+};
 
 /**
- * A wallet provider that uses the Viem library.
+ * Options for the ViewWalletProvider
  */
-export class ViemWalletProvider extends EvmWalletProvider {
-  private readonly walletClient: ViemWalletClient;
-  private readonly publicClient: ViemPublicClient;
-  private readonly gasLimitMultiplier: number;
-  private readonly feePerGasMultiplier: number;
+export type ViewWalletProviderOptions = {
+  /**
+   * Gas configuration options
+   */
+  gas?: GasConfiguration;
+};
+
+/**
+ * Implementation of EvmWalletProvider using Viem library
+ */
+export class ViewWalletProvider extends EvmWalletProvider {
+  private readonly wallet: WalletClient;
+  private readonly rpcClient: PublicClient;
+  private readonly gasConfig: Required<GasConfiguration>;
 
   /**
-   * Constructs a new ViemWalletProvider.
-   *
-   * @param walletClient - The wallet client.
-   * @param gasConfig - Configuration for gas multipliers.
+   * Creates a new Ethereum wallet adapter using Viem
    */
-  constructor(walletClient: ViemWalletClient, gasConfig?: ViemWalletProviderGasConfig) {
+  constructor(client: WalletClient, options?: ViewWalletProviderOptions) {
     super();
-
-    this.walletClient = walletClient;
-    this.publicClient = createPublicClient({
-      chain: walletClient.chain,
+    
+    this.wallet = client;
+    this.rpcClient = createPublicClient({
+      chain: client.chain,
       transport: http(),
     });
-    this.gasLimitMultiplier = Math.max(gasConfig?.gasLimitMultiplier ?? 1.2, 1);
-    this.feePerGasMultiplier = Math.max(gasConfig?.feePerGasMultiplier ?? 1, 1);
+    
+    // Set gas configuration with defaults
+    this.gasConfig = {
+      limitMultiplier: Math.max(options?.gas?.limitMultiplier ?? 1.2, 1),
+      feeMultiplier: Math.max(options?.gas?.feeMultiplier ?? 1, 1),
+    };
   }
 
   /**
-   * Signs a message.
-   *
-   * @param message - The message to sign.
-   * @returns The signed message.
+   * Gets the current wallet address
+   */
+  getAddress(): string {
+    return this.wallet.account?.address ?? '';
+  }
+
+  /**
+   * Retrieves the wallet's native token balance
+   */
+  async getBalance(): Promise<bigint> {
+    const account = this.validateAccount();
+    return this.rpcClient.getBalance({ address: account.address });
+  }
+
+  /**
+   * Signs a message with the wallet's private key
    */
   async signMessage(message: string): Promise<`0x${string}`> {
-    const account = this.walletClient.account;
-    if (!account) {
-      throw new Error('Account not found');
-    }
-
-    return this.walletClient.signMessage({ account, message });
+    const account = this.validateAccount();
+    return this.wallet.signMessage({ account, message });
   }
 
   /**
-   * Signs a typed data object.
-   *
-   * @param typedData - The typed data object to sign.
-   * @returns The signed typed data object.
+   * Signs EIP-712 typed data
    */
-  async signTypedData(typedData: any): Promise<`0x${string}`> {
-    return this.walletClient.signTypedData({
-      account: this.walletClient.account!,
-      domain: typedData.domain!,
-      types: typedData.types!,
-      primaryType: typedData.primaryType!,
-      message: typedData.message!,
-    });
-  }
-
-  /**
-   * Signs a transaction.
-   *
-   * @param transaction - The transaction to sign.
-   * @returns The signed transaction.
-   */
-  async signTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
-    const txParams = {
-      account: this.walletClient.account!,
-      to: transaction.to,
-      value: transaction.value,
-      data: transaction.data,
-      chain: this.walletClient.chain,
-    };
-
-    return this.walletClient.signTransaction(txParams);
-  }
-
-  /**
-   * Sends a transaction.
-   *
-   * @param transaction - The transaction to send.
-   * @returns The hash of the transaction.
-   */
-  async signAndSendTransaction(transaction: TransactionRequest): Promise<`0x${string}`> {
-    const account = this.walletClient.account;
-    if (!account) {
-      throw new Error('Account not found');
-    }
-
-    const chain = this.walletClient.chain;
-    if (!chain) {
-      throw new Error('Chain not found');
-    }
-
-    const feeData = await this.publicClient.estimateFeesPerGas();
-    const maxFeePerGas = BigInt(Math.round(Number(feeData.maxFeePerGas) * this.feePerGasMultiplier));
-    const maxPriorityFeePerGas = BigInt(Math.round(Number(feeData.maxPriorityFeePerGas) * this.feePerGasMultiplier));
-
-    const gasLimit = await this.publicClient.estimateGas({
+  async signTypedData(data: any): Promise<`0x${string}`> {
+    const account = this.validateAccount();
+    
+    return this.wallet.signTypedData({
       account,
-      to: transaction.to,
-      value: transaction.value,
-      data: transaction.data,
+      domain: data.domain!,
+      types: data.types!,
+      primaryType: data.primaryType!,
+      message: data.message!,
     });
-    const gas = BigInt(Math.round(Number(gasLimit) * this.gasLimitMultiplier));
+  }
 
-    const txParams = {
-      account: account,
-      chain: chain,
-      data: transaction.data,
-      to: transaction.to,
-      value: transaction.value,
+  /**
+   * Signs a transaction without broadcasting it
+   */
+  async signTransaction(tx: TransactionRequest): Promise<`0x${string}`> {
+    const account = this.validateAccount();
+    
+    return this.wallet.signTransaction({
+      account,
+      to: tx.to,
+      value: tx.value,
+      data: tx.data,
+      chain: this.wallet.chain,
+    });
+  }
+
+  /**
+   * Signs and broadcasts a transaction
+   */
+  async signAndSendTransaction(tx: TransactionRequest): Promise<`0x${string}`> {
+    const account = this.validateAccount();
+    const chain = this.validateChain();
+
+    // Calculate gas parameters with multipliers
+    const { gas, maxFeePerGas, maxPriorityFeePerGas } = await this.calculateGasParameters(tx, account);
+
+    return this.wallet.sendTransaction({
+      account,
+      chain,
+      to: tx.to,
+      value: tx.value,
+      data: tx.data,
       gas,
       maxFeePerGas,
       maxPriorityFeePerGas,
-    };
-
-    return this.walletClient.sendTransaction(txParams);
+    });
   }
 
   /**
-   * Gets the address of the wallet.
-   *
-   * @returns The address of the wallet.
-   */
-  getAddress(): string {
-    return this.walletClient.account?.address ?? '';
-  }
-
-  /**
-   * Gets the balance of the wallet.
-   *
-   * @returns The balance of the wallet.
-   */
-  async getBalance(): Promise<bigint> {
-    const account = this.walletClient.account;
-    if (!account) {
-      throw new Error('Account not found');
-    }
-
-    return this.publicClient.getBalance({ address: account.address });
-  }
-
-  /**
-   * Waits for a transaction receipt.
-   *
-   * @param txHash - The hash of the transaction to wait for.
-   * @returns The transaction receipt.
+   * Waits for transaction confirmation and returns receipt
    */
   async waitForTransactionConfirmation(txHash: `0x${string}`): Promise<WalletTxReceipt> {
-    const receipt = await this.publicClient.waitForTransactionReceipt({ hash: txHash });
+    const receipt = await this.rpcClient.waitForTransactionReceipt({ hash: txHash });
+    
     return {
       txId: txHash,
       status: receipt.status === 'success' ? 'confirmed' : 'failed',
@@ -202,10 +170,7 @@ export class ViemWalletProvider extends EvmWalletProvider {
   }
 
   /**
-   * Reads a contract.
-   *
-   * @param params - The parameters to read the contract.
-   * @returns The response from the contract.
+   * Calls a read-only contract method
    */
   async readContract<
     const abi extends Abi | readonly unknown[],
@@ -214,6 +179,55 @@ export class ViemWalletProvider extends EvmWalletProvider {
   >(
     params: ReadContractParameters<abi, functionName, args>,
   ): Promise<ReadContractReturnType<abi, functionName, args>> {
-    return this.publicClient.readContract<abi, functionName, args>(params);
+    return this.rpcClient.readContract<abi, functionName, args>(params);
+  }
+
+  /**
+   * Helper to ensure account is available
+   */
+  private validateAccount() {
+    const account = this.wallet.account;
+    if (!account) {
+      throw new Error('No account connected to wallet');
+    }
+    return account;
+  }
+
+  /**
+   * Helper to ensure chain is available
+   */
+  private validateChain() {
+    const chain = this.wallet.chain;
+    if (!chain) {
+      throw new Error('No chain configured for wallet');
+    }
+    return chain;
+  }
+
+  /**
+   * Calculate gas parameters with configured multipliers
+   */
+  private async calculateGasParameters(tx: TransactionRequest, account: NonNullable<WalletClient['account']>) {
+    // Estimate gas fees
+    const feeData = await this.rpcClient.estimateFeesPerGas();
+    const maxFeePerGas = BigInt(Math.round(
+      Number(feeData.maxFeePerGas) * this.gasConfig.feeMultiplier
+    ));
+    const maxPriorityFeePerGas = BigInt(Math.round(
+      Number(feeData.maxPriorityFeePerGas) * this.gasConfig.feeMultiplier
+    ));
+    
+    // Estimate gas limit
+    const gasEstimate = await this.rpcClient.estimateGas({
+      account,
+      to: tx.to,
+      value: tx.value,
+      data: tx.data,
+    });
+    const gas = BigInt(Math.round(
+      Number(gasEstimate) * this.gasConfig.limitMultiplier
+    ));
+    
+    return { gas, maxFeePerGas, maxPriorityFeePerGas };
   }
 }
