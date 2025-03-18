@@ -88,12 +88,22 @@ export class V3ApiClient extends BaseApiClient {
     });
   }
 
-  // Helper method for API URL
+  /**
+   * Gets the base URL for the v3 API
+   *
+   * @returns Base URL
+   */
   getBaseUrl(): string {
     // Same url for dev and prod
     return 'https://api-mainnet.magiceden.dev/v3';
   }
 
+  /**
+   * Creates a Reservoir client
+   *
+   * @param options
+   * @returns Reservoir client
+   */
   private createReservoirClient(options: ApiClientOptions): ReservoirClient {
     const baseUrl = this.getBaseUrl();
 
@@ -112,7 +122,7 @@ export class V3ApiClient extends BaseApiClient {
       return {
         id: chainId,
         name: chain,
-        baseApiUrl: `${baseUrl}/v3/rtp/${reservoirConfig.routePrefix}`,
+        baseApiUrl: `${baseUrl}/rtp/${reservoirConfig.routePrefix}`,
         active: true,
         paymentTokens: paymentTokens,
       };
