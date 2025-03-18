@@ -97,14 +97,14 @@ export const EvmApiMappers = {
 
   v4: {
     /**
-     * Maps Solana publish launchpad parameters to V4 publish launchpad request
+     * Maps EVM publish launchpad parameters to V4 publish launchpad request
      */
     publishLaunchpadRequest: (params: EvmPublishLaunchpadParams): V4PublishLaunchpadRequest => ({
       ...params,
     }),
 
     /**
-     * Maps Solana create launchpad parameters to V4 create launchpad request
+     * Maps EVM create launchpad parameters to V4 create launchpad request
      */
     createLaunchpadRequest: (params: EvmCreateLaunchpadParams): V4CreateLaunchpadRequest => ({
       // All variables have the same name
@@ -112,14 +112,14 @@ export const EvmApiMappers = {
     }),
 
     /**
-     * Maps Solana update launchpad parameters to V4 update launchpad request
+     * Maps EVM update launchpad parameters to V4 update launchpad request
      */
     updateLaunchpadRequest: (params: EvmUpdateLaunchpadParams): V4UpdateLaunchpadRequest => ({
       ...params,
     }),
 
     /**
-     * Maps Solana mint parameters to V4 mint request
+     * Maps EVM mint parameters to V4 mint request
      */
     mintRequest: (params: EvmMintParams): V4MintRequest => ({
       ...params,

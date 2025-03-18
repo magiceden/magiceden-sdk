@@ -6,7 +6,7 @@ import { EvmApiMappers } from '../../mappers/nft';
 import { EvmTransactionAdapters } from '../../adapters/transactions';
 
 /**
- * Solana-specific NFT service implementation
+ * EVM-specific NFT service implementation
  */
 export class EvmNftService extends BaseNftService<'evm'> {
   constructor(config: ClientConfig<'evm'>) {
