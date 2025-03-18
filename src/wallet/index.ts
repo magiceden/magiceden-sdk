@@ -1,6 +1,6 @@
 import { VersionedTransaction } from '@solana/web3.js';
 import { TransactionRequest } from 'viem';
-import { SupportedChain } from '../types/chain';
+import { SupportedChain } from '../types/chains';
 
 export * from './solana';
 export * from './evm';

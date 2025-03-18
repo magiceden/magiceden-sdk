@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { zEVMAddress } from '../../../evm/primitives';
-import { Blockchain, ZodEvmBlockchain } from '../../../chain';
+import { Blockchain, ZodEvmBlockchain } from '../../../chains';
 import { zSolanaAddress } from '../../../solana/primitives';
 
 /**

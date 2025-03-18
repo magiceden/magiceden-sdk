@@ -4,7 +4,7 @@ import {
   TransactionResponse,
   TransactionStrategy,
 } from '../../types';
-import { SupportedChain } from '../../types/chain';
+import { SupportedChain } from '../../types/chains';
 import { ChainTransaction, WalletTxReceipt } from '../../wallet';
 import { V2ApiClient } from '../../api/clients/v2';
 import { V4ApiClient } from '../../api/clients/v4';

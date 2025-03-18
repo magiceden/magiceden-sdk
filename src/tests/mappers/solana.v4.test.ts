@@ -1,6 +1,6 @@
 import { SolanaApiMappers } from '../../mappers/nft/solana';
 import { SolanaCreateLaunchpadParams, SolanaUpdateLaunchpadParams, SolanaMintParams } from '../../types';
-import { Blockchain } from '../../types/chain';
+import { Blockchain } from '../../types/chains';
 import { SolProtocolType } from '../../types/protocol';
 import { MintStageKind } from '../../types/services/nft/shared';
 import { V4CreateLaunchpadRequest, V4UpdateLaunchpadRequest, V4MintRequest } from '../../types/api';

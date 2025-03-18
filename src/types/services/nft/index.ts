@@ -1,4 +1,4 @@
-import { SupportedChain } from '../../chain';
+import { SupportedChain } from '../../chains';
 import { EvmCreateLaunchpadParams, SolanaCreateLaunchpadParams } from './createLaunchpad';
 import { EvmUpdateLaunchpadParams, SolanaUpdateLaunchpadParams } from './updateLaunchpad';
 import { EvmMintParams, SolanaMintParams } from './mint';

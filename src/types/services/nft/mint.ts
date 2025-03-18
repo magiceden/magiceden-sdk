@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Blockchain, ZodEvmBlockchain } from '../../chain';
+import { Blockchain, ZodEvmBlockchain } from '../../chains';
 import { EvmProtocolType } from '../../protocol';
 import { SolanaSymbol, zSolanaAddress } from '../../solana/primitives';
 import { MintStageKind } from './shared';

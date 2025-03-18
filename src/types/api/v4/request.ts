@@ -1,4 +1,4 @@
-import { Blockchain } from '../../chain';
+import { Blockchain } from '../../chains';
 import { TokenProtocolType } from '../../protocol';
 
 interface SocialAccountDetails {

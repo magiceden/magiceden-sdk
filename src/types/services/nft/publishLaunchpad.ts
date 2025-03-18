@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Blockchain, ZodEvmBlockchain } from '../../chain';
+import { Blockchain, ZodEvmBlockchain } from '../../chains';
 import { zSolAuthorization } from '../../solana';
 import { SolanaSymbol } from '../../solana';
 import { zSolanaAddress } from '../../solana/primitives';

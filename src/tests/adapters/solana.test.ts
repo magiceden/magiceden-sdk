@@ -1,6 +1,6 @@
 import { SolanaTransactionAdapters } from '../../adapters/transactions';
 import { VersionedTransaction } from '@solana/web3.js';
-import { Blockchain } from '../../types/chain';
+import { Blockchain } from '../../types/chains';
 import { V4TransactionResponse, V4CreateLaunchpadResponse, V4UpdateLaunchpadResponse, V4MintResponse } from '../../types/api';
 import { SolanaTransactionParams } from '../../types/services/nft/shared/steps';
 import { TransactionStep } from '../../types/services/nft/shared';

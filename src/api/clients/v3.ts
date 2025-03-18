@@ -1,3 +1,4 @@
+import { createClient, ReservoirClient } from '@reservoir0x/reservoir-sdk';
 import { ChainType } from '../../types';
 import { supportedOn } from '../utils/decorators';
 import { BaseApiClient, ApiClientOptions } from './base';
@@ -6,8 +7,12 @@ import { BaseApiClient, ApiClientOptions } from './base';
  * V3 API client implementation (primarily for EVM chains)
  */
 export class V3ApiClient extends BaseApiClient {
+  private readonly reservoirClient: ReservoirClient;
+
   constructor(options: ApiClientOptions) {
     super(options);
+
+    this.reservoirClient = this.createReservoirClient(options);
   }
 
   /**
@@ -108,5 +113,20 @@ export class V3ApiClient extends BaseApiClient {
   getBaseUrl(): string {
     // Same url for dev and prod
     return 'https://api-mainnet.magiceden.dev/v3';
+  }
+
+  private createReservoirClient(options: ApiClientOptions): ReservoirClient {
+    return createClient({
+      apiKey: options.apiKey,
+      chains: [
+        // {
+        //   id: 1,
+        //   name: 'EVM',
+        //   baseApiUrl: 'https://api-mainnet.magiceden.dev/v3',
+        //   active: true,
+        //   paymentTokens: [],
+        // },
+      ],
+    });
   }
 }

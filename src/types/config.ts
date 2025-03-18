@@ -1,6 +1,6 @@
-import { SupportedChain } from './chain';
+import { SupportedChain } from './chains';
 import { WalletProvider, ChainTransaction } from '../wallet';
-import { ChainType } from './chain';
+import { ChainType } from './chains';
 import { TransactionStrategy } from './transactions';
 
 /**

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Blockchain, ZodEvmBlockchain } from '../../chain';
+import { Blockchain, ZodEvmBlockchain } from '../../chains';
 import { EvmProtocolType, SolProtocolType, TokenProtocolType } from '../../protocol';
 import { SolanaSymbol, zSolanaAddress } from '../../solana/primitives';
 import { MAX_NAME_LENGTH, MAX_ROYALTY_BPS, MIN_ROYALTY_BPS, SOL_MAX_NAME_LENGTH } from '../../../constants/nft';

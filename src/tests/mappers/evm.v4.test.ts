@@ -1,6 +1,6 @@
 import { EvmApiMappers } from '../../mappers/nft/ethereum';
 import { EvmCreateLaunchpadParams, EvmUpdateLaunchpadParams, EvmMintParams } from '../../types';
-import { Blockchain } from '../../types/chain';
+import { Blockchain } from '../../types/chains';
 import { EvmProtocolType } from '../../types/protocol';
 import { MintStageKind } from '../../types/services/nft/shared';
 

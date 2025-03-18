@@ -12,7 +12,7 @@ import {
   MintStageKind,
   V4CreateLaunchpadResponse,
 } from '../../..';
-import { Blockchain, ChainType } from '../../../types/chain';
+import { Blockchain, ChainType } from '../../../types/chains';
 import { EvmNftService } from '../../../services/nft/evm';
 import { V4TransactionResponse } from '../../../types/api';
 import { V4ApiClient } from '../../../api/clients/v4';
