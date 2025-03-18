@@ -49,7 +49,6 @@ jest.mock('@solana/web3.js', () => {
         context: { slot: 1 },
         value: { slot: 1, confirmations: 1, err: null, confirmationStatus: 'confirmed' },
       }),
-      requestAirdrop: jest.fn().mockResolvedValue('mock-airdrop-signature'),
       rpcEndpoint: 'https://api.devnet.solana.com',
     })),
     VersionedTransaction: MockVersionedTransaction,
@@ -97,44 +96,25 @@ describe('SolanaKeypairWalletProvider', () => {
     // Generate a new keypair for each test
     keypair = Keypair.generate();
     wallet = new SolanaKeypairWalletProvider({
-      keypair: new Uint8Array(64).fill(1), // Mock secret key
-      rpcUrl: 'https://api.devnet.solana.com',
+      secretKey: new Uint8Array(64).fill(1), // Mock secret key
+      rpcEndpoint: 'https://api.devnet.solana.com',
     });
   });
 
   describe('constructor', () => {
     it('should create a wallet from a Uint8Array secret key', () => {
       const wallet = new SolanaKeypairWalletProvider({
-        keypair: new Uint8Array(64).fill(1),
-        rpcUrl: 'https://api.devnet.solana.com',
+        secretKey: new Uint8Array(64).fill(1),
+        rpcEndpoint: 'https://api.devnet.solana.com',
       });
       expect(wallet.getAddress()).toBe('mock-public-key');
     });
 
     it('should create a wallet from a base58 encoded secret key', () => {
       const wallet = new SolanaKeypairWalletProvider({
-        keypair: 'mock-base58-key',
-        rpcUrl: 'https://api.devnet.solana.com',
+        secretKey: 'mock-base58-key',
+        rpcEndpoint: 'https://api.devnet.solana.com',
       });
-      expect(wallet.getAddress()).toBe('mock-public-key');
-    });
-  });
-
-  describe('static factory methods', () => {
-    it('should create a wallet from an RPC URL', async () => {
-      const wallet = await SolanaKeypairWalletProvider.fromRpcUrl(
-        'https://api.devnet.solana.com',
-        new Uint8Array(64).fill(1)
-      );
-      expect(wallet.getAddress()).toBe('mock-public-key');
-    });
-
-    it('should create a wallet from a Connection', async () => {
-      const connection = new Connection('https://api.devnet.solana.com');
-      const wallet = await SolanaKeypairWalletProvider.fromConnection(
-        connection,
-        new Uint8Array(64).fill(1)
-      );
       expect(wallet.getAddress()).toBe('mock-public-key');
     });
   });
@@ -187,7 +167,7 @@ describe('SolanaKeypairWalletProvider', () => {
 
     describe('sendTransaction', () => {
       it('should send a transaction', async () => {
-        const signature = await wallet.sendTransaction(mockTransaction);
+        const signature = await wallet.signAndSendTransaction(mockTransaction);
         expect(signature).toBe('mock-signature');
       });
     });
@@ -195,7 +175,7 @@ describe('SolanaKeypairWalletProvider', () => {
     describe('signAndSendTransaction', () => {
       it('should sign and send a transaction', async () => {
         const signSpy = jest.spyOn(wallet, 'signTransaction');
-        const sendSpy = jest.spyOn(wallet, 'sendTransaction');
+        const sendSpy = jest.spyOn(wallet, 'signAndSendTransaction');
         
         const signature = await wallet.signAndSendTransaction(mockTransaction);
         
@@ -206,19 +186,13 @@ describe('SolanaKeypairWalletProvider', () => {
     });
   });
 
-  describe('requestAirdrop', () => {
-    it('should request an airdrop', async () => {
-      const signature = await wallet.requestAirdrop(1000000000); // 1 SOL
-      expect(signature).toBe('mock-airdrop-signature');
-    });
-  });
-
   describe('waitForTransactionConfirmation', () => {
     it('should wait for transaction confirmation', async () => {
       const result = await wallet.waitForTransactionConfirmation('mock-signature');
       expect(result).toEqual({
         txId: 'mock-signature',
         status: 'confirmed',
+        error: undefined,
         metadata: {
           blockhash: 'mock-blockhash',
           lastValidBlockHeight: 123456,
@@ -234,12 +208,6 @@ describe('SolanaKeypairWalletProvider', () => {
         context: { slot: 1 },
         value: { slot: 1, confirmations: 1, err: null, confirmationStatus: 'confirmed' },
       });
-    });
-  });
-
-  describe('getName', () => {
-    it('should return the wallet provider name', () => {
-      expect(wallet.getName()).toBe('solana_keypair_wallet_provider');
     });
   });
 });

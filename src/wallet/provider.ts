@@ -51,14 +51,6 @@ export abstract class WalletProvider<
   abstract signTransaction(transaction: TxType): Promise<SignedTxType>;
 
   /**
-   * Send a transaction.
-   *
-   * @param transaction - The transaction to send.
-   * @returns The transaction hash or signature.
-   */
-  abstract sendTransaction(transaction: TxType): Promise<TxHashType>;
-
-  /**
    * Sign and send a transaction.
    *
    * @param transaction The transaction to sign and send.

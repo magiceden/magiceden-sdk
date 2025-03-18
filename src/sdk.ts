@@ -51,8 +51,8 @@ export class MagicEdenSDK {
   ): MagicEdenClient {
     const rpcUrl = options?.rpcUrl || 'https://api.mainnet-beta.solana.com';
     const walletProvider = new SolanaKeypairWalletProvider({ 
-      keypair: keypair.secretKey, 
-      rpcUrl 
+      secretKey: keypair.secretKey, 
+      rpcEndpoint: rpcUrl 
     });
     
     return this.createSolanaClient(apiKey, walletProvider, options?.clientConfig);

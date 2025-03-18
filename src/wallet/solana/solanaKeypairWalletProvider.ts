@@ -1,91 +1,67 @@
-import { SolanaWalletProvider } from './solanaWalletProvider';
 import {
   Connection,
   Keypair,
   VersionedTransaction,
   RpcResponseAndContext,
-  SignatureResult,
   SignatureStatus,
   SignatureStatusConfig,
 } from '@solana/web3.js';
 import bs58 from 'bs58';
 import nacl from 'tweetnacl';
 import { WalletTxReceipt } from '../provider';
+import { SolanaWalletProvider } from './solanaWalletProvider';
+
 
 /**
- * SolanaKeypairWalletProvider is a wallet provider that uses a local Solana keypair.
- *
- * @augments SvmWalletProvider
+ * Configuration for the Solana wallet adapter
+ */
+export type KeypairWalletConfig = {
+  /** Secret key in either base58 string format or raw bytes */
+  secretKey: string | Uint8Array;
+
+  /** RPC endpoint URL */
+  rpcEndpoint: string;
+};
+
+/**
+ * A Solana wallet implementation using a local keypair
  */
 export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
-  private keypair: Keypair;
-  private connection: Connection;
+  private readonly connection: Connection;
+  private readonly keypair: Keypair;
 
   /**
-   * Creates a new SolanaKeypairWalletProvider
-   *
-   * @param args - Configuration arguments
-   * @param args.keypair - Either a Uint8Array or a base58 encoded string representing a 32-byte secret key
-   * @param args.rpcUrl - URL of the Solana RPC endpoint
-   * @param args.genesisHash - The genesis hash of the network
+   * Creates a new Solana wallet provider
    */
-  constructor({ keypair, rpcUrl }: { keypair: Uint8Array | string; rpcUrl: string }) {
+  constructor(config: KeypairWalletConfig) {
     super();
 
-    this.keypair =
-      typeof keypair === 'string'
-        ? Keypair.fromSecretKey(bs58.decode(keypair))
-        : Keypair.fromSecretKey(keypair);
-    this.connection = new Connection(rpcUrl);
+    // Initialize the RPC connection
+    this.connection = new Connection(config.rpcEndpoint, 'confirmed');
+
+    // Create the keypair from the provided secret
+    this.keypair = this.createKeyFromSecret(config.secretKey);
   }
 
   /**
-   * Create a new SolanaKeypairWalletProvider from a Connection and a keypair
-   *
-   * @param connection - The Connection to use
-   * @param keypair - Either a Uint8Array or a base58 encoded string representing a 32-byte secret key
-   * @returns The new SolanaKeypairWalletProvider
-   */
-  static async fromConnection<T extends SolanaKeypairWalletProvider>(
-    connection: Connection,
-    keypair: Uint8Array | string,
-  ): Promise<T> {
-    return (await this.fromRpcUrl(connection.rpcEndpoint, keypair)) as T;
-  }
-
-  /**
-   * Create a new SolanaKeypairWalletProvider from an RPC URL and a keypair
-   *
-   * @param rpcUrl - The URL of the Solana RPC endpoint
-   * @param keypair - Either a Uint8Array or a base58 encoded string representing a 32-byte secret key
-   * @returns The new SolanaKeypairWalletProvider
-   */
-  static async fromRpcUrl<T extends SolanaKeypairWalletProvider>(
-    rpcUrl: string,
-    keypair: Uint8Array | string,
-  ): Promise<T> {
-    return new SolanaKeypairWalletProvider({
-      keypair,
-      rpcUrl,
-    }) as T;
-  }
-
-  /**
-   * Get the connection instance
-   *
-   * @returns The Solana connection instance
+   * Gets the RPC connection
    */
   getConnection(): Connection {
     return this.connection;
   }
 
   /**
-   * Get the address of the wallet
-   *
-   * @returns The base58 encoded address of the wallet
+   * Gets the wallet's public address
    */
   getAddress(): string {
     return this.keypair.publicKey.toBase58();
+  }
+
+  /**
+   * Gets the wallet's SOL balance
+   */
+  async getBalance(): Promise<bigint> {
+    return this.connection.getBalance(this.keypair.publicKey).then((balance) => BigInt(balance));
   }
 
   /**
@@ -112,18 +88,6 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
   }
 
   /**
-   * Send a transaction
-   *
-   * @param transaction - The transaction to send
-   * @returns The signature
-   */
-  async sendTransaction(transaction: VersionedTransaction): Promise<string> {
-    const signature = await this.connection.sendTransaction(transaction);
-    await this.waitForTransactionConfirmation(signature);
-    return signature;
-  }
-
-  /**
    * Sign and send a transaction
    *
    * @param transaction - The transaction to sign and send
@@ -131,7 +95,7 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
    */
   async signAndSendTransaction(transaction: VersionedTransaction): Promise<string> {
     const signedTransaction = await this.signTransaction(transaction);
-    return this.sendTransaction(signedTransaction);
+    return await this.connection.sendTransaction(signedTransaction);
   }
 
   /**
@@ -154,52 +118,63 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
    * @param signature - The signature
    * @returns The confirmation response
    */
-  async waitForTransactionConfirmation(
-    signature: string,
-  ): Promise<WalletTxReceipt> {
-    const { blockhash, lastValidBlockHeight } = await this.connection.getLatestBlockhash();
-    const receipt = await this.connection.confirmTransaction({
-      signature: signature,
-      lastValidBlockHeight,
-      blockhash,
-    });
-    
-    return {
-      txId: signature,
-      status: receipt.value.err ? 'failed' : 'confirmed',
-      error: receipt.value.err?.toString(),
-      metadata: {
-        blockhash,
-        lastValidBlockHeight,
-      },
-    };
+  async waitForTransactionConfirmation(signature: string): Promise<WalletTxReceipt> {
+    try {
+      // Get the latest blockhash for transaction confirmation
+      const { blockhash, lastValidBlockHeight } = await this.connection.getLatestBlockhash({
+        commitment: 'confirmed',
+      });
+
+      // Wait for confirmation
+      const confirmResult = await this.connection.confirmTransaction(
+        {
+          blockhash,
+          lastValidBlockHeight,
+          signature,
+        },
+        'confirmed',
+      );
+
+      // Format the receipt
+      return {
+        txId: signature,
+        status: confirmResult.value.err ? 'failed' : 'confirmed',
+        error: confirmResult.value.err ? String(confirmResult.value.err) : undefined,
+        metadata: {
+          blockhash,
+          lastValidBlockHeight,
+        },
+      };
+    } catch (error) {
+      // Handle timeout or other errors
+      return {
+        txId: signature,
+        status: 'failed',
+        error: error instanceof Error ? error.message : 'Unknown error during confirmation',
+        metadata: {
+          errorType: error instanceof Error ? error.name : 'Unknown',
+        },
+      };
+    }
   }
 
   /**
-   * Get the name of the wallet provider
-   *
-   * @returns The name of the wallet provider
+   * Helper to create a keypair from different secret formats
    */
-  getName(): string {
-    return 'solana_keypair_wallet_provider';
-  }
-
-  /**
-   * Get the balance of the wallet
-   *
-   * @returns The balance of the wallet
-   */
-  getBalance(): Promise<bigint> {
-    return this.connection.getBalance(this.keypair.publicKey).then((balance) => BigInt(balance));
-  }
-
-  /**
-   * Request SOL tokens from the Solana faucet. This method only works on devnet and testnet networks.
-   *
-   * @param lamports - The amount of lamports (1 SOL = 1,000,000,000 lamports) to request from the faucet
-   * @returns A Promise that resolves to the signature of the airdrop
-   */
-  async requestAirdrop(lamports: number): Promise<string> {
-    return await this.connection.requestAirdrop(this.keypair.publicKey, lamports);
+  private createKeyFromSecret(secret: string | Uint8Array): Keypair {
+    if (typeof secret === 'string') {
+      try {
+        const decoded = bs58.decode(secret);
+        return Keypair.fromSecretKey(decoded);
+      } catch (error) {
+        throw new Error('Invalid base58 encoded secret key');
+      }
+    } else {
+      try {
+        return Keypair.fromSecretKey(secret);
+      } catch (error) {
+        throw new Error('Invalid secret key bytes');
+      }
+    }
   }
 }
