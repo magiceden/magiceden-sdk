@@ -38,30 +38,6 @@ export class V3ApiClient extends BaseApiClient {
     });
   }
 
-  @supportedOn([ChainType.EVM])
-  async makeCollectionOffer(request: any): Promise<any> {
-    throw new Error('Not implemented');
-    // return this.api.get<SolanaInstructionsResponse>('/instructions/mmm/create-pool', {
-    //   ...request,
-    // });
-  }
-
-  @supportedOn([ChainType.EVM])
-  async cancelCollectionOffer(request: any): Promise<any> {
-    throw new Error('Not implemented');
-    // return this.api.get<SolanaInstructionsResponse>('/instructions/mmm/sol-withdraw-buy', {
-    //   ...request,
-    // });
-  }
-
-  @supportedOn([ChainType.EVM])
-  async takeCollectionOffer(request: any): Promise<any> {
-    throw new Error('Not implemented');
-    // return this.api.get<SolanaInstructionsResponse>('/instructions/mmm/sol-fulfill-buy', {
-    //   ...request,
-    // });
-  }
-
   /**
    * Gets instructions to accept an offer
    */
