@@ -177,14 +177,4 @@ export class SolanaKeypairWalletProvider extends SolanaWalletProvider {
       }
     }
   }
-
-  /**
-   * Helper to convert message to bytes
-   */
-  private convertToBytes(message: string | Uint8Array): Uint8Array {
-    if (typeof message === 'string') {
-      return new TextEncoder().encode(message);
-    }
-    return message;
-  }
 }
