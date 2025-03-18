@@ -1,7 +1,10 @@
-import { createClient, ReservoirClient } from '@reservoir0x/reservoir-sdk';
-import { ChainType } from '../../types';
+import { createClient, ReservoirChain, ReservoirClient } from '@reservoir0x/reservoir-sdk';
+import { ChainType, EvmChainId } from '../../types';
 import { supportedOn } from '../utils/decorators';
 import { BaseApiClient, ApiClientOptions } from './base';
+import { getEvmChainFromId } from '../../helpers/evm/chain';
+import { getReservoirConfigForChain } from '../../helpers/evm/reservoir';
+import { getPaymentTokensForEvmChain } from '../../helpers/evm/payment';
 
 /**
  * V3 API client implementation (primarily for EVM chains)
@@ -116,17 +119,32 @@ export class V3ApiClient extends BaseApiClient {
   }
 
   private createReservoirClient(options: ApiClientOptions): ReservoirClient {
+    const baseUrl = this.getBaseUrl();
+
+    // Get all EVM chain IDs
+    const evmChainIds = Object.values(EvmChainId).filter(
+      (value) => typeof value === 'number',
+    ) as EvmChainId[];
+
+    // Create chain configurations for Reservoir
+    const chains = evmChainIds.map((chainId) => {
+      const chain = getEvmChainFromId(chainId);
+
+      const reservoirConfig = getReservoirConfigForChain(chain);
+      const paymentTokens = getPaymentTokensForEvmChain(chain);
+
+      return {
+        id: chainId,
+        name: chain,
+        baseApiUrl: `${baseUrl}/v3/rtp/${reservoirConfig.routePrefix}`,
+        active: true,
+        paymentTokens: paymentTokens,
+      };
+    });
+
     return createClient({
       apiKey: options.apiKey,
-      chains: [
-        // {
-        //   id: 1,
-        //   name: 'EVM',
-        //   baseApiUrl: 'https://api-mainnet.magiceden.dev/v3',
-        //   active: true,
-        //   paymentTokens: [],
-        // },
-      ],
+      chains: chains,
     });
   }
 }

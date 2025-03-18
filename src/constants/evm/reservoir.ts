@@ -6,7 +6,7 @@ export interface ReservoirConfig {
   routePrefix: string;
 }
 
-const RESERVOIR_CONFIGS: Record<EvmBlockchain, ReservoirConfig> = {
+export const RESERVOIR_CONFIGS: Record<EvmBlockchain, ReservoirConfig> = {
   [Blockchain.ETHEREUM]: {
     apiHost: 'https://api.reservoir.tools',
     routePrefix: 'ethereum',
