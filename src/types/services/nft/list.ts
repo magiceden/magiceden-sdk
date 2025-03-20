@@ -1,3 +1,4 @@
+import { ZodEvmBlockchain } from '../../chains';
 import { SplAmount } from '../../solana';
 import { z } from 'zod';
 
@@ -17,6 +18,11 @@ export const ListParams = z.object({
 
 export const EvmListParams = ListParams.extend({});
 
+export const EvmListParamsWithExtras = z.object({
+  chain: ZodEvmBlockchain.describe('The chain to list on'),
+  params: z.array(EvmListParams).describe('The list parameters'),
+});
+
 export const SolanaListParams = ListParams.extend({
   // Solana-specific parameters
   auctionHouseAddress: z.string().describe('Auction house address'),
@@ -32,5 +38,5 @@ export const SolanaListParams = ListParams.extend({
   txFeePayer: z.string().optional().describe('Transaction fee payer address'),
 });
 
-export type EvmListParams = z.infer<typeof EvmListParams>;
+export type EvmListParams = z.infer<typeof EvmListParamsWithExtras>;
 export type SolanaListParams = z.infer<typeof SolanaListParams>;

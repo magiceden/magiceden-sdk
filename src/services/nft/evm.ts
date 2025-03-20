@@ -102,7 +102,10 @@ export class EvmNftService extends BaseNftService<'evm'> {
     params: ChainMethodParams<'evm', 'makeItemOffer'>,
   ): Promise<ChainOperation<'evm'>[]> {
     const response = await this.v3ApiClient.placeBid(
-      EvmApiMappers.v3.makeItemOfferRequest(this.config.wallet.getAddress() as `0x${string}`, params)
+      EvmApiMappers.v3.makeItemOfferRequest(
+        this.config.wallet.getAddress() as `0x${string}`,
+        params,
+      ),
     );
     return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
@@ -140,7 +143,9 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getBuyOperations(
     params: ChainMethodParams<'evm', 'buy'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v3ApiClient.buy(EvmApiMappers.v3.buyRequest(params));
+    const response = await this.v3ApiClient.buy(
+      EvmApiMappers.v3.buyRequest(this.config.wallet.getAddress() as `0x${string}`, params),
+    );
     return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
@@ -172,13 +177,15 @@ export class EvmNftService extends BaseNftService<'evm'> {
       const signature = await evmWallet.signTypedData(operation.signatureData);
 
       if (operation.signatureData.post) {
-        const orderResponse = await this.v3ApiClient.order({
-          chain: getEvmChainFromId(operation.signatureData.chainId),
-          signature,
-          data: operation.signatureData.post.body,
-        }).withRetries({
-          retries: 3
-        });
+        const orderResponse = await this.v3ApiClient
+          .order({
+            chain: getEvmChainFromId(operation.signatureData.chainId),
+            signature,
+            data: operation.signatureData.post.body,
+          })
+          .withRetries({
+            retries: 3,
+          });
 
         return {
           signature,

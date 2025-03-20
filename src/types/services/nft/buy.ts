@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SplAmount } from "../../solana";
+import { ZodEvmBlockchain } from "../../chains";
 
 /**
  * Parameters for buying an NFT
@@ -7,20 +8,26 @@ import { SplAmount } from "../../solana";
 export const BuyParams = z.object({
   // Generic parameters that can be shared between chains
   token: z.string().describe("The NFT token in the format of <contract address>:<token id> for EVM and <mint address> for Solana"),
-  seller: z.string().describe("The seller's wallet address"),
-  price: z.string().describe("The purchase price"),
 });
 
 export const EvmBuyParams = BuyParams.extend({
-  // EVM-specific parameters
+  collection: z.string().optional().describe('Collection to buy.'),
+  quantity: z.number().optional().describe('Quantity of tokens to buy.'),
+  orderId: z.string().optional().describe('Optional order id to fill.'),
+});
+
+export const EvmBuyParamsWithExtras = z.object({
+  chain: ZodEvmBlockchain.describe('The chain to buy on'),
+  currency: z.string().optional().describe('The currency to use for the purchase'),
+  currencyChainId: z.number().optional().describe('The chain id of the currency'),
+  items: z.array(EvmBuyParams).describe('The buy parameters'),
 });
 
 export const SolanaBuyParams = BuyParams.extend({
   // Solana-specific parameters
-  // tokenAddress in BuyParams maps to tokenMint in V2BuyRequest
-  // buyer in BuyParams maps to buyer in V2BuyRequest
-  // seller in BuyParams maps to seller in V2BuyRequest
-  // price in BuyParams maps to price in V2BuyRequest
+  // token in BuyParams maps to tokenMint in V2BuyRequest
+  seller: z.string().describe("The seller's wallet address"),
+  price: z.string().describe("The purchase price"),
   auctionHouseAddress: z.string().describe("Auction house address"),
   tokenATA: z.string().describe("Token associated token account"),
   buyerReferral: z.string().optional().describe("Buyer referral address"),
@@ -31,5 +38,5 @@ export const SolanaBuyParams = BuyParams.extend({
   splPrice: z.custom<SplAmount>().optional().describe("SPL token price details"),
 });
 
-export type EvmBuyParams = z.infer<typeof EvmBuyParams>;
+export type EvmBuyParams = z.infer<typeof EvmBuyParamsWithExtras>;
 export type SolanaBuyParams = z.infer<typeof SolanaBuyParams>;

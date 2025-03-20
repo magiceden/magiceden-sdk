@@ -21,6 +21,11 @@ export const EvmMakeItemOfferParams = MakeItemOfferParams.extend({
   currency: z.string().optional().describe("Currency address for the offer (defaults to chain's native wrapped token)"),
 });
 
+export const EvmMakeItemOfferParamsWithExtras = z.object({
+  chain: ZodEvmBlockchain.describe('The chain to make the offer on'),
+  params: z.array(EvmMakeItemOfferParams).describe('The make item offer parameters'),
+});
+
 export const SolanaMakeItemOfferParams = MakeItemOfferParams.extend({
   // Solana-specific parameters
   // tokenAddress in MakeItemOfferParams maps to tokenMint in V2MakeItemOfferRequest
@@ -36,5 +41,5 @@ export const SolanaMakeItemOfferParams = MakeItemOfferParams.extend({
   exactPrioFeeLamports: z.number().optional().describe("Exact priority fee in lamports"),
 });
 
-export type EvmMakeItemOfferParams = z.infer<typeof EvmMakeItemOfferParams>;
+export type EvmMakeItemOfferParams = z.infer<typeof EvmMakeItemOfferParamsWithExtras>;
 export type SolanaMakeItemOfferParams = z.infer<typeof SolanaMakeItemOfferParams>;

@@ -10,7 +10,6 @@ import {
   EvmUpdateLaunchpadParams,
   EvmCreateLaunchpadParams,
   EvmPublishLaunchpadParams,
-  EvmChainParams,
 } from '../../types/services/nft';
 import {
   V4CreateLaunchpadRequest,
@@ -37,7 +36,7 @@ export const EvmApiMappers = {
     /**
      * Maps generic list parameters to Ethereum-specific API request
      */
-    listRequest: (maker: `0x${string}`, params: EvmChainParams<EvmListParams[]>): V3ListRequest => {
+    listRequest: (maker: `0x${string}`, params: EvmListParams): V3ListRequest => {
       return {
         maker,
         chain: params.chain,
@@ -66,7 +65,7 @@ export const EvmApiMappers = {
      */
     makeItemOfferRequest: (
       maker: `0x${string}`,
-      params: EvmChainParams<EvmMakeItemOfferParams[]>,
+      params: EvmMakeItemOfferParams,
     ): V3PlaceBidRequest => {
       return {
         maker,
@@ -106,9 +105,18 @@ export const EvmApiMappers = {
     /**
      * Maps generic buy parameters to Ethereum-specific API request
      */
-    buyRequest: (params: EvmChainParams<EvmBuyParams[]>): V3BuyRequest => {
+    buyRequest: (taker: string, params: EvmBuyParams): V3BuyRequest => {
       return {
-        
+        taker,
+        chain: params.chain,
+        currency: params.currency,
+        currencyChainId: params.currencyChainId,
+        items: params.items.map((item) => ({
+          ...(item.token ? { token: item.token } : {}),
+          ...(item.collection ? { collection: item.collection } : {}),
+          ...(item.quantity ? { quantity: item.quantity } : {}),
+          ...(item.orderId ? { orderId: item.orderId } : {}),
+        })),
       };
     },
 
