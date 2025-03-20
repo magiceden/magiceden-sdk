@@ -192,7 +192,8 @@ export class EvmNftService extends BaseNftService<'evm'> {
             data: operation.signatureData.post.body,
           })
           .withRetries({
-            retries: 3,
+            retries: 5,
+            delay: 3000,
           });
 
         return {

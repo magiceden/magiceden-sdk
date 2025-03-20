@@ -50,7 +50,7 @@ export interface TransactionResponse {
   /**
    * Metadata
    */
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, any>;
 }
 
 /**

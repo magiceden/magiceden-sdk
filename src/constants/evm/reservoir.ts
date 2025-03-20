@@ -1,7 +1,7 @@
 import { Blockchain } from '../../types';
 import { EvmBlockchain } from '../../types/chains/evm';
 
-export const DEFAULT_ORDER_KIND = 'seaport-v1.6';
+export const DEFAULT_ORDER_KIND = 'payment-processor-v2';
 export const DEFAULT_ORDERBOOK = 'reservoir';
 
 export interface ReservoirConfig {
