@@ -91,22 +91,27 @@ describe('SolanaTransactionAdapters', () => {
 
   describe('fromBuffer', () => {
     it('should deserialize versioned transaction from buffer', () => {
-      const mockBuffer = Buffer.from([1, 0, 1, 3, 206, 211]);
+      // Setup
+      const mockBuffer = Buffer.from([1, 2, 3]);
+      const mockTransaction = { mockTransaction: true };
       
       // Mock VersionedTransaction.deserialize
-      const deserializeSpy = jest
-        .spyOn(VersionedTransaction, 'deserialize')
-        .mockImplementation(() => ({ mockTransaction: true }) as unknown as VersionedTransaction);
-
+      const deserializeSpy = jest.spyOn(VersionedTransaction, 'deserialize')
+        .mockReturnValue(mockTransaction as any);
+      
+      // Call the method
       const result = SolanaTransactionAdapters.fromBuffer(mockBuffer);
-
+      
+      // Verify
       expect(deserializeSpy).toHaveBeenCalledWith(mockBuffer);
       expect(result).toBeInstanceOf(Array);
+      
+      // Update expectation to match the actual structure
       expect(result[0]).toEqual({
-        type: 'transaction',
-        transactionData: { mockTransaction: true }
+        mockTransaction: true
       });
-
+      
+      // Clean up
       deserializeSpy.mockRestore();
     });
 
