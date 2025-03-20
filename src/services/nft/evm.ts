@@ -4,6 +4,8 @@ import { ClientConfig } from '../../types';
 import { EvmApiMappers } from '../../mappers/nft';
 import { EvmTransactionAdapters } from '../../adapters/transactions';
 import { ChainOperation, SignatureOperation } from '../../types/operations';
+import { EvmWalletProvider } from '../../wallet';
+import { getEvmChainFromId } from '../../helpers';
 
 /**
  * EVM-specific NFT service implementation
@@ -74,7 +76,7 @@ export class EvmNftService extends BaseNftService<'evm'> {
     const response = await this.v3ApiClient.list(
       EvmApiMappers.v3.listRequest(this.config.wallet.getAddress() as `0x${string}`, params),
     );
-    return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    return EvmTransactionAdapters.fromV3TransactionResponse(params.chain, response);
   }
 
   /**
@@ -160,6 +162,41 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async processSignatureOperation(
     operation: SignatureOperation<'evm'>,
   ): Promise<SignatureResponse> {
-    throw new Error('Not implemented');
+    if (operation.signatureData.api !== 'v3') {
+      throw new Error('Not implemented');
+    }
+
+    try {
+      const evmWallet = this.config.wallet as EvmWalletProvider;
+      const signature = await evmWallet.signTypedData(operation.signatureData);
+
+      if (operation.signatureData.post) {
+        const orderResponse = await this.v3ApiClient.order({
+          chain: getEvmChainFromId(operation.signatureData.chainId),
+          signature,
+          data: operation.signatureData.post.body,
+        });
+
+        console.log(orderResponse);
+        console.log(orderResponse?.data);
+
+        return {
+          signature,
+          status: 'success',
+        };
+      }
+
+      return {
+        signature,
+        status: 'success',
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        signature: '',
+        status: 'failed',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
   }
 }

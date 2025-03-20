@@ -13,29 +13,24 @@ export interface SignatureResponse {
  * Ethereum signature request
  */
 export type EvmSignatureRequest = {
+  api: 'v3' | 'v4';
+  chainId: number;
   domain: any;
   types: any;
   message: any;
   primaryType: string;
-  postData?: {
-    endpoint: string;
-    method: string;
-    body: any;
-  };
+  post?: any;
 }
 
 /**
  * Solana signature request
  */
 export type SolanaSignatureRequest = {
+  api: 'v2' | 'v4';
   message: Uint8Array | string;
-  display?: 'utf8' | 'hex';
-  postData?: {
-    endpoint: string;
-    method: string;
-    body: any;
-  };
+  display?: 'utf8' | 'hex'; 
 }
+
 /**
  * Define signature data types for each chain
  */

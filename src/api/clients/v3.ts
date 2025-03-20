@@ -3,6 +3,7 @@ import { ChainType, EvmBlockchain } from '../../types';
 import {
   V3BuyRequest,
   V3CancelOrderRequest,
+  V3EVMRequest,
   V3ListRequest,
   V3PlaceBidRequest,
   V3SellRequest,
@@ -96,9 +97,9 @@ export class V3ApiClient extends BaseApiClient {
    * Posts an submit signed order request to the v3 API
    */
   @supportedOn([ChainType.EVM])
-  async order(request: V3SubmitSignedOrderRequest): Promise<Execute> {
-    return this.api.post<Execute>(
-      this.getRequestPath(request.chain, `orders/v4?signature=${request.signature}`),
+  async order(request: V3SubmitSignedOrderRequest): Promise<any> {
+    return this.api.post<any>(
+      `/rtp/${request.chain}/orders/v4?signature=${request.signature}`,
       {
         ...request.data,
       },

@@ -1,17 +1,18 @@
 import { V4TransactionResponse } from '../../types/api';
-import { EvmSignatureRequest, ZodEvmBlockchain } from '../../types';
+import { EvmBlockchain, EvmSignatureRequest, ZodEvmBlockchain } from '../../types';
 import { EvmTransactionParams } from '../../types/services/nft/shared/steps';
 import { TransactionRequest } from 'viem';
 import { isHexPrefixedString } from '../../validation';
 import { ChainOperation, TransactionOperation } from '../../types/operations';
 import { Execute } from '@reservoir0x/reservoir-sdk';
+import { getEvmChainIdFromBlockchain } from '../../helpers';
 
 /**
  * Ethereum Transaction Adapters
  * Converts between API responses and Ethereum transaction objects
  */
 export const EvmTransactionAdapters = {
-  fromV3TransactionResponse: (response: Execute): ChainOperation<'evm'>[] => {
+  fromV3TransactionResponse: (chain: EvmBlockchain, response: Execute): ChainOperation<'evm'>[] => {
     if (response.errors && response.errors.length > 0) {
       throw new Error(`Magic Eden API errors: ${JSON.stringify(response.errors)}`);
     }
@@ -39,16 +40,19 @@ export const EvmTransactionAdapters = {
             transactionData: transaction,
           });
         } else if (step.kind === 'signature') {
+          const signData = item.data?.sign;
+          if (!signData) {
+            continue;
+          }
+
           const signatureOperation: EvmSignatureRequest = {
-            domain: item.data.domain,
-            types: item.data.types,
-            message: item.data.message,
-            primaryType: item.data.primaryType,
-            postData: {
-              endpoint: item.data.post.endpoint,
-              method: item.data.post.method,
-              body: item.data.post.body,
-            },
+            api: 'v3',
+            chainId: getEvmChainIdFromBlockchain(chain),
+            domain: signData.domain,
+            types: signData.types,
+            message: signData.value,
+            primaryType: signData.primaryType,
+            post: item.data.post
           };
           operations.push({
             type: 'signature',
