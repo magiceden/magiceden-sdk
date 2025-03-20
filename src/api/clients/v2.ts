@@ -15,6 +15,7 @@ import {
   V2TransferRequest,
 } from '../../types/api';
 import { ApiClientOptions } from './base';
+import { RetryablePromise } from '../../helpers';
 
 /**
  * V2 API client implementation (primarily for Solana marketplace operations)
@@ -28,7 +29,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to list an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async list(request: V2ListRequest): Promise<SolanaInstructionsResponse> {
+  list(request: V2ListRequest): RetryablePromise<SolanaInstructionsResponse> {
     return this.api.get<SolanaInstructionsResponse>('/instructions/sell', {
       ...request,
     });
@@ -38,16 +39,16 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to cancel a listing
    */
   @supportedOn([ChainType.SOLANA])
-  async cancelListing(request: V2CancelListingRequest): Promise<SolanaInstructionsResponse> {
+  cancelListing(request: V2CancelListingRequest): RetryablePromise<SolanaInstructionsResponse> {
     return this.api.get<SolanaInstructionsResponse>('/instructions/sell_cancel', {
       ...request,
     });
   }
 
   @supportedOn([ChainType.SOLANA])
-  async makeCollectionOffer(
+  makeCollectionOffer(
     request: V2MakeCollectionOfferRequest,
-  ): Promise<SolanaInstructionsResponse> {
+  ): RetryablePromise<SolanaInstructionsResponse> {
     throw new Error('Not implemented');
     // return this.api.get<SolanaInstructionsResponse>('/instructions/mmm/create-pool', {
     //   ...request,
@@ -55,9 +56,9 @@ export class V2ApiClient extends BaseApiClient {
   }
 
   @supportedOn([ChainType.SOLANA])
-  async cancelCollectionOffer(
+  cancelCollectionOffer(
     request: V2CancelCollectionOfferRequest,
-  ): Promise<SolanaInstructionsResponse> {
+  ): RetryablePromise<SolanaInstructionsResponse> {
     throw new Error('Not implemented');
     // return this.api.get<SolanaInstructionsResponse>('/instructions/mmm/sol-withdraw-buy', {
     //   ...request,
@@ -65,9 +66,9 @@ export class V2ApiClient extends BaseApiClient {
   }
 
   @supportedOn([ChainType.SOLANA])
-  async takeCollectionOffer(
+  takeCollectionOffer(
     request: V2TakeCollectionOfferRequest,
-  ): Promise<SolanaInstructionsResponse> {
+  ): RetryablePromise<SolanaInstructionsResponse> {
     throw new Error('Not implemented');
     // return this.api.get<SolanaInstructionsResponse>('/instructions/mmm/sol-fulfill-buy', {
     //   ...request,
@@ -78,7 +79,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to accept an offer
    */
   @supportedOn([ChainType.SOLANA])
-  async takeItemOffer(request: V2TakeItemOfferRequest): Promise<SolanaInstructionsResponse> {
+  takeItemOffer(request: V2TakeItemOfferRequest): RetryablePromise<SolanaInstructionsResponse> {
     return this.api.get<SolanaInstructionsResponse>('/instructions/sell_now', {
       ...request,
     });
@@ -88,7 +89,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to make an offer on an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async makeItemOffer(request: V2MakeItemOfferRequest): Promise<SolanaInstructionsResponse> {
+  makeItemOffer(request: V2MakeItemOfferRequest): RetryablePromise<SolanaInstructionsResponse> {
     return this.api.get<SolanaInstructionsResponse>('/instructions/buy', {
       ...request,
     });
@@ -98,7 +99,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to cancel an offer
    */
   @supportedOn([ChainType.SOLANA])
-  async cancelItemOffer(request: V2CancelItemOfferRequest): Promise<SolanaInstructionsResponse> {
+  cancelItemOffer(request: V2CancelItemOfferRequest): RetryablePromise<SolanaInstructionsResponse> {
     return this.api.get<SolanaInstructionsResponse>('/instructions/buy_cancel', {
       ...request,
     });
@@ -108,7 +109,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to buy an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async buy(request: V2BuyRequest): Promise<SolanaInstructionsResponse> {
+  buy(request: V2BuyRequest): RetryablePromise<SolanaInstructionsResponse> {
     return this.api.get<SolanaInstructionsResponse>('/instructions/buy_now', {
       ...request,
     });
@@ -118,7 +119,7 @@ export class V2ApiClient extends BaseApiClient {
    * Gets instructions to transfer an NFT
    */
   @supportedOn([ChainType.SOLANA])
-  async transfer(request: V2TransferRequest): Promise<SolanaInstructionsResponse> {
+  transfer(request: V2TransferRequest): RetryablePromise<SolanaInstructionsResponse> {
     return this.api.get<SolanaInstructionsResponse>('/instructions/ocp/transfer', {
       ...request,
     });
