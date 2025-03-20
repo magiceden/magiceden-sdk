@@ -1,4 +1,4 @@
-import { SupportedChain } from '../../chains';
+import { EvmBlockchain, SupportedChain } from '../../chains';
 import { EvmCreateLaunchpadParams, SolanaCreateLaunchpadParams } from './createLaunchpad';
 import { EvmUpdateLaunchpadParams, SolanaUpdateLaunchpadParams } from './updateLaunchpad';
 import { EvmMintParams, SolanaMintParams } from './mint';
@@ -25,6 +25,15 @@ export * from './shared';
 export * from './publishLaunchpad';
 
 /**
+ * EVM chain-specific parameter types mapping
+ * Maps each chain to its specific parameter types for each method
+ */
+export interface EvmChainParams<T> {
+  chain: EvmBlockchain;
+  params: T;
+}
+
+/**
  * Chain-specific parameter types mapping
  * Maps each chain to its specific parameter types for each method
  */
@@ -46,14 +55,14 @@ export interface ChainParamTypes {
     publishLaunchpad: EvmPublishLaunchpadParams;
     createLaunchpad: EvmCreateLaunchpadParams;
     updateLaunchpad: EvmUpdateLaunchpadParams;
-    mint: EvmMintParams;
-    list: EvmListParams;
-    cancelListing: EvmCancelListingParams;
-    makeItemOffer: EvmMakeItemOfferParams;
-    cancelItemOffer: EvmCancelItemOfferParams;
-    takeItemOffer: EvmTakeItemOfferParams;
-    transfer: EvmTransferParams;
-    buy: EvmBuyParams;
+    mint: EvmChainParams<EvmMintParams[]>;
+    list: EvmChainParams<EvmListParams[]>;
+    cancelListing: EvmChainParams<EvmCancelListingParams[]>;
+    makeItemOffer: EvmChainParams<EvmMakeItemOfferParams[]>;
+    cancelItemOffer: EvmChainParams<EvmCancelItemOfferParams[]>;
+    takeItemOffer: EvmChainParams<EvmTakeItemOfferParams[]>;
+    transfer: EvmChainParams<EvmTransferParams[]>;
+    buy: EvmChainParams<EvmBuyParams[]>;
   };
 }
 

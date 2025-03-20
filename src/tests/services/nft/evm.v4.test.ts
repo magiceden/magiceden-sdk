@@ -285,15 +285,20 @@ describe('EvmNftService V4', () => {
   describe('mint', () => {
     it('should map parameters, call API, and sign transaction', async () => {
       // Setup mocks
-      const mockParams: EvmMintParams = {
+      const mockParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
-        protocol: EvmProtocolType.ERC721,
-        collectionId: validEvmAddress,
-        wallet: validEvmAddress,
-        nftAmount: 3,
-        stageId: 'stage1',
-        kind: MintStageKind.Public,
-    };
+        params: [
+          {
+            chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
+            protocol: EvmProtocolType.ERC721,
+            collectionId: validEvmAddress,
+            wallet: validEvmAddress,
+            nftAmount: 3,
+            stageId: 'stage1',
+            kind: MintStageKind.Public,
+          },
+        ],
+      };
 
       const mockApiRequest = { collection: validEvmAddress /* other fields */ };
 
@@ -321,14 +326,19 @@ describe('EvmNftService V4', () => {
 
     it('should handle multiple transactions', async () => {
       // Setup mocks
-      const mockParams: EvmMintParams = {
+      const mockParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
-        protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
-        collectionId: validEvmAddress,
-        wallet: validEvmAddress,
-        nftAmount: 3,
-        stageId: 'stage1',
-        kind: MintStageKind.Public,
+        params: [
+          {
+            chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
+            protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
+            collectionId: validEvmAddress,
+            wallet: validEvmAddress,
+            nftAmount: 3,
+            stageId: 'stage1',
+            kind: MintStageKind.Public,
+          },
+        ],
       };
 
       // Create a response with multiple transactions (no metadata for V4MintResponse)
@@ -407,12 +417,17 @@ describe('EvmNftService V4', () => {
       // Setup mocks
       const mockParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
-        protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
-        collectionId: validEvmAddress,
-        wallet: validEvmAddress,
-        nftAmount: 3,
-        stageId: 'stage1',
-        kind: MintStageKind.Public,
+        params: [
+          {
+            chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
+            protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
+            collectionId: validEvmAddress,
+            wallet: validEvmAddress,
+            nftAmount: 3,
+            stageId: 'stage1',
+            kind: MintStageKind.Public,
+          },
+        ],
       };
 
       // Setup adapter to throw error
@@ -434,12 +449,17 @@ describe('EvmNftService V4', () => {
       // Setup mocks
       const mockParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
-        protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
-        collectionId: validEvmAddress,
-        wallet: validEvmAddress,
-        nftAmount: 3,
-        stageId: 'stage1',
-        kind: MintStageKind.Public,
+        params: [
+          {
+            chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
+            protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
+            collectionId: validEvmAddress,
+            wallet: validEvmAddress,
+            nftAmount: 3,
+            stageId: 'stage1',
+            kind: MintStageKind.Public,
+          },
+        ],
       };
 
       // Create an invalid response

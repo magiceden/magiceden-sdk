@@ -265,7 +265,7 @@ describe('SolanaNftService V2', () => {
     it('should map parameters, call API, and sign transaction', async () => {
       // Setup mocks
       const mockParams = {
-        tokenAddress: 'mockTokenMint',
+        token: 'mockTokenMint',
         buyer: 'mockBuyer',
         seller: 'mockSeller',
         auctionHouseAddress: 'mockAuctionHouse',

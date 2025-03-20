@@ -62,8 +62,9 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getMintOperations(
     params: ChainMethodParams<'evm', 'mint'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v4ApiClient.mint(EvmApiMappers.v4.mintRequest(params));
-    return EvmTransactionAdapters.fromV4TransactionResponse(response);
+    throw new Error('Not implemented');
+    // const response = await this.v4ApiClient.mint(EvmApiMappers.v4.mintRequest(params));
+    // return EvmTransactionAdapters.fromV4TransactionResponse(response);
   }
 
   /**
@@ -139,9 +140,8 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getBuyOperations(
     params: ChainMethodParams<'evm', 'buy'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    throw new Error('Not implemented');
-    // const response = await this.v3ApiClient.buy(EvmApiMappers.v3.buyRequest(params));
-    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    const response = await this.v3ApiClient.buy(EvmApiMappers.v3.buyRequest(params));
+    return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**

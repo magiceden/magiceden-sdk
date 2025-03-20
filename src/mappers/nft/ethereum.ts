@@ -10,6 +10,7 @@ import {
   EvmUpdateLaunchpadParams,
   EvmCreateLaunchpadParams,
   EvmPublishLaunchpadParams,
+  EvmChainParams,
 } from '../../types/services/nft';
 import {
   V4CreateLaunchpadRequest,
@@ -36,19 +37,17 @@ export const EvmApiMappers = {
     /**
      * Maps generic list parameters to Ethereum-specific API request
      */
-    listRequest: (maker: `0x${string}`, params: EvmListParams): V3ListRequest => {
+    listRequest: (maker: `0x${string}`, params: EvmChainParams<EvmListParams[]>): V3ListRequest => {
       return {
         maker,
         chain: params.chain,
-        params: [
-          {
-            token: params.token,
-            weiPrice: params.price,
-            orderbook: DEFAULT_ORDERBOOK,
-            orderKind: DEFAULT_ORDER_KIND,
-            ...(params.expiry ? { expirationTime: params.expiry.toString() } : {}),
-          },
-        ],
+        params: params.params.map((param) => ({
+          token: param.token,
+          weiPrice: param.price,
+          orderbook: DEFAULT_ORDERBOOK,
+          orderKind: DEFAULT_ORDER_KIND,
+          ...(param.expiry ? { expirationTime: param.expiry.toString() } : {}),
+        })),
       };
     },
 
@@ -67,20 +66,20 @@ export const EvmApiMappers = {
      */
     makeItemOfferRequest: (
       maker: `0x${string}`,
-      params: EvmMakeItemOfferParams,
+      params: EvmChainParams<EvmMakeItemOfferParams[]>,
     ): V3PlaceBidRequest => {
       return {
         maker,
         chain: params.chain,
-        params: [{
-          token: params.token,
-          weiPrice: params.price,
-          ...(params.expiry ? { expirationTime: params.expiry.toString() } : {}),
-          ...(params.quantity ? { quantity: params.quantity } : {}),
-          ...(params.automatedRoyalties !== undefined ? { automatedRoyalties: params.automatedRoyalties } : {}),
-          ...(params.royaltyBps ? { royaltyBps: params.royaltyBps } : {}),
-          ...(params.currency ? { currency: params.currency } : {}),
-        }],
+        params: params.params.map((param) => ({
+          token: param.token,
+          weiPrice: param.price,
+          ...(param.expiry ? { expirationTime: param.expiry.toString() } : {}),
+          ...(param.quantity ? { quantity: param.quantity } : {}),
+          ...(param.automatedRoyalties !== undefined ? { automatedRoyalties: param.automatedRoyalties } : {}),
+          ...(param.royaltyBps ? { royaltyBps: param.royaltyBps } : {}),
+          ...(param.currency ? { currency: param.currency } : {}),
+        })),
       };
     },
 
@@ -104,15 +103,14 @@ export const EvmApiMappers = {
     //   };
     // },
 
-    // /**
-    //  * Maps generic buy parameters to Ethereum-specific API request
-    //  */
-    // buyRequest: (params: EvmBuyParams): V3BuyRequest => {
-    //   // TODO: Implement Ethereum-specific mapping
-    //   return {
-    //     // Map params to Ethereum API request format
-    //   };
-    // },
+    /**
+     * Maps generic buy parameters to Ethereum-specific API request
+     */
+    buyRequest: (params: EvmChainParams<EvmBuyParams[]>): V3BuyRequest => {
+      return {
+        
+      };
+    },
 
     // /**
     //  * Maps generic transfer parameters to Ethereum-specific API request

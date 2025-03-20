@@ -11,10 +11,7 @@ export const MakeItemOfferParams = z.object({
   expiry: z.number().optional().describe("Offer expiry timestamp (Unix timestamp in seconds)"),
 });
 
-export const EvmMakeItemOfferParams = MakeItemOfferParams.extend({
-  // EVM-specific parameters
-  chain: ZodEvmBlockchain.describe("The blockchain to use"),
-  
+export const EvmMakeItemOfferParams = MakeItemOfferParams.extend({  
   // Optional parameters
   quantity: z.number().optional().describe("Quantity of tokens to bid on"),
   

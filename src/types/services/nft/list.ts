@@ -1,4 +1,3 @@
-import { ZodEvmBlockchain } from '../../chains';
 import { SplAmount } from '../../solana';
 import { z } from 'zod';
 
@@ -16,9 +15,7 @@ export const ListParams = z.object({
   expiry: z.number().optional().describe('Listing expiration time (Unix timestamp in seconds)'),
 });
 
-export const EvmListParams = ListParams.extend({
-  chain: ZodEvmBlockchain,
-});
+export const EvmListParams = ListParams.extend({});
 
 export const SolanaListParams = ListParams.extend({
   // Solana-specific parameters

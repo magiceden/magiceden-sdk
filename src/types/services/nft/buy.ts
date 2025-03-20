@@ -6,7 +6,7 @@ import { SplAmount } from "../../solana";
  */
 export const BuyParams = z.object({
   // Generic parameters that can be shared between chains
-  tokenAddress: z.string().describe("The NFT token address/mint"),
+  token: z.string().describe("The NFT token in the format of <contract address>:<token id> for EVM and <mint address> for Solana"),
   seller: z.string().describe("The seller's wallet address"),
   price: z.string().describe("The purchase price"),
 });
