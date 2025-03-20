@@ -17,7 +17,6 @@ export const MintParams = z.object({
 });
 
 export const EvmMintParams = MintParams.extend({
-  chain: ZodEvmBlockchain,
   protocol: z.nativeEnum(EvmProtocolType).describe('Token protocol type'),
   tokenId: z.number().int().optional().describe('Token ID for ERC-1155'),
 });
