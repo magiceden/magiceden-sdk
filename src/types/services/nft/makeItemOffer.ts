@@ -21,9 +21,7 @@ export const EvmMakeItemOfferParams = MakeItemOfferParams.extend({
   // Advanced options
   automatedRoyalties: z.boolean().optional().describe("If true, royalty amounts and recipients will be set automatically"),
   royaltyBps: z.number().optional().describe("Maximum amount of royalties to pay in basis points (1 BPS = 0.01%)"),
-  excludeFlaggedTokens: z.boolean().optional().describe("If true, flagged tokens will be excluded"),
   currency: z.string().optional().describe("Currency address for the offer (defaults to chain's native wrapped token)"),
-  checkMakerOutstandingBalance: z.boolean().optional().describe("Check if maker has enough balance for all open bid orders"),
 });
 
 export const SolanaMakeItemOfferParams = MakeItemOfferParams.extend({
