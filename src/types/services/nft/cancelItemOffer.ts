@@ -3,21 +3,18 @@ import { z } from "zod";
 /**
  * Parameters for canceling an offer
  */
-export const CancelItemOfferParams = {
+export const CancelItemOfferParams = z.object({
   // Generic parameters that can be shared between chains
   tokenAddress: z.string().describe("The NFT token address/mint"),
   price: z.number().describe("The offer price to cancel"),
-  buyer: z.string().describe("The buyer's wallet address"),
   expiry: z.number().optional().describe("Offer expiry timestamp"),
-};
+});
 
-export const EvmCancelItemOfferParams = z.object({
-  ...CancelItemOfferParams,
+export const EvmCancelItemOfferParams = CancelItemOfferParams.extend({
   // EVM-specific parameters
 });
 
-export const SolanaCancelItemOfferParams = z.object({
-  ...CancelItemOfferParams,
+export const SolanaCancelItemOfferParams = CancelItemOfferParams.extend({
   // Solana-specific parameters
   // tokenAddress in CancelItemOfferParams maps to tokenMint in V2CancelItemOfferRequest
   // price in CancelItemOfferParams maps to price in V2CancelItemOfferRequest

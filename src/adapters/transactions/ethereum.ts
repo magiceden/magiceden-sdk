@@ -1,9 +1,9 @@
 import { V4TransactionResponse } from '../../types/api';
-import { ZodEvmBlockchain } from '../../types';
+import { EvmSignatureRequest, ZodEvmBlockchain } from '../../types';
 import { EvmTransactionParams } from '../../types/services/nft/shared/steps';
 import { TransactionRequest } from 'viem';
 import { isHexPrefixedString } from '../../validation';
-import { TransactionOperation } from '../../types/operations';
+import { ChainOperation, TransactionOperation } from '../../types/operations';
 import { Execute } from '@reservoir0x/reservoir-sdk';
 
 /**
@@ -11,8 +11,56 @@ import { Execute } from '@reservoir0x/reservoir-sdk';
  * Converts between API responses and Ethereum transaction objects
  */
 export const EvmTransactionAdapters = {
-  fromV3TransactionResponse: (response: Execute): TransactionOperation<'evm'>[] => {
-    return [];
+  fromV3TransactionResponse: (response: Execute): ChainOperation<'evm'>[] => {
+    if (response.errors && response.errors.length > 0) {
+      throw new Error(`Magic Eden API errors: ${JSON.stringify(response.errors)}`);
+    }
+
+    const operations: ChainOperation<'evm'>[] = [];
+
+    // Process each step in the API response.
+    for (const step of response.steps) {
+      if (!step.items || step.items.length === 0) continue;
+
+      // Process each item in the step.
+      for (const [index, item] of step.items.entries()) {
+        if (item.status !== 'incomplete') {
+          continue;
+        }
+        if (step.kind === 'transaction') {
+          const transaction: TransactionRequest = {
+            to: item.data.to,
+            from: item.data.from,
+            data: item.data.data,
+            ...(item.data.value ? { value: BigInt(item.data.value) } : {}),
+          };
+          operations.push({
+            type: 'transaction',
+            transactionData: transaction,
+          });
+        } else if (step.kind === 'signature') {
+          const signatureOperation: EvmSignatureRequest = {
+            domain: item.data.domain,
+            types: item.data.types,
+            message: item.data.message,
+            primaryType: item.data.primaryType,
+            postData: {
+              endpoint: item.data.post.endpoint,
+              method: item.data.post.method,
+              body: item.data.post.body,
+            },
+          };
+          operations.push({
+            type: 'signature',
+            signatureData: signatureOperation,
+          });
+        } else {
+          throw new Error(`Unsupported step kind "${step.kind}" for step "${step.action}"`);
+        }
+      }
+    }
+
+    return operations;
   },
 
   /**

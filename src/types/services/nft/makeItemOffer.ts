@@ -4,22 +4,19 @@ import { SplAmount } from "../../solana";
 /**
  * Parameters for making an offer on an NFT
  */
-export const MakeItemOfferParams = {
+export const MakeItemOfferParams = z.object({
   // Generic parameters that can be shared between chains
   tokenAddress: z.string().describe("The NFT token address/mint"),
   price: z.number().describe("The offer price"),
-  buyer: z.string().describe("The buyer's wallet address"),
   expiry: z.number().optional().describe("Offer expiry timestamp"),
-};
+});
 
-export const EvmMakeItemOfferParams = z.object({
-  ...MakeItemOfferParams,
+export const EvmMakeItemOfferParams = MakeItemOfferParams.extend({
   // EVM-specific parameters
   expirationTime: z.number().describe("Offer expiration time"),
 });
 
-export const SolanaMakeItemOfferParams = z.object({
-  ...MakeItemOfferParams,
+export const SolanaMakeItemOfferParams = MakeItemOfferParams.extend({
   // Solana-specific parameters
   // tokenAddress in MakeItemOfferParams maps to tokenMint in V2MakeItemOfferRequest
   // price in MakeItemOfferParams maps to price in V2MakeItemOfferRequest

@@ -4,21 +4,18 @@ import { SplAmount } from "../../solana";
 /**
  * Parameters for buying an NFT
  */
-export const BuyParams = {
+export const BuyParams = z.object({
   // Generic parameters that can be shared between chains
   tokenAddress: z.string().describe("The NFT token address/mint"),
-  buyer: z.string().describe("The buyer's wallet address"),
   seller: z.string().describe("The seller's wallet address"),
   price: z.number().describe("The purchase price"),
-};
+});
 
-export const EvmBuyParams = z.object({
-  ...BuyParams,
+export const EvmBuyParams = BuyParams.extend({
   // EVM-specific parameters
 });
 
-export const SolanaBuyParams = z.object({
-  ...BuyParams,
+export const SolanaBuyParams = BuyParams.extend({
   // Solana-specific parameters
   // tokenAddress in BuyParams maps to tokenMint in V2BuyRequest
   // buyer in BuyParams maps to buyer in V2BuyRequest

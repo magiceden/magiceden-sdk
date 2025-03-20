@@ -9,7 +9,7 @@ import { MintStages } from './shared';
 /**
  * Parameters for creating a launchpad
  */
-export const CreateLaunchpadParams = {
+export const CreateLaunchpadParams = z.object({
   chain: z.nativeEnum(Blockchain).describe('Blockchain to deploy on'),
   protocol: TokenProtocolType.describe('Token protocol type'),
   creator: z.string().min(1).describe('Creator wallet address'),
@@ -48,16 +48,14 @@ export const CreateLaunchpadParams = {
   nftMetadataUrl: z.string().min(1).optional().describe('JSON file that contains all the metadata'),
   tokenImageUrl: z.string().min(1).optional().describe('URL for image for the token'),
   mintStages: MintStages.describe('Mint stages configuration'),
-};
+});
 
-export const EvmCreateLaunchpadParams = z.object({
-  ...CreateLaunchpadParams,
+export const EvmCreateLaunchpadParams = CreateLaunchpadParams.extend({
   chain: ZodEvmBlockchain,
   protocol: z.enum([EvmProtocolType.ERC721, EvmProtocolType.ERC1155]),
 });
 
-export const SolanaCreateLaunchpadParams = z.object({
-  ...CreateLaunchpadParams,
+export const SolanaCreateLaunchpadParams = CreateLaunchpadParams.extend({
   chain: z.literal(Blockchain.SOLANA).describe('Blockchain to deploy on'),
   protocol: z.literal(SolProtocolType.METAPLEX_CORE).describe('Token protocol type'),
   payoutRecipient: zSolanaAddress.describe('Payout recipient address of mint proceeds'),

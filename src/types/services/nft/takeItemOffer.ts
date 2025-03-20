@@ -3,22 +3,19 @@ import { z } from "zod";
 /**
  * Parameters for taking an NFT offer
  */
-export const TakeItemOfferParams = {
+export const TakeItemOfferParams = z.object({
   // Generic parameters that can be shared between chains
   tokenAddress: z.string().describe("The NFT token address/mint"),
   buyer: z.string().describe("The buyer's wallet address"),
-  seller: z.string().describe("The seller's wallet address"),
   price: z.number().optional().describe("The original offer price"),
   newPrice: z.number().describe("The new price to accept"),
-};
+});
 
-export const EvmTakeItemOfferParams = z.object({
-  ...TakeItemOfferParams,
+export const EvmTakeItemOfferParams = TakeItemOfferParams.extend({
   // EVM-specific parameters
 });
 
-export const SolanaTakeItemOfferParams = z.object({
-  ...TakeItemOfferParams,
+export const SolanaTakeItemOfferParams = TakeItemOfferParams.extend({
   // Solana-specific parameters
   // tokenAddress in TakeItemOfferParams maps to tokenMint in V2TakeItemOfferRequest
   // buyer in TakeItemOfferParams maps to buyer in V2TakeItemOfferRequest

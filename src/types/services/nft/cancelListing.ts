@@ -7,7 +7,6 @@ export const CancelListingParams = {
   // Generic parameters that can be shared between chains
   tokenAddress: z.string().describe("The NFT token address/mint"),
   price: z.number().describe("The listing price to cancel"),
-  seller: z.string().describe("The seller's wallet address"),
 };
 
 export const EvmCancelListingParams = z.object({

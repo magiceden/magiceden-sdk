@@ -71,7 +71,9 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getListOperations(
     params: ChainMethodParams<'evm', 'list'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v3ApiClient.list(EvmApiMappers.v3.listRequest(params));
+    const response = await this.v3ApiClient.list(
+      EvmApiMappers.v3.listRequest(this.config.wallet.getAddress() as `0x${string}`, params),
+    );
     return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
@@ -82,10 +84,11 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getCancelListingOperations(
     params: ChainMethodParams<'evm', 'cancelListing'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v3ApiClient.cancelOrder(
-      EvmApiMappers.v3.cancelListingRequest(params),
-    );
-    return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    throw new Error('Not implemented');
+    // const response = await this.v3ApiClient.cancelOrder(
+    //   EvmApiMappers.v3.cancelListingRequest(params),
+    // );
+    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
@@ -95,8 +98,9 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getMakeItemOfferOperations(
     params: ChainMethodParams<'evm', 'makeItemOffer'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v3ApiClient.placeBid(EvmApiMappers.v3.makeItemOfferRequest(params));
-    return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    throw new Error('Not implemented');
+    // const response = await this.v3ApiClient.placeBid(EvmApiMappers.v3.makeItemOfferRequest(params));
+    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
@@ -106,8 +110,9 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getTakeItemOfferOperations(
     params: ChainMethodParams<'evm', 'takeItemOffer'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v3ApiClient.sell(EvmApiMappers.v3.takeItemOfferRequest(params));
-    return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    throw new Error('Not implemented');
+    // const response = await this.v3ApiClient.sell(EvmApiMappers.v3.takeItemOfferRequest(params));
+    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
@@ -117,10 +122,11 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getCancelItemOfferOperations(
     params: ChainMethodParams<'evm', 'cancelItemOffer'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v3ApiClient.cancelOrder(
-      EvmApiMappers.v3.cancelItemOfferRequest(params),
-    );
-    return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    throw new Error('Not implemented');
+    // const response = await this.v3ApiClient.cancelOrder(
+    //   EvmApiMappers.v3.cancelItemOfferRequest(params),
+    // );
+    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
@@ -130,8 +136,9 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getBuyOperations(
     params: ChainMethodParams<'evm', 'buy'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v3ApiClient.buy(EvmApiMappers.v3.buyRequest(params));
-    return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    throw new Error('Not implemented');
+    // const response = await this.v3ApiClient.buy(EvmApiMappers.v3.buyRequest(params));
+    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
@@ -141,8 +148,9 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getTransferOperations(
     params: ChainMethodParams<'evm', 'transfer'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v3ApiClient.transfer(EvmApiMappers.v3.transferRequest(params));
-    return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    throw new Error('Not implemented');
+    // const response = await this.v3ApiClient.transfer(EvmApiMappers.v3.transferRequest(params));
+    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**

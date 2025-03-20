@@ -3,20 +3,17 @@ import { z } from "zod";
 /**
  * Parameters for transferring an NFT
  */
-export const TransferParams = {
+export const TransferParams = z.object({
   // Generic parameters that can be shared between chains
   tokenAddress: z.string().describe("The NFT token address/mint"),
-  from: z.string().describe("The sender's wallet address"),
   to: z.string().describe("The recipient's wallet address"),
-};
+});
 
-export const EvmTransferParams = z.object({
-  ...TransferParams,
+export const EvmTransferParams = TransferParams.extend({
   // EVM-specific parameters
 });
 
-export const SolanaTransferParams = z.object({
-  ...TransferParams,
+export const SolanaTransferParams = TransferParams.extend({
   // Solana-specific parameters
   // tokenAddress in TransferParams maps to mint in V2TransferRequest
   // from in TransferParams maps to from in V2TransferRequest

@@ -4,10 +4,10 @@ import { SplAmount } from '../../types/solana';
 describe('SolanaApiMappers V2', () => {
   describe('listRequest', () => {
     it('should correctly map list parameters', () => {
+      const seller = 'sellerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         price: 1000000000,
-        seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890,
@@ -18,7 +18,7 @@ describe('SolanaApiMappers V2', () => {
         txFeePayer: 'feePayer123'
       };
 
-      const result = SolanaApiMappers.v2.listRequest(params);
+      const result = SolanaApiMappers.v2.listRequest(seller, params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -36,16 +36,16 @@ describe('SolanaApiMappers V2', () => {
     });
 
     it('should handle optional parameters', () => {
+      const seller = 'sellerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         price: 1000000000,
-        seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890
       };
 
-      const result = SolanaApiMappers.v2.listRequest(params);
+      const result = SolanaApiMappers.v2.listRequest(seller, params);
 
       expect(result.sellerReferral).toBeUndefined();
       expect(result.prioFeeMicroLamports).toBeUndefined();
@@ -61,17 +61,17 @@ describe('SolanaApiMappers V2', () => {
         decimals: 9
       };
 
+      const seller = 'sellerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         price: 1000000000,
-        seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890,
         splPrice
       };
 
-      const result = SolanaApiMappers.v2.listRequest(params);
+      const result = SolanaApiMappers.v2.listRequest(seller, params);
 
       expect(result.splPrice).toEqual(splPrice);
     });
@@ -79,10 +79,10 @@ describe('SolanaApiMappers V2', () => {
 
   describe('cancelListingRequest', () => {
     it('should correctly map cancel listing parameters', () => {
+      const seller = 'sellerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
         price: 1000000000,
-        seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890,
@@ -92,7 +92,7 @@ describe('SolanaApiMappers V2', () => {
         exactPrioFeeLamports: 7500
       };
 
-      const result = SolanaApiMappers.v2.cancelListingRequest(params);
+      const result = SolanaApiMappers.v2.cancelListingRequest(seller, params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -109,16 +109,16 @@ describe('SolanaApiMappers V2', () => {
     });
 
     it('should handle optional parameters', () => {
+      const seller = 'sellerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
         price: 1000000000,
-        seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890
       };
 
-      const result = SolanaApiMappers.v2.cancelListingRequest(params);
+      const result = SolanaApiMappers.v2.cancelListingRequest(seller, params);
 
       expect(result.sellerReferral).toBeUndefined();
       expect(result.prioFeeMicroLamports).toBeUndefined();
@@ -129,10 +129,10 @@ describe('SolanaApiMappers V2', () => {
 
   describe('makeItemOfferRequest', () => {
     it('should correctly map make item offer parameters', () => {
+      const buyer = 'buyerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
         price: 1000000000,
-        buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         buyerReferral: 'referral123',
         expiry: 1234567890,
@@ -143,7 +143,7 @@ describe('SolanaApiMappers V2', () => {
         exactPrioFeeLamports: 7500
       };
 
-      const result = SolanaApiMappers.v2.makeItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.makeItemOfferRequest(buyer, params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -161,15 +161,15 @@ describe('SolanaApiMappers V2', () => {
     });
 
     it('should handle optional parameters', () => {
+      const buyer = 'buyerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
         price: 1000000000,
-        buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         expiry: 1234567890
       };
 
-      const result = SolanaApiMappers.v2.makeItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.makeItemOfferRequest(buyer, params);
 
       expect(result.buyerReferral).toBeUndefined();
       expect(result.useBuyV2).toBeUndefined();
@@ -182,10 +182,10 @@ describe('SolanaApiMappers V2', () => {
 
   describe('cancelItemOfferRequest', () => {
     it('should correctly map cancel item offer parameters', () => {
+      const buyer = 'buyerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
         price: 1000000000,
-        buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         buyerReferral: 'referral123',
         expiry: 1234567890,
@@ -194,7 +194,7 @@ describe('SolanaApiMappers V2', () => {
         exactPrioFeeLamports: 7500
       };
 
-      const result = SolanaApiMappers.v2.cancelItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.cancelItemOfferRequest(buyer, params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -210,15 +210,15 @@ describe('SolanaApiMappers V2', () => {
     });
 
     it('should handle optional parameters', () => {
+      const buyer = 'buyerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
         price: 1000000000,
-        buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         expiry: 1234567890
       };
 
-      const result = SolanaApiMappers.v2.cancelItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.cancelItemOfferRequest(buyer, params);
 
       expect(result.buyerReferral).toBeUndefined();
       expect(result.prioFeeMicroLamports).toBeUndefined();
@@ -229,10 +229,10 @@ describe('SolanaApiMappers V2', () => {
 
   describe('takeItemOfferRequest', () => {
     it('should correctly map take item offer parameters', () => {
+      const seller = 'sellerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
         buyer: 'buyerAddress123',
-        seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
         price: 1000000000,
@@ -246,7 +246,7 @@ describe('SolanaApiMappers V2', () => {
         exactPrioFeeLamports: 7500
       };
 
-      const result = SolanaApiMappers.v2.takeItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.takeItemOfferRequest(seller, params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -267,17 +267,17 @@ describe('SolanaApiMappers V2', () => {
     });
 
     it('should handle optional parameters', () => {
+      const seller = 'sellerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
         buyer: 'buyerAddress123',
-        seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
         newPrice: 1100000000,
         sellerExpiry: 1234567891
       };
 
-      const result = SolanaApiMappers.v2.takeItemOfferRequest(params);
+      const result = SolanaApiMappers.v2.takeItemOfferRequest(seller, params);
 
       expect(result.price).toBeUndefined();
       expect(result.buyerReferral).toBeUndefined();
@@ -297,9 +297,9 @@ describe('SolanaApiMappers V2', () => {
         decimals: 9
       };
 
+      const buyer = 'buyerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
-        buyer: 'buyerAddress123',
         seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
@@ -312,7 +312,7 @@ describe('SolanaApiMappers V2', () => {
         splPrice
       };
 
-      const result = SolanaApiMappers.v2.buyRequest(params);
+      const result = SolanaApiMappers.v2.buyRequest(buyer, params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -331,9 +331,9 @@ describe('SolanaApiMappers V2', () => {
     });
 
     it('should handle optional parameters', () => {
+      const buyer = 'buyerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
-        buyer: 'buyerAddress123',
         seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
@@ -341,7 +341,7 @@ describe('SolanaApiMappers V2', () => {
         sellerExpiry: 1234567891
       };
 
-      const result = SolanaApiMappers.v2.buyRequest(params);
+      const result = SolanaApiMappers.v2.buyRequest(buyer, params);
 
       expect(result.buyerReferral).toBeUndefined();
       expect(result.sellerReferral).toBeUndefined();
@@ -353,14 +353,14 @@ describe('SolanaApiMappers V2', () => {
 
   describe('transferRequest', () => {
     it('should correctly map transfer parameters', () => {
+      const from = 'fromAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
-        from: 'fromAddress123',
         to: 'toAddress123',
         isCompressed: true
       };
 
-      const result = SolanaApiMappers.v2.transferRequest(params);
+      const result = SolanaApiMappers.v2.transferRequest(from, params);
 
       expect(result).toEqual({
         mint: 'tokenMintAddress123',
@@ -371,13 +371,13 @@ describe('SolanaApiMappers V2', () => {
     });
 
     it('should handle optional parameters', () => {
+      const from = 'fromAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
-        from: 'fromAddress123',
         to: 'toAddress123'
       };
 
-      const result = SolanaApiMappers.v2.transferRequest(params);
+      const result = SolanaApiMappers.v2.transferRequest(from, params);
 
       expect(result.isCompressed).toBeUndefined();
     });

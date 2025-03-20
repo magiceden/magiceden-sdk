@@ -1,36 +1,40 @@
-import { SplAmount } from "../../solana";
+import { ZodEvmBlockchain } from '../../chains';
+import { SplAmount } from '../../solana';
 import { z } from 'zod';
 
 /**
  * Parameters for listing an NFT
  */
-export const ListParams = {
+export const ListParams = z.object({
   // Generic parameters that can be shared between chains
-  tokenAddress: z.string().describe("The NFT token address/mint"),
-  price: z.number().describe("The listing price"),
-  seller: z.string().describe("The seller's wallet address"),
-};
-
-export const EvmListParams = z.object({
-  ...ListParams,
-  // EVM-specific parameters
+  token: z.string().describe('The NFT token address/mint'),
+  price: z.number().describe('The listing price'),
 });
 
-export const SolanaListParams = z.object({
-  ...ListParams,
+export const EvmListParams = ListParams.extend({
+  chain: ZodEvmBlockchain,
+  token: z
+    .string()
+    .min(1, "Token is required in the format 'collectionAddress:tokenId'")
+    .describe("The NFT ID in the format 'collectionAddress:tokenId'"),
+  price: z.string().min(1, 'Listing price in wei is required').describe('Listing price in wei'),
+  expirationTime: z.string().optional().describe('Optional listing expiration time (epoch)'),
+});
+
+export const SolanaListParams = ListParams.extend({
   // Solana-specific parameters
-  auctionHouseAddress: z.string().describe("Auction house address"),
-  tokenAccount: z.string().describe("Token account address"),
+  auctionHouseAddress: z.string().describe('Auction house address'),
+  tokenAccount: z.string().describe('Token account address'),
   // tokenAddress in ListParams maps to tokenMint in V2ListRequest
   // price in ListParams maps to price in V2ListRequest
   // seller in ListParams maps to seller in V2ListRequest
-  splPrice: z.custom<SplAmount>().optional().describe("SPL token price details"),
-  sellerReferral: z.string().optional().describe("Seller referral address"),
-  expiry: z.number().describe("Listing expiry timestamp"),
-  prioFeeMicroLamports: z.number().optional().describe("Priority fee in micro lamports"),
-  maxPrioFeeLamports: z.number().optional().describe("Maximum priority fee in lamports"),
-  exactPrioFeeLamports: z.number().optional().describe("Exact priority fee in lamports"),
-  txFeePayer: z.string().optional().describe("Transaction fee payer address"),
+  splPrice: z.custom<SplAmount>().optional().describe('SPL token price details'),
+  sellerReferral: z.string().optional().describe('Seller referral address'),
+  expiry: z.number().describe('Listing expiry timestamp'),
+  prioFeeMicroLamports: z.number().optional().describe('Priority fee in micro lamports'),
+  maxPrioFeeLamports: z.number().optional().describe('Maximum priority fee in lamports'),
+  exactPrioFeeLamports: z.number().optional().describe('Exact priority fee in lamports'),
+  txFeePayer: z.string().optional().describe('Transaction fee payer address'),
 });
 
 export type EvmListParams = z.infer<typeof EvmListParams>;

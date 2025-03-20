@@ -68,7 +68,7 @@ describe('SolanaNftService V2', () => {
     it('should map parameters, call API, and sign transaction', async () => {
       // Setup mocks
       const mockParams = {
-        tokenAddress: 'mockTokenMint',
+        token: 'mockTokenMint',
         price: 1000000000,
         seller: 'mockSeller',
         auctionHouseAddress: 'mockAuctionHouse',
@@ -98,7 +98,7 @@ describe('SolanaNftService V2', () => {
     it('should handle API errors', async () => {
       // Setup mocks
       const mockParams = {
-        tokenAddress: 'mockTokenMint',
+        token: 'mockTokenMint',
         price: 1000000000,
         seller: 'mockSeller',
         auctionHouseAddress: 'mockAuctionHouse',
@@ -116,7 +116,7 @@ describe('SolanaNftService V2', () => {
     it('should handle wallet errors', async () => {
       // Setup mocks
       const mockParams = {
-        tokenAddress: 'mockTokenMint',
+        token: 'mockTokenMint',
         price: 1000000000,
         seller: 'mockSeller',
         auctionHouseAddress: 'mockAuctionHouse',
@@ -327,7 +327,7 @@ describe('SolanaNftService V2', () => {
     it('should handle adapter errors', async () => {
       // Setup mocks
       const mockParams = {
-        tokenAddress: 'mockTokenMint',
+        token: 'mockTokenMint',
         price: 1000000000,
         seller: 'mockSeller',
         auctionHouseAddress: 'mockAuctionHouse',
@@ -347,7 +347,7 @@ describe('SolanaNftService V2', () => {
     it('should handle mapper errors', async () => {
       // Setup mocks
       const mockParams = {
-        tokenAddress: 'mockTokenMint',
+        token: 'mockTokenMint',
         price: 1000000000,
         seller: 'mockSeller',
         auctionHouseAddress: 'mockAuctionHouse',
@@ -369,7 +369,7 @@ describe('SolanaNftService V2', () => {
     it('should handle empty transaction response', async () => {
       // Setup mocks
       const mockParams = {
-        tokenAddress: 'mockTokenMint',
+        token: 'mockTokenMint',
         price: 1000000000,
         seller: 'mockSeller',
         auctionHouseAddress: 'mockAuctionHouse',
@@ -399,7 +399,7 @@ describe('SolanaNftService V2', () => {
 
       // Setup mocks
       const mockParams = {
-        tokenAddress: 'mockTokenMint',
+        token: 'mockTokenMint',
         price: 1000000000,
         seller: 'mockSeller',
         auctionHouseAddress: 'mockAuctionHouse',

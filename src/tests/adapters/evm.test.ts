@@ -264,12 +264,4 @@ describe('EvmTransactionAdapters', () => {
       }).toThrow('No valid EVM transaction steps found in response');
     });
   });
-
-  describe('fromV3TransactionResponse', () => {
-    it('should return an empty array', () => {
-      const mockResponse = { someData: 'value' };
-      const result = EvmTransactionAdapters.fromV3TransactionResponse(mockResponse);
-      expect(result).toEqual([]);
-    });
-  });
 });

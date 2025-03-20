@@ -5,32 +5,43 @@ import { SupportedChain } from "./chains";
  */
 export interface SignatureResponse {
   signature: string;
+  status: 'success' | 'failed';
+  error?: string;
 }
 
+/**
+ * Ethereum signature request
+ */
+export type EvmSignatureRequest = {
+  domain: any;
+  types: any;
+  message: any;
+  primaryType: string;
+  postData?: {
+    endpoint: string;
+    method: string;
+    body: any;
+  };
+}
+
+/**
+ * Solana signature request
+ */
+export type SolanaSignatureRequest = {
+  message: Uint8Array | string;
+  display?: 'utf8' | 'hex';
+  postData?: {
+    endpoint: string;
+    method: string;
+    body: any;
+  };
+}
 /**
  * Define signature data types for each chain
  */
 export type ChainSignatureType = {
-  evm: {
-    domain: any;
-    types: any;
-    message: any;
-    primaryType: string;
-    postData?: {
-      endpoint: string;
-      method: string;
-      body: any;
-    };
-  };
-  solana: {
-    message: Uint8Array | string;
-    display?: 'utf8' | 'hex';
-    postData?: {
-      endpoint: string;
-      method: string;
-      body: any;
-    };
-  };
+  evm: EvmSignatureRequest;
+  solana: SolanaSignatureRequest;
 };
 
 /**

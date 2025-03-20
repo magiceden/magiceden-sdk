@@ -39,9 +39,9 @@ export const SolanaApiMappers = {
     /**
      * Maps generic list parameters to Solana-specific API request
      */
-    listRequest: (params: SolanaListParams): V2ListRequest => ({
-      seller: params.seller,
-      tokenMint: params.tokenAddress,
+    listRequest: (seller: string, params: SolanaListParams): V2ListRequest => ({
+      seller,
+      tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress,
       tokenAccount: params.tokenAccount,
       price: params.price,
@@ -57,8 +57,8 @@ export const SolanaApiMappers = {
     /**
      * Maps generic cancel listing parameters to Solana-specific API request
      */
-    cancelListingRequest: (params: SolanaCancelListingParams): V2CancelListingRequest => ({
-      seller: params.seller,
+    cancelListingRequest: (seller: string, params: SolanaCancelListingParams): V2CancelListingRequest => ({
+      seller,
       tokenMint: params.tokenAddress,
       auctionHouseAddress: params.auctionHouseAddress,
       tokenAccount: params.tokenAccount,
@@ -73,8 +73,8 @@ export const SolanaApiMappers = {
     /**
      * Maps generic make item offer parameters to Solana-specific API request
      */
-    makeItemOfferRequest: (params: SolanaMakeItemOfferParams): V2MakeItemOfferRequest => ({
-      buyer: params.buyer,
+    makeItemOfferRequest: (buyer: string, params: SolanaMakeItemOfferParams): V2MakeItemOfferRequest => ({
+      buyer,
       tokenMint: params.tokenAddress,
       auctionHouseAddress: params.auctionHouseAddress,
       price: params.price,
@@ -90,8 +90,8 @@ export const SolanaApiMappers = {
     /**
      * Maps generic cancel item offer parameters to Solana-specific API request
      */
-    cancelItemOfferRequest: (params: SolanaCancelItemOfferParams): V2CancelItemOfferRequest => ({
-      buyer: params.buyer,
+    cancelItemOfferRequest: (buyer: string, params: SolanaCancelItemOfferParams): V2CancelItemOfferRequest => ({
+      buyer,
       tokenMint: params.tokenAddress,
       auctionHouseAddress: params.auctionHouseAddress,
       price: params.price,
@@ -105,10 +105,10 @@ export const SolanaApiMappers = {
     /**
      * Maps generic take item offer parameters to Solana-specific API request
      */
-    takeItemOfferRequest: (params: SolanaTakeItemOfferParams): V2TakeItemOfferRequest => ({
-      auctionHouseAddress: params.auctionHouseAddress,
+    takeItemOfferRequest: (seller: string,params: SolanaTakeItemOfferParams): V2TakeItemOfferRequest => ({
+      seller,
       buyer: params.buyer,
-      seller: params.seller,
+      auctionHouseAddress: params.auctionHouseAddress,
       tokenMint: params.tokenAddress,
       tokenATA: params.tokenATA,
       price: params.price,
@@ -125,10 +125,10 @@ export const SolanaApiMappers = {
     /**
      * Maps generic buy parameters to Solana-specific API request
      */
-    buyRequest: (params: SolanaBuyParams): V2BuyRequest => ({
-      auctionHouseAddress: params.auctionHouseAddress,
-      buyer: params.buyer,
+    buyRequest: (buyer: string, params: SolanaBuyParams): V2BuyRequest => ({
+      buyer,
       seller: params.seller,
+      auctionHouseAddress: params.auctionHouseAddress,
       tokenMint: params.tokenAddress,
       tokenATA: params.tokenATA,
       price: params.price,
@@ -143,8 +143,8 @@ export const SolanaApiMappers = {
     /**
      * Maps generic transfer parameters to Solana-specific API request
      */
-    transferRequest: (params: SolanaTransferParams): V2TransferRequest => ({
-      from: params.from,
+    transferRequest: (from: string, params: SolanaTransferParams): V2TransferRequest => ({
+      from,
       to: params.to,
       mint: params.tokenAddress,
       isCompressed: params.isCompressed,
