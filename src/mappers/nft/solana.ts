@@ -109,7 +109,7 @@ export const SolanaApiMappers = {
       seller,
       buyer: params.buyer,
       auctionHouseAddress: params.auctionHouseAddress,
-      tokenMint: params.tokenAddress,
+      tokenMint: params.token,
       tokenATA: params.tokenATA,
       price: Number(params.price),
       newPrice: Number(params.newPrice),

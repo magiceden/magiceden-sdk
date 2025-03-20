@@ -254,6 +254,7 @@ describe('EvmApiMappers V4', () => {
   describe('mintRequest', () => {
     it('should correctly map mint parameters for ERC721', () => {
       const params: EvmMintParams = {
+        chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
         collectionId: '0x3456789012abcdef3456789012abcdef34567890',
         wallet: '0x4567890123abcdef4567890123abcdef45678901',
@@ -279,6 +280,7 @@ describe('EvmApiMappers V4', () => {
 
     it('should correctly map mint parameters for ERC1155', () => {
       const params: EvmMintParams = {
+        chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC1155 as EvmProtocolType.ERC1155,
         collectionId: '0x3456789012abcdef3456789012abcdef34567890',
         wallet: '0x4567890123abcdef4567890123abcdef45678901',
@@ -303,6 +305,7 @@ describe('EvmApiMappers V4', () => {
 
     it('should handle optional parameters', () => {
       const params: EvmMintParams = {
+        chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
         collectionId: '0x3456789012abcdef3456789012abcdef34567890',
         wallet: '0x4567890123abcdef4567890123abcdef45678901',

@@ -166,6 +166,7 @@ describe('SolanaApiMappers V4', () => {
   describe('mintRequest', () => {
     it('should correctly map mint parameters', () => {
       const params: SolanaMintParams = {
+        chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
         wallet: 'walletAddress123',
         nftAmount: 3,
@@ -196,6 +197,7 @@ describe('SolanaApiMappers V4', () => {
 
     it('should handle optional parameters', () => {
       const params: SolanaMintParams = {
+        chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
         wallet: 'walletAddress123',
         nftAmount: 1,

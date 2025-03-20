@@ -117,9 +117,13 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getTakeItemOfferOperations(
     params: ChainMethodParams<'evm', 'takeItemOffer'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    throw new Error('Not implemented');
-    // const response = await this.v3ApiClient.sell(EvmApiMappers.v3.takeItemOfferRequest(params));
-    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    const response = await this.v3ApiClient.sell(
+      EvmApiMappers.v3.takeItemOfferRequest(
+        this.config.wallet.getAddress() as `0x${string}`,
+        params,
+      ),
+    );
+    return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**

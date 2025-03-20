@@ -92,20 +92,25 @@ export const EvmApiMappers = {
     //   };
     // },
 
-    // /**
-    //  * Maps generic take item offer parameters to Ethereum-specific API request
-    //  */
-    // takeItemOfferRequest: (params: EvmTakeItemOfferParams): V3SellRequest => {
-    //   // TODO: Implement Ethereum-specific mapping
-    //   return {
-    //     // Map params to Ethereum API request format
-    //   };
-    // },
+    /**
+     * Maps generic take item offer parameters to Ethereum-specific API request
+     */
+    takeItemOfferRequest: (taker: `0x${string}`, params: EvmTakeItemOfferParams): V3SellRequest => {
+      return {
+        taker,
+        chain: params.chain,
+        items: params.items.map((item) => ({
+          token: item.token,
+          ...(item.quantity ? { quantity: item.quantity } : {}),
+          ...(item.orderId ? { orderId: item.orderId } : {}),
+        })),
+      };
+    },
 
     /**
      * Maps generic buy parameters to Ethereum-specific API request
      */
-    buyRequest: (taker: string, params: EvmBuyParams): V3BuyRequest => {
+    buyRequest: (taker: `0x${string}`, params: EvmBuyParams): V3BuyRequest => {
       return {
         taker,
         chain: params.chain,

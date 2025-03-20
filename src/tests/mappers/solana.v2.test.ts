@@ -231,7 +231,7 @@ describe('SolanaApiMappers V2', () => {
     it('should correctly map take item offer parameters', () => {
       const seller = 'sellerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
@@ -269,7 +269,7 @@ describe('SolanaApiMappers V2', () => {
     it('should handle optional parameters', () => {
       const seller = 'sellerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
