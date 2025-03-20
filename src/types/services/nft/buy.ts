@@ -8,7 +8,7 @@ export const BuyParams = z.object({
   // Generic parameters that can be shared between chains
   tokenAddress: z.string().describe("The NFT token address/mint"),
   seller: z.string().describe("The seller's wallet address"),
-  price: z.number().describe("The purchase price"),
+  price: z.string().describe("The purchase price"),
 });
 
 export const EvmBuyParams = BuyParams.extend({

@@ -7,7 +7,7 @@ describe('SolanaApiMappers V2', () => {
       const seller = 'sellerAddress123';
       const params = {
         token: 'tokenMintAddress123',
-        price: 1000000000,
+        price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890,
@@ -22,7 +22,7 @@ describe('SolanaApiMappers V2', () => {
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
-        price: 1000000000,
+        price: '1000000000',
         seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
@@ -39,7 +39,7 @@ describe('SolanaApiMappers V2', () => {
       const seller = 'sellerAddress123';
       const params = {
         token: 'tokenMintAddress123',
-        price: 1000000000,
+        price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890
@@ -64,7 +64,7 @@ describe('SolanaApiMappers V2', () => {
       const seller = 'sellerAddress123';
       const params = {
         token: 'tokenMintAddress123',
-        price: 1000000000,
+        price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890,
@@ -82,7 +82,7 @@ describe('SolanaApiMappers V2', () => {
       const seller = 'sellerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
-        price: 1000000000,
+        price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890,
@@ -96,7 +96,7 @@ describe('SolanaApiMappers V2', () => {
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
-        price: 1000000000,
+        price: '1000000000',
         seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
@@ -112,7 +112,7 @@ describe('SolanaApiMappers V2', () => {
       const seller = 'sellerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
-        price: 1000000000,
+        price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890
@@ -131,8 +131,8 @@ describe('SolanaApiMappers V2', () => {
     it('should correctly map make item offer parameters', () => {
       const buyer = 'buyerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
-        price: 1000000000,
+        token: 'tokenMintAddress123',
+        price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         buyerReferral: 'referral123',
         expiry: 1234567890,
@@ -163,8 +163,8 @@ describe('SolanaApiMappers V2', () => {
     it('should handle optional parameters', () => {
       const buyer = 'buyerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
-        price: 1000000000,
+        token: 'tokenMintAddress123',
+        price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         expiry: 1234567890
       };
@@ -185,7 +185,7 @@ describe('SolanaApiMappers V2', () => {
       const buyer = 'buyerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
-        price: 1000000000,
+        price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         buyerReferral: 'referral123',
         expiry: 1234567890,
@@ -198,7 +198,7 @@ describe('SolanaApiMappers V2', () => {
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
-        price: 1000000000,
+        price: '1000000000',
         buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         buyerReferral: 'referral123',
@@ -213,7 +213,7 @@ describe('SolanaApiMappers V2', () => {
       const buyer = 'buyerAddress123';
       const params = {
         tokenAddress: 'tokenMintAddress123',
-        price: 1000000000,
+        price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         expiry: 1234567890
       };
@@ -235,8 +235,8 @@ describe('SolanaApiMappers V2', () => {
         buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
-        price: 1000000000,
-        newPrice: 1100000000,
+        price: '1000000000',
+        newPrice: '1100000000',
         buyerReferral: 'buyerReferral123',
         sellerReferral: 'sellerReferral123',
         buyerExpiry: 1234567890,
@@ -254,8 +254,8 @@ describe('SolanaApiMappers V2', () => {
         seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
-        price: 1000000000,
-        newPrice: 1100000000,
+        price: '1000000000',
+        newPrice: '1100000000',
         buyerReferral: 'buyerReferral123',
         sellerReferral: 'sellerReferral123',
         buyerExpiry: 1234567890,
@@ -273,7 +273,7 @@ describe('SolanaApiMappers V2', () => {
         buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
-        newPrice: 1100000000,
+        newPrice: '1100000000',
         sellerExpiry: 1234567891
       };
 
@@ -303,7 +303,7 @@ describe('SolanaApiMappers V2', () => {
         seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
-        price: 1000000000,
+        price: '1000000000',
         buyerReferral: 'buyerReferral123',
         sellerReferral: 'sellerReferral123',
         buyerExpiry: 1234567890,
@@ -320,7 +320,7 @@ describe('SolanaApiMappers V2', () => {
         seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
-        price: 1000000000,
+        price: '1000000000',
         buyerReferral: 'buyerReferral123',
         sellerReferral: 'sellerReferral123',
         buyerExpiry: 1234567890,
@@ -337,7 +337,7 @@ describe('SolanaApiMappers V2', () => {
         seller: 'sellerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
-        price: 1000000000,
+        price: '1000000000',
         sellerExpiry: 1234567891
       };
 

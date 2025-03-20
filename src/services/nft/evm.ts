@@ -100,9 +100,10 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getMakeItemOfferOperations(
     params: ChainMethodParams<'evm', 'makeItemOffer'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    throw new Error('Not implemented');
-    // const response = await this.v3ApiClient.placeBid(EvmApiMappers.v3.makeItemOfferRequest(params));
-    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    const response = await this.v3ApiClient.placeBid(
+      EvmApiMappers.v3.makeItemOfferRequest(this.config.wallet.getAddress() as `0x${string}`, params)
+    );
+    return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**

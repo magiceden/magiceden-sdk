@@ -6,7 +6,7 @@ import { z } from "zod";
 export const CancelItemOfferParams = z.object({
   // Generic parameters that can be shared between chains
   tokenAddress: z.string().describe("The NFT token address/mint"),
-  price: z.number().describe("The offer price to cancel"),
+  price: z.string().describe("The offer price to cancel"),
   expiry: z.number().optional().describe("Offer expiry timestamp"),
 });
 

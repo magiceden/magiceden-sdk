@@ -17,7 +17,14 @@ import {
   V4MintRequest,
   V4PublishLaunchpadRequest,
 } from '../../types/api';
-import { V3BuyRequest, V3CancelOrderRequest, V3ListRequest, V3PlaceBidRequest, V3SellRequest, V3TransferRequest } from '../../types/api/v3';
+import {
+  V3BuyRequest,
+  V3CancelOrderRequest,
+  V3ListRequest,
+  V3PlaceBidRequest,
+  V3SellRequest,
+  V3TransferRequest,
+} from '../../types/api/v3';
 
 /**
  * Ethereum NFT Service Mappers
@@ -32,13 +39,15 @@ export const EvmApiMappers = {
       return {
         maker,
         chain: params.chain,
-        params: [{
-          token: params.token,
-          weiPrice: params.price,
-          orderbook: 'reservoir',
-          orderKind: 'payment-processor-v2',
-          ...(params.expirationTime ? { expirationTime: params.expirationTime } : {}),
-        }]
+        params: [
+          {
+            token: params.token,
+            weiPrice: params.price,
+            orderbook: 'reservoir',
+            orderKind: 'payment-processor-v2',
+            ...(params.expiry ? { expirationTime: params.expiry.toString() } : {}),
+          },
+        ],
       };
     },
 
@@ -52,15 +61,29 @@ export const EvmApiMappers = {
     //   };
     // },
 
-    // /**
-    //  * Maps generic make item offer parameters to Ethereum-specific API request
-    //  */
-    // makeItemOfferRequest: (params: EvmMakeItemOfferParams): V3PlaceBidRequest => {
-    //   // TODO: Implement Ethereum-specific mapping
-    //   return {
-    //     // Map params to Ethereum API request format
-    //   };
-    // },
+    /**
+     * Maps generic make item offer parameters to Ethereum-specific API request
+     */
+    makeItemOfferRequest: (
+      maker: `0x${string}`,
+      params: EvmMakeItemOfferParams,
+    ): V3PlaceBidRequest => {
+      return {
+        maker,
+        chain: params.chain,
+        params: [{
+          token: params.token,
+          weiPrice: params.price,
+          ...(params.expiry ? { expirationTime: params.expiry.toString() } : {}),
+          ...(params.quantity ? { quantity: params.quantity } : {}),
+          ...(params.automatedRoyalties !== undefined ? { automatedRoyalties: params.automatedRoyalties } : {}),
+          ...(params.royaltyBps ? { royaltyBps: params.royaltyBps } : {}),
+          ...(params.excludeFlaggedTokens !== undefined ? { excludeFlaggedTokens: params.excludeFlaggedTokens } : {}),
+          ...(params.currency ? { currency: params.currency } : {}),
+          ...(params.checkMakerOutstandingBalance !== undefined ? { checkMakerOutstandingBalance: params.checkMakerOutstandingBalance } : {}),
+        }],
+      };
+    },
 
     // /**
     //  * Maps generic cancel item offer parameters to Ethereum-specific API request

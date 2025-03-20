@@ -1,4 +1,4 @@
-import { ExpectedPrice, paths } from '@reservoir0x/reservoir-sdk';
+import { paths } from '@reservoir0x/reservoir-sdk';
 import { EvmBlockchain } from '../../chains/evm';
 
 export interface V3EVMRequest {

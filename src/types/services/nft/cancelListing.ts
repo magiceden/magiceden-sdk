@@ -6,7 +6,7 @@ import { z } from "zod";
 export const CancelListingParams = {
   // Generic parameters that can be shared between chains
   tokenAddress: z.string().describe("The NFT token address/mint"),
-  price: z.number().describe("The listing price to cancel"),
+  price: z.string().describe("The listing price to cancel"),
 };
 
 export const EvmCancelListingParams = z.object({

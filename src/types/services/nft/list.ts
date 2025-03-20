@@ -12,13 +12,12 @@ export const ListParams = z.object({
     .describe(
       'The NFT token in the format of <contract address>:<token id> for EVM and <mint address> for Solana',
     ),
-  price: z.number().describe('The listing price'),
+  price: z.string().describe('The listing price'),
+  expiry: z.number().optional().describe('Listing expiration time (Unix timestamp in seconds)'),
 });
 
 export const EvmListParams = ListParams.extend({
   chain: ZodEvmBlockchain,
-  price: z.string().min(1, 'Listing price in wei is required').describe('Listing price in wei'),
-  expirationTime: z.string().optional().describe('Optional listing expiration time (epoch)'),
 });
 
 export const SolanaListParams = ListParams.extend({

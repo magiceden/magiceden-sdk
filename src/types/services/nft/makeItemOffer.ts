@@ -1,19 +1,29 @@
 import { z } from "zod";
-import { SplAmount } from "../../solana";
+import { ZodEvmBlockchain } from "../../chains";
 
 /**
  * Parameters for making an offer on an NFT
  */
 export const MakeItemOfferParams = z.object({
   // Generic parameters that can be shared between chains
-  tokenAddress: z.string().describe("The NFT token address/mint"),
-  price: z.number().describe("The offer price"),
-  expiry: z.number().optional().describe("Offer expiry timestamp"),
+  token: z.string().describe("The NFT token in the format of <contract address>:<token id> for EVM and <mint address> for Solana"),
+  price: z.string().describe("The offer price"),
+  expiry: z.number().optional().describe("Offer expiry timestamp (Unix timestamp in seconds)"),
 });
 
 export const EvmMakeItemOfferParams = MakeItemOfferParams.extend({
   // EVM-specific parameters
-  expirationTime: z.number().describe("Offer expiration time"),
+  chain: ZodEvmBlockchain.describe("The blockchain to use"),
+  
+  // Optional parameters
+  quantity: z.number().optional().describe("Quantity of tokens to bid on"),
+  
+  // Advanced options
+  automatedRoyalties: z.boolean().optional().describe("If true, royalty amounts and recipients will be set automatically"),
+  royaltyBps: z.number().optional().describe("Maximum amount of royalties to pay in basis points (1 BPS = 0.01%)"),
+  excludeFlaggedTokens: z.boolean().optional().describe("If true, flagged tokens will be excluded"),
+  currency: z.string().optional().describe("Currency address for the offer (defaults to chain's native wrapped token)"),
+  checkMakerOutstandingBalance: z.boolean().optional().describe("Check if maker has enough balance for all open bid orders"),
 });
 
 export const SolanaMakeItemOfferParams = MakeItemOfferParams.extend({
