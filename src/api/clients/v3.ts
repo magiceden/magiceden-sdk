@@ -1,91 +1,121 @@
-import { createClient, ReservoirChain, ReservoirClient } from '@reservoir0x/reservoir-sdk';
-import { ChainType, EvmChainId } from '../../types';
+import { Execute } from '@reservoir0x/reservoir-sdk';
+import { ChainType, EvmBlockchain } from '../../types';
+import {
+  V3BuyRequest,
+  V3CancelOrderRequest,
+  V3ListRequest,
+  V3PlaceBidRequest,
+  V3SellRequest,
+  V3SubmitSignedOrderRequest,
+  V3TransferRequest,
+} from '../../types/api/v3/request';
 import { supportedOn } from '../utils/decorators';
 import { BaseApiClient, ApiClientOptions } from './base';
-import { getEvmChainFromId } from '../../helpers/evm/chain';
-import { getReservoirConfigForChain } from '../../helpers/evm/reservoir';
-import { getPaymentTokensForEvmChain } from '../../helpers/evm/payment';
 
 /**
  * V3 API client implementation (primarily for EVM chains)
  */
 export class V3ApiClient extends BaseApiClient {
-  private readonly reservoirClient: ReservoirClient;
-
   constructor(options: ApiClientOptions) {
     super(options);
-
-    this.reservoirClient = this.createReservoirClient(options);
   }
 
   /**
-   * Gets instructions to list an NFT
+   * Posts a place bid request to the v3 API.
+   *
+   * Used to place a bid on an NFT.
    */
   @supportedOn([ChainType.EVM])
-  async list(request: any): Promise<any> {
-    return this.api.get<any>('/instructions/sell', {
-      ...request,
+  async placeBid(request: V3PlaceBidRequest): Promise<Execute> {
+    return this.api.post<Execute>(this.getRequestPath(request.chain, 'bid/v5'), {
+      maker: request.maker,
+      params: request.params,
     });
   }
 
   /**
-   * Gets instructions to cancel a listing
+   * Posts a list order request to the v3 API.
+   *
+   * Used to list an NFT for sale.
    */
   @supportedOn([ChainType.EVM])
-  async cancelListing(request: any): Promise<any> {
-    return this.api.get<any>('/instructions/sell_cancel', {
-      ...request,
+  async list(request: V3ListRequest): Promise<Execute> {
+    return this.api.post<Execute>(this.getRequestPath(request.chain, 'list/v5'), {
+      maker: request.maker,
+      params: request.params,
     });
   }
 
   /**
-   * Gets instructions to accept an offer
+   * Posts a buy order to the v3 API.
+   *
+   * Used to fill listings on an NFT.
    */
   @supportedOn([ChainType.EVM])
-  async takeItemOffer(request: any): Promise<any> {
-    return this.api.get<any>('/instructions/sell_now', {
-      ...request,
+  async buy(request: V3BuyRequest): Promise<Execute> {
+    return this.api.post<Execute>(this.getRequestPath(request.chain, 'buy/v7'), {
+      taker: request.taker,
+      items: request.items,
+      ...request.options,
     });
   }
 
   /**
-   * Gets instructions to make an offer on an NFT
+   * Posts a sell order to the v3 API.
+   *
+   * Used to accept bids on an NFT.
    */
   @supportedOn([ChainType.EVM])
-  async makeItemOffer(request: any): Promise<any> {
-    return this.api.get<any>('/instructions/buy', {
-      ...request,
+  async sell(request: V3SellRequest): Promise<Execute> {
+    return this.api.post<Execute>(this.getRequestPath(request.chain, 'sell/v7'), {
+      taker: request.taker,
+      items: request.items,
+      ...request.options,
     });
   }
 
   /**
-   * Gets instructions to cancel an offer
+   * Posts a cancel order request to the v3 API.
+   *
+   * Used to cancel an order (whether a listing, a bid, etc).
    */
   @supportedOn([ChainType.EVM])
-  async cancelItemOffer(request: any): Promise<any> {
-    return this.api.get<any>('/instructions/buy_cancel', {
-      ...request,
+  async cancelOrder(request: V3CancelOrderRequest): Promise<Execute> {
+    return this.api.post<Execute>(this.getRequestPath(request.chain, 'cancel/v3'), {
+      orderIds: request.orderIds,
+      ...request.options,
     });
   }
 
   /**
-   * Gets instructions to buy an NFT
+   * Posts an submit signed order request to the v3 API
    */
   @supportedOn([ChainType.EVM])
-  async buy(request: any): Promise<any> {
-    return this.api.get<any>('/instructions/buy_now', {
-      ...request,
-    });
+  async order(request: V3SubmitSignedOrderRequest): Promise<Execute> {
+    return this.api.post<Execute>(
+      this.getRequestPath(request.chain, `orders/v4?signature=${request.signature}`),
+      {
+        ...request.data,
+      },
+    );
   }
 
   /**
-   * Gets instructions to transfer an NFT
+   * Posts a transfer request to the v3 API.
+   *
+   * Used to transfer one or more NFTs from one address to another.
    */
   @supportedOn([ChainType.EVM])
-  async transfer(request: any): Promise<any> {
-    return this.api.get<any>('/instructions/ocp/transfer', {
-      ...request,
+  async transfer(request: V3TransferRequest): Promise<Execute> {
+    return this.api.post<Execute>(this.getRequestPath(request.chain, 'transfer/v1'), {
+      to: request.to,
+      from: request.from,
+      items: request.items,
     });
+  }
+
+  private getRequestPath(chain: EvmBlockchain, path: string): string {
+    return `/rtp/${chain}/execute/${path}`;
   }
 
   /**
@@ -96,41 +126,5 @@ export class V3ApiClient extends BaseApiClient {
   getBaseUrl(): string {
     // Same url for dev and prod
     return 'https://api-mainnet.magiceden.dev/v3';
-  }
-
-  /**
-   * Creates a Reservoir client
-   *
-   * @param options
-   * @returns Reservoir client
-   */
-  private createReservoirClient(options: ApiClientOptions): ReservoirClient {
-    const baseUrl = this.getBaseUrl();
-
-    // Get all EVM chain IDs
-    const evmChainIds = Object.values(EvmChainId).filter(
-      (value) => typeof value === 'number',
-    ) as EvmChainId[];
-
-    // Create chain configurations for Reservoir
-    const chains = evmChainIds.map((chainId) => {
-      const chain = getEvmChainFromId(chainId);
-
-      const reservoirConfig = getReservoirConfigForChain(chain);
-      const paymentTokens = getPaymentTokensForEvmChain(chain);
-
-      return {
-        id: chainId,
-        name: chain,
-        baseApiUrl: `${baseUrl}/rtp/${reservoirConfig.routePrefix}`,
-        active: true,
-        paymentTokens: paymentTokens,
-      };
-    });
-
-    return createClient({
-      apiKey: options.apiKey,
-      chains: chains,
-    });
   }
 }

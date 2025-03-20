@@ -1,3 +1,6 @@
+import { SupportedChain } from "./chains";
+import { TransactionRequest } from "viem";
+import { VersionedTransaction } from "@solana/web3.js";
 
 /**
  * Transaction strategy
@@ -49,3 +52,16 @@ export interface TransactionResponse {
    */
   metadata?: Record<string, unknown>;
 }
+
+/**
+ * Define a type that maps chain types to their transaction types
+ */
+export type ChainTransactionType = {
+  solana: VersionedTransaction;
+  evm: TransactionRequest;
+};
+
+/**
+ * Helper type to get the transaction type for a specific chain
+ */
+export type ChainTransaction<C extends SupportedChain> = ChainTransactionType[C];

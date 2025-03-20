@@ -69,9 +69,7 @@ export const USDC_CONTRACTS: Record<EvmBlockchain, `0x${string}` | null> = {
   [Blockchain.ARBITRUM]: Contracts.USDC_ARB,
   [Blockchain.APECHAIN]: null,
   [Blockchain.BERACHAIN]: Contracts.USDC_BERACHAIN,
-  [Blockchain.MONAD]: null,
   [Blockchain.MONAD_TESTNET]: Contracts.USDC_MONAD,
-  [Blockchain.AVALANCHE]: Contracts.USDC_AVAX,
   [Blockchain.BSC]: Contracts.USDC_BSC,
   [Blockchain.ABSTRACT]: Contracts.USDC_ABSTRACT,
 };
@@ -84,9 +82,7 @@ export const WETH_CONTRACTS: Record<EvmBlockchain, `0x${string}` | null> = {
   [Blockchain.ARBITRUM]: Contracts.WETH_ARB,
   [Blockchain.APECHAIN]: null,
   [Blockchain.BERACHAIN]: null,
-  [Blockchain.MONAD]: null,
   [Blockchain.MONAD_TESTNET]: Contracts.WETH_MONAD,
-  [Blockchain.AVALANCHE]: Contracts.WETH_AVAX,
   [Blockchain.BSC]: null,
   [Blockchain.ABSTRACT]: Contracts.WETH_ABSTRACT,
 };

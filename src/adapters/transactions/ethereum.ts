@@ -1,16 +1,16 @@
 import { V4TransactionResponse } from '../../types/api';
-import { ChainTransaction } from '../../wallet';
 import { ZodEvmBlockchain } from '../../types';
 import { EvmTransactionParams } from '../../types/services/nft/shared/steps';
 import { TransactionRequest } from 'viem';
 import { isHexPrefixedString } from '../../validation';
+import { TransactionOperation } from '../../types/operations';
 
 /**
  * Ethereum Transaction Adapters
  * Converts between API responses and Ethereum transaction objects
  */
 export const EvmTransactionAdapters = {
-  fromV3TransactionResponse: (response: any): ChainTransaction<'evm'>[] => {
+  fromV3TransactionResponse: (response: any): TransactionOperation<'evm'>[] => {
     return [];
   },
 
@@ -19,7 +19,7 @@ export const EvmTransactionAdapters = {
    * @param response The API response containing transaction data
    * @returns An array of properly formatted Ethereum transactions
    */
-  fromV4TransactionResponse: (response: V4TransactionResponse): ChainTransaction<'evm'>[] => {
+  fromV4TransactionResponse: (response: V4TransactionResponse): TransactionOperation<'evm'>[] => {
     if (!response.steps || response.steps.length === 0) {
       throw new Error('Invalid transaction response: missing steps');
     }
@@ -71,6 +71,9 @@ export const EvmTransactionAdapters = {
       transactions.push(transaction);
     }
 
-    return transactions;
+    return transactions.map((tx) => ({
+      type: 'transaction',
+      transactionData: tx,
+    }));
   },
 };

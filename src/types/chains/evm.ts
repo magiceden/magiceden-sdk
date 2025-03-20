@@ -12,9 +12,7 @@ export enum EvmChainId {
   ARBITRUM = 42161,
   APECHAIN = 33139,
   BERACHAIN = 80094,
-  MONAD = 0, // TODO: update when testnet launches
   MONAD_TESTNET = 10143,
-  AVALANCHE = 43114,
   BSC = 56,
   ABSTRACT = 2741,
 }
@@ -30,9 +28,7 @@ export const ZodEvmBlockchain = z.enum([
   Blockchain.ARBITRUM,
   Blockchain.APECHAIN,
   Blockchain.BERACHAIN,
-  Blockchain.MONAD,
   Blockchain.MONAD_TESTNET,
-  Blockchain.AVALANCHE,
   Blockchain.BSC,
   Blockchain.ABSTRACT,
 ]);
@@ -44,9 +40,7 @@ export type EvmBlockchain =
   | Blockchain.ARBITRUM
   | Blockchain.APECHAIN
   | Blockchain.BERACHAIN
-  | Blockchain.MONAD
   | Blockchain.MONAD_TESTNET
-  | Blockchain.AVALANCHE
   | Blockchain.BSC
   | Blockchain.ABSTRACT;
 export const EvmBlockchains = ZodEvmBlockchain.options;

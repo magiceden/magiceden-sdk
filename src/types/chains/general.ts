@@ -24,10 +24,7 @@ export enum Blockchain {
   ARBITRUM = 'arbitrum',
   APECHAIN = 'apechain',
   BERACHAIN = 'berachain',
-  MONAD = 'monad',
   MONAD_TESTNET = 'monad-testnet',
-  AVALANCHE = 'avalanche',
   BSC = 'bsc',
   ABSTRACT = 'abstract',
-  HYPERLIQUID = 'hyperliquid',
 }

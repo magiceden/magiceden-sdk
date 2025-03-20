@@ -65,9 +65,7 @@ export const OTHER_PAYMENT_TOKENS: Record<EvmBlockchain, PaymentTokenWithoutChai
   ],
   [Blockchain.APECHAIN]: [],
   [Blockchain.BERACHAIN]: [],
-  [Blockchain.MONAD]: [],
   [Blockchain.MONAD_TESTNET]: [],
-  [Blockchain.AVALANCHE]: [],
   [Blockchain.BSC]: [],
   [Blockchain.ABSTRACT]: [],
 };

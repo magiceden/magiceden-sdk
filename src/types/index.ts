@@ -7,3 +7,5 @@ export * from './chains';
 export * from './protocol';
 export * from './evm';
 export * from './currency';
+export * from './operations';
+export * from './signatures';

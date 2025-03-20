@@ -25,18 +25,6 @@ export const BERACHAIN_VIEM_DEFINITION = {
 };
 
 // TODO(monad): Remove this after viem is updated
-export const MONAD_VIEM_DEFINITION = {
-  id: EvmChainId.MONAD,
-  name: 'Monad',
-  nativeCurrency: { name: 'Mon', symbol: 'MON', decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: [''],
-    },
-  },
-};
-
-// TODO(monad): Remove this after viem is updated
 export const MONAD_TESTNET_VIEM_DEFINITION = {
   id: EvmChainId.MONAD_TESTNET,
   name: 'Monad Testnet',

@@ -79,17 +79,6 @@ export namespace Berachain {
   export const EXPLORER_TX_PREFIX = `${EXPLORER_URL}/tx/`;
 }
 
-export namespace Monad {
-  export const SHORT_NAME = 'monad';
-  export const CHAIN_NAME = 'monad';
-  export const DISPLAY_NAME = 'Monad';
-  export const CHAIN_ID = EvmChainId.MONAD;
-  export const CURRENCY = Currencies.MON;
-  export const EXPLORER_URL = null;
-  export const EXPLORER_PREFIX = null;
-  export const EXPLORER_TX_PREFIX = null;
-}
-
 export namespace MonadTestnet {
   export const SHORT_NAME = 'monad';
   export const CHAIN_NAME = 'monad-testnet';
@@ -97,17 +86,6 @@ export namespace MonadTestnet {
   export const CHAIN_ID = EvmChainId.MONAD_TESTNET;
   export const CURRENCY = Currencies.MON;
   export const EXPLORER_URL = 'https://testnet.monadexplorer.com';
-  export const EXPLORER_PREFIX = `${EXPLORER_URL}/address/`;
-  export const EXPLORER_TX_PREFIX = `${EXPLORER_URL}/tx/`;
-}
-
-export namespace Avalanche {
-  export const SHORT_NAME = 'avax';
-  export const CHAIN_NAME = 'avalanche';
-  export const DISPLAY_NAME = 'Avalanche';
-  export const CHAIN_ID = EvmChainId.AVALANCHE;
-  export const CURRENCY = Currencies.AVAX;
-  export const EXPLORER_URL = 'https://avascan.info/blockchain/all';
   export const EXPLORER_PREFIX = `${EXPLORER_URL}/address/`;
   export const EXPLORER_TX_PREFIX = `${EXPLORER_URL}/tx/`;
 }

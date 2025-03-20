@@ -22,17 +22,11 @@ export function getCurrencyForChain(chain: Blockchain): Currency {
       return Currencies.APE;
     case Blockchain.BERACHAIN:
       return Currencies.BERA;
-    case Blockchain.MONAD:
-      return Currencies.MON;
     case Blockchain.MONAD_TESTNET:
       return Currencies.MON;
-    case Blockchain.AVALANCHE:
-      return Currencies.AVAX;
     case Blockchain.BSC:
       return Currencies.BNB;
     case Blockchain.ABSTRACT:
       return Currencies.ETH;
-    case Blockchain.HYPERLIQUID:
-      return Currencies.HYPE;
   }
 }

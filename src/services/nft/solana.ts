@@ -1,9 +1,10 @@
 import { BaseNftService } from './base';
-import { ChainMethodParams } from '../../types';
+import { ChainMethodParams, SignatureResponse } from '../../types';
 import { ClientConfig } from '../../types';
-import { ChainTransaction } from '../../wallet';
+import { ChainTransaction, TransactionResponse } from '../../types/transactions';
 import { SolanaApiMappers } from '../../mappers/nft';
 import { SolanaTransactionAdapters } from '../../adapters/transactions';
+import { ChainOperation, SignatureOperation } from '../../types/operations';
 
 /**
  * Solana-specific NFT service implementation
@@ -20,43 +21,49 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getPublishLaunchpadResponse(
     params: ChainMethodParams<'solana', 'publishLaunchpad'>,
   ): Promise<boolean> {
-    const response = await this.v4ApiClient.publishLaunchpad(SolanaApiMappers.v4.publishLaunchpadRequest(params));
+    const response = await this.v4ApiClient.publishLaunchpad(
+      SolanaApiMappers.v4.publishLaunchpadRequest(params),
+    );
     return response.success;
   }
 
   /**
-   * Get create launchpad transaction instructions from API
+   * Get create launchpad operations from API
    * @param params Launchpad creation parameters
    */
-  protected async getCreateLaunchpadTransactions(
+  protected async getCreateLaunchpadOperations(
     params: ChainMethodParams<'solana', 'createLaunchpad'>,
-  ): Promise<ChainTransaction<'solana'>[]> {
+  ): Promise<ChainOperation<'solana'>[]> {
     // TODO: Later on, properly implement extra signers for the launchpad routes
     // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
-    const response = await this.v4ApiClient.createLaunchpad(SolanaApiMappers.v4.createLaunchpadRequest(params));
+    const response = await this.v4ApiClient.createLaunchpad(
+      SolanaApiMappers.v4.createLaunchpadRequest(params),
+    );
     return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }
 
   /**
-   * Get update launchpad transaction instructions from API
+   * Get update launchpad operations from API
    * @param params Launchpad update parameters
    */
-  protected async getUpdateLaunchpadTransactions(
+  protected async getUpdateLaunchpadOperations(
     params: ChainMethodParams<'solana', 'updateLaunchpad'>,
-  ): Promise<ChainTransaction<'solana'>[]> {
+  ): Promise<ChainOperation<'solana'>[]> {
     // TODO: Later on, properly implement extra signers for the launchpad routes
     // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
-    const response = await this.v4ApiClient.updateLaunchpad(SolanaApiMappers.v4.updateLaunchpadRequest(params));
+    const response = await this.v4ApiClient.updateLaunchpad(
+      SolanaApiMappers.v4.updateLaunchpadRequest(params),
+    );
     return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }
 
   /**
-   * Get mint transaction instructions from API
+   * Get mint operations from API
    * @param params Mint parameters
    */
-  protected async getMintTransactions(
+  protected async getMintOperations(
     params: ChainMethodParams<'solana', 'mint'>,
-  ): Promise<ChainTransaction<'solana'>[]> {
+  ): Promise<ChainOperation<'solana'>[]> {
     // TODO: Later on, properly implement extra signers for the mint routes
     // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
     const response = await this.v4ApiClient.mint(SolanaApiMappers.v4.mintRequest(params));
@@ -64,23 +71,23 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   }
 
   /**
-   * Get list transaction instructions from API
+   * Get list operations from API
    * @param params Listing parameters
    */
-  protected async getListTransactions(
+  protected async getListOperations(
     params: ChainMethodParams<'solana', 'list'>,
-  ): Promise<ChainTransaction<'solana'>[]> {
+  ): Promise<ChainOperation<'solana'>[]> {
     const response = await this.v2ApiClient.list(SolanaApiMappers.v2.listRequest(params));
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
 
   /**
-   * Get cancel listing transaction instructions from API
+   * Get cancel listing operations from API
    * @param params Cancel listing parameters
    */
-  protected async getCancelListingTransactions(
+  protected async getCancelListingOperations(
     params: ChainMethodParams<'solana', 'cancelListing'>,
-  ): Promise<ChainTransaction<'solana'>[]> {
+  ): Promise<ChainOperation<'solana'>[]> {
     const response = await this.v2ApiClient.cancelListing(
       SolanaApiMappers.v2.cancelListingRequest(params),
     );
@@ -88,12 +95,12 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   }
 
   /**
-   * Get make item offer transaction instructions from API
+   * Get make item offer operations from API
    * @param params Make item offer parameters
    */
-  protected async getMakeItemOfferTransactions(
+  protected async getMakeItemOfferOperations(
     params: ChainMethodParams<'solana', 'makeItemOffer'>,
-  ): Promise<ChainTransaction<'solana'>[]> {
+  ): Promise<ChainOperation<'solana'>[]> {
     const response = await this.v2ApiClient.makeItemOffer(
       SolanaApiMappers.v2.makeItemOfferRequest(params),
     );
@@ -101,12 +108,12 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   }
 
   /**
-   * Get take item offer transaction instructions from API
+   * Get take item offer operations from API
    * @param params Take item offer parameters
    */
-  protected async getTakeItemOfferTransactions(
+  protected async getTakeItemOfferOperations(
     params: ChainMethodParams<'solana', 'takeItemOffer'>,
-  ): Promise<ChainTransaction<'solana'>[]> {
+  ): Promise<ChainOperation<'solana'>[]> {
     const response = await this.v2ApiClient.takeItemOffer(
       SolanaApiMappers.v2.takeItemOfferRequest(params),
     );
@@ -114,12 +121,12 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   }
 
   /**
-   * Get cancel item offer transaction instructions from API
+   * Get cancel item offer operations from API
    * @param params Cancel item offer parameters
    */
-  protected async getCancelItemOfferTransactions(
+  protected async getCancelItemOfferOperations(
     params: ChainMethodParams<'solana', 'cancelItemOffer'>,
-  ): Promise<ChainTransaction<'solana'>[]> {
+  ): Promise<ChainOperation<'solana'>[]> {
     const response = await this.v2ApiClient.cancelItemOffer(
       SolanaApiMappers.v2.cancelItemOfferRequest(params),
     );
@@ -127,24 +134,34 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   }
 
   /**
-   * Get buy transaction instructions from API
+   * Get buy operations from API
    * @param params Buy parameters
    */
-  protected async getBuyTransactions(
+  protected async getBuyOperations(
     params: ChainMethodParams<'solana', 'buy'>,
-  ): Promise<ChainTransaction<'solana'>[]> {
+  ): Promise<ChainOperation<'solana'>[]> {
     const response = await this.v2ApiClient.buy(SolanaApiMappers.v2.buyRequest(params));
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
 
   /**
-   * Get transfer transaction instructions from API
+   * Get transfer operations from API
    * @param params Transfer parameters
    */
-  protected async getTransferTransactions(
+  protected async getTransferOperations(
     params: ChainMethodParams<'solana', 'transfer'>,
-  ): Promise<ChainTransaction<'solana'>[]> {
+  ): Promise<ChainOperation<'solana'>[]> {
     const response = await this.v2ApiClient.transfer(SolanaApiMappers.v2.transferRequest(params));
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
+  }
+
+  /**
+   * Process a signature operation
+   * @param operation Signature operation
+   */
+  protected async processSignatureOperation(
+    operation: SignatureOperation<'solana'>,
+  ): Promise<SignatureResponse> {
+    throw new Error('Signature operations are not supported for Solana');
   }
 }

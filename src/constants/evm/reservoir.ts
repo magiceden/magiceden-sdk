@@ -35,17 +35,9 @@ export const RESERVOIR_CONFIGS: Record<EvmBlockchain, ReservoirConfig> = {
     apiHost: 'https://api-berachain.reservoir.tools',
     routePrefix: 'berachain',
   },
-  [Blockchain.MONAD]: {
-    apiHost: 'https://api-monad.reservoir.tools',
-    routePrefix: 'monad',
-  },
   [Blockchain.MONAD_TESTNET]: {
     apiHost: 'https://api-monad-testnet.reservoir.tools',
     routePrefix: 'monad-testnet',
-  },
-  [Blockchain.AVALANCHE]: {
-    apiHost: 'https://api-avalanche.reservoir.tools',
-    routePrefix: 'avalanche',
   },
   [Blockchain.BSC]: {
     apiHost: 'https://api-bsc.reservoir.tools',
