@@ -1,18 +1,17 @@
 import { V4TransactionResponse } from '../../types/api';
-import { EvmBlockchain, EvmSignatureRequest, ZodEvmBlockchain } from '../../types';
+import { EvmSignatureRequest, ZodEvmBlockchain } from '../../types';
 import { EvmTransactionParams } from '../../types/services/nft/shared/steps';
 import { TransactionRequest } from 'viem';
 import { isHexPrefixedString } from '../../validation';
 import { ChainOperation, TransactionOperation } from '../../types/operations';
 import { Execute } from '@reservoir0x/reservoir-sdk';
-import { getEvmChainIdFromBlockchain } from '../../helpers';
 
 /**
  * Ethereum Transaction Adapters
  * Converts between API responses and Ethereum transaction objects
  */
 export const EvmTransactionAdapters = {
-  fromV3TransactionResponse: (chain: EvmBlockchain, response: Execute): ChainOperation<'evm'>[] => {
+  fromV3TransactionResponse: (response: Execute): ChainOperation<'evm'>[] => {
     if (response.errors && response.errors.length > 0) {
       throw new Error(`Magic Eden API errors: ${JSON.stringify(response.errors)}`);
     }
@@ -42,12 +41,12 @@ export const EvmTransactionAdapters = {
         } else if (step.kind === 'signature') {
           const signData = item.data?.sign;
           if (!signData) {
-            continue;
+            throw new Error('Invalid signature response: missing signature data');
           }
 
           const signatureOperation: EvmSignatureRequest = {
             api: 'v3',
-            chainId: getEvmChainIdFromBlockchain(chain),
+            chainId: signData.domain.chainId,
             domain: signData.domain,
             types: signData.types,
             message: signData.value,

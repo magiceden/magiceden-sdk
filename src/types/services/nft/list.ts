@@ -7,16 +7,16 @@ import { z } from 'zod';
  */
 export const ListParams = z.object({
   // Generic parameters that can be shared between chains
-  token: z.string().describe('The NFT token address/mint'),
+  token: z
+    .string()
+    .describe(
+      'The NFT token in the format of <contract address>:<token id> for EVM and <mint address> for Solana',
+    ),
   price: z.number().describe('The listing price'),
 });
 
 export const EvmListParams = ListParams.extend({
   chain: ZodEvmBlockchain,
-  token: z
-    .string()
-    .min(1, "Token is required in the format 'collectionAddress:tokenId'")
-    .describe("The NFT ID in the format 'collectionAddress:tokenId'"),
   price: z.string().min(1, 'Listing price in wei is required').describe('Listing price in wei'),
   expirationTime: z.string().optional().describe('Optional listing expiration time (epoch)'),
 });
@@ -24,8 +24,7 @@ export const EvmListParams = ListParams.extend({
 export const SolanaListParams = ListParams.extend({
   // Solana-specific parameters
   auctionHouseAddress: z.string().describe('Auction house address'),
-  tokenAccount: z.string().describe('Token account address'),
-  // tokenAddress in ListParams maps to tokenMint in V2ListRequest
+  // token in ListParams maps to tokenMint and tokenAccount in V2ListRequest
   // price in ListParams maps to price in V2ListRequest
   // seller in ListParams maps to seller in V2ListRequest
   splPrice: z.custom<SplAmount>().optional().describe('SPL token price details'),

@@ -76,7 +76,7 @@ export class EvmNftService extends BaseNftService<'evm'> {
     const response = await this.v3ApiClient.list(
       EvmApiMappers.v3.listRequest(this.config.wallet.getAddress() as `0x${string}`, params),
     );
-    return EvmTransactionAdapters.fromV3TransactionResponse(params.chain, response);
+    return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
@@ -175,14 +175,16 @@ export class EvmNftService extends BaseNftService<'evm'> {
           chain: getEvmChainFromId(operation.signatureData.chainId),
           signature,
           data: operation.signatureData.post.body,
+        }).withRetries({
+          retries: 3
         });
-
-        console.log(orderResponse);
-        console.log(orderResponse?.data);
 
         return {
           signature,
           status: 'success',
+          metadata: {
+            results: orderResponse?.results,
+          },
         };
       }
 
@@ -191,7 +193,6 @@ export class EvmNftService extends BaseNftService<'evm'> {
         status: 'success',
       };
     } catch (error) {
-      console.log(error);
       return {
         signature: '',
         status: 'failed',

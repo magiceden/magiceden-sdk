@@ -7,6 +7,7 @@ export interface SignatureResponse {
   signature: string;
   status: 'success' | 'failed';
   error?: string;
+  metadata?: Record<string, unknown>;
 }
 
 /**

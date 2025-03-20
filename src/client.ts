@@ -30,7 +30,7 @@ export class MagicEdenClient {
    */
   private validateConfig(config: ClientConfig): ClientConfig {
     if (!config.chain) {
-      throw new ApiError('Chain type must be specified');
+      throw new Error('Chain type must be specified');
     }
 
     return {

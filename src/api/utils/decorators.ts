@@ -18,7 +18,7 @@ export function supportedOn(chains: ChainType[]) {
       const currentChain = this.chain;
       
       if (!chains.includes(currentChain)) {
-        throw new ApiError(`Operation ${methodName} is not supported on ${currentChain}`);
+        throw new Error(`Operation ${methodName} is not supported on ${currentChain}`);
       }
       
       return originalMethod.apply(this, args);

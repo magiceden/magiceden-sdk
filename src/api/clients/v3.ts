@@ -3,7 +3,6 @@ import { ChainType, EvmBlockchain } from '../../types';
 import {
   V3BuyRequest,
   V3CancelOrderRequest,
-  V3EVMRequest,
   V3ListRequest,
   V3PlaceBidRequest,
   V3SellRequest,
@@ -12,6 +11,7 @@ import {
 } from '../../types/api/v3/request';
 import { supportedOn } from '../utils/decorators';
 import { BaseApiClient, ApiClientOptions } from './base';
+import { RetryablePromise } from '../../helpers';
 
 /**
  * V3 API client implementation (primarily for EVM chains)
@@ -27,11 +27,11 @@ export class V3ApiClient extends BaseApiClient {
    * Used to place a bid on an NFT.
    */
   @supportedOn([ChainType.EVM])
-  async placeBid(request: V3PlaceBidRequest): Promise<Execute> {
+  placeBid(request: V3PlaceBidRequest): RetryablePromise<Execute> {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'bid/v5'), {
       maker: request.maker,
       params: request.params,
-      source: 'magiceden.dev',
+      source: 'magiceden.io',
     });
   }
 
@@ -41,11 +41,11 @@ export class V3ApiClient extends BaseApiClient {
    * Used to list an NFT for sale.
    */
   @supportedOn([ChainType.EVM])
-  async list(request: V3ListRequest): Promise<Execute> {
+  list(request: V3ListRequest): RetryablePromise<Execute> {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'list/v5'), {
       maker: request.maker,
       params: request.params,
-      source: 'magiceden.dev',
+      source: 'magiceden.io',
     });
   }
 
@@ -55,11 +55,11 @@ export class V3ApiClient extends BaseApiClient {
    * Used to fill listings on an NFT.
    */
   @supportedOn([ChainType.EVM])
-  async buy(request: V3BuyRequest): Promise<Execute> {
+  buy(request: V3BuyRequest): RetryablePromise<Execute> {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'buy/v7'), {
       taker: request.taker,
       items: request.items,
-      source: 'magiceden.dev',
+      source: 'magiceden.io',
       ...request.options,
     });
   }
@@ -70,11 +70,11 @@ export class V3ApiClient extends BaseApiClient {
    * Used to accept bids on an NFT.
    */
   @supportedOn([ChainType.EVM])
-  async sell(request: V3SellRequest): Promise<Execute> {
+  sell(request: V3SellRequest): RetryablePromise<Execute> {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'sell/v7'), {
       taker: request.taker,
       items: request.items,
-      source: 'magiceden.dev',
+      source: 'magiceden.io',
       ...request.options,
     });
   }
@@ -85,10 +85,10 @@ export class V3ApiClient extends BaseApiClient {
    * Used to cancel an order (whether a listing, a bid, etc).
    */
   @supportedOn([ChainType.EVM])
-  async cancelOrder(request: V3CancelOrderRequest): Promise<Execute> {
+  cancelOrder(request: V3CancelOrderRequest): RetryablePromise<Execute> {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'cancel/v3'), {
       orderIds: request.orderIds,
-      source: 'magiceden.dev',
+      source: 'magiceden.io',
       ...request.options,
     });
   }
@@ -97,9 +97,9 @@ export class V3ApiClient extends BaseApiClient {
    * Posts an submit signed order request to the v3 API
    */
   @supportedOn([ChainType.EVM])
-  async order(request: V3SubmitSignedOrderRequest): Promise<any> {
+  order(request: V3SubmitSignedOrderRequest): RetryablePromise<any> {
     return this.api.post<any>(
-      `/rtp/${request.chain}/orders/v4?signature=${request.signature}`,
+      `/rtp/${request.chain}/order/v4?signature=${request.signature}`,
       {
         ...request.data,
       },
@@ -112,12 +112,12 @@ export class V3ApiClient extends BaseApiClient {
    * Used to transfer one or more NFTs from one address to another.
    */
   @supportedOn([ChainType.EVM])
-  async transfer(request: V3TransferRequest): Promise<Execute> {
+  transfer(request: V3TransferRequest): RetryablePromise<Execute> {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'transfer/v1'), {
       to: request.to,
       from: request.from,
       items: request.items,
-      source: 'magiceden.dev',
+      source: 'magiceden.io',
     });
   }
 

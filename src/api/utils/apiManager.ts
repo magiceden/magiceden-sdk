@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import { NetworkError, AuthenticationError, RateLimitError, ApiError } from '../../errors';
+import { RetryablePromise } from '../../helpers';
 
 /**
  * API configuration options
@@ -40,44 +41,52 @@ export class ApiManager {
     // Add response interceptor for error handling
     this.client.interceptors.response.use(
       (response) => response,
-      (error: AxiosError) => this.handleRequestError(error)
+      (error: AxiosError) => this.handleRequestError(error),
     );
   }
 
   /**
    * Makes a GET request
    */
-  async get<T>(url: string, params?: Record<string, any>, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.get<T>(url, { ...config, params });
-    return response.data;
+  get<T>(
+    url: string,
+    params?: Record<string, any>,
+    config?: AxiosRequestConfig,
+  ): RetryablePromise<T> {
+    return RetryablePromise.from(() =>
+      this.client.get<T>(url, { ...config, params }).then((response) => response.data),
+    );
   }
 
   /**
    * Makes a POST request
    */
-  async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.post<T>(url, data, config);
-    return response.data;
+  post<T>(url: string, data?: any, config?: AxiosRequestConfig): RetryablePromise<T> {
+    return RetryablePromise.from(() =>
+      this.client.post<T>(url, data, config).then((response) => response.data),
+    );
   }
 
   /**
    * Makes a PUT request
    */
-  async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.put<T>(url, data, config);
-    return response.data;
+  put<T>(url: string, data?: any, config?: AxiosRequestConfig): RetryablePromise<T> {
+    return RetryablePromise.from(() =>
+      this.client.put<T>(url, data, config).then((response) => response.data),
+    );
   }
 
   /**
    * Makes a DELETE request
    */
-  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.delete<T>(url, config);
-    return response.data;
+  delete<T>(url: string, config?: AxiosRequestConfig): RetryablePromise<T> {
+    return RetryablePromise.from(() =>
+      this.client.delete<T>(url, config).then((response) => response.data),
+    );
   }
 
   /**
-   * Handles request errors
+   * Handles request errors and converts them to appropriate error types
    */
   private handleRequestError(error: AxiosError): never {
     if (error.response) {
@@ -85,28 +94,38 @@ export class ApiManager {
       // that falls out of the range of 2xx
       const { status, statusText } = error.response;
       const errorData = error.response.data as ErrorResponse;
-      
+
       // Extract error message using a safer approach
       const errorMessage = this.getErrorMessage(errorData);
 
       if (status === 401 || status === 403) {
-        throw new AuthenticationError(errorMessage || 'Authentication failed');
+        throw new AuthenticationError(errorMessage || 'Authentication failed', status);
       }
 
       if (status === 429) {
-        const retryAfter = error.response.headers['retry-after'] 
-          ? parseInt(error.response.headers['retry-after'], 10) 
+        const retryAfter = error.response.headers['retry-after']
+          ? parseInt(error.response.headers['retry-after'], 10)
           : undefined;
         throw new RateLimitError(errorMessage || 'Rate limit exceeded', retryAfter);
       }
 
-      throw new NetworkError(status, statusText, errorData);
+      // Server errors (5xx) - generally retryable
+      if (status >= 500 && status < 600) {
+        throw new ApiError(errorMessage || `Server error: ${status} ${statusText}`, status);
+      }
+
+      // Client errors (4xx) - generally not retryable (except those handled above)
+      if (status >= 400 && status < 500) {
+        throw new ApiError(errorMessage || `Client error: ${status} ${statusText}`, status);
+      }
+
+      throw new ApiError(errorMessage || `Unexpected status: ${status} ${statusText}`, status);
     } else if (error.request) {
       // The request was made but no response was received
       throw new NetworkError(0, 'No response received', error.request);
     } else {
       // Something happened in setting up the request that triggered an Error
-      throw new ApiError(error.message || 'Request failed');
+      throw new ApiError(error.message || 'Request failed', 0);
     }
   }
 
@@ -118,11 +137,11 @@ export class ApiManager {
     if (typeof data?.message === 'string') {
       return data.message;
     }
-    
+
     if (typeof data?.error === 'string') {
       return data.error;
     }
-    
+
     // For nested error objects
     if (data?.error && typeof data.error === 'object' && data.error !== null) {
       const errorObj = data.error as Record<string, any>;
@@ -130,7 +149,7 @@ export class ApiManager {
         return errorObj.message;
       }
     }
-    
+
     return undefined;
   }
 }
