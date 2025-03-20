@@ -146,7 +146,7 @@ export const SolanaApiMappers = {
     transferRequest: (from: string, params: SolanaTransferParams): V2TransferRequest => ({
       from,
       to: params.to,
-      mint: params.tokenAddress,
+      mint: params.token,
       isCompressed: params.isCompressed,
     }),
   },

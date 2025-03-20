@@ -253,6 +253,7 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   protected async processTransactionOperation(
     operation: TransactionOperation<C>,
   ): Promise<TransactionResponse> {
+    try {
     const signature = await this.config.wallet!.signAndSendTransaction(operation.transactionData);
 
     switch (this.config.transactionOptions?.strategy || TransactionStrategy.SignSendAndConfirm) {
@@ -273,8 +274,15 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
         };
       default:
         throw new Error(
-          `Unsupported transaction strategy: ${this.config.transactionOptions?.strategy}`,
-        );
+            `Unsupported transaction strategy: ${this.config.transactionOptions?.strategy}`,
+          );
+      }
+    } catch (error) {
+      return {
+        txId: '',
+        status: 'failed',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
     }
   }
 

@@ -137,15 +137,20 @@ export const EvmApiMappers = {
       };
     },
 
-    // /**
-    //  * Maps generic transfer parameters to Ethereum-specific API request
-    //  */
-    // transferRequest: (params: EvmTransferParams): V3TransferRequest => {
-    //   // TODO: Implement Ethereum-specific mapping
-    //   return {
-    //     // Map params to Ethereum API request format
-    //   };
-    // },
+    /**
+     * Maps generic transfer parameters to Ethereum-specific API request
+     */
+    transferRequest: (from: `0x${string}`, params: EvmTransferParams): V3TransferRequest => {
+      return {
+        from,
+        chain: params.chain,
+        to: params.to as `0x${string}`,
+        items: params.items.map((item) => ({
+          token: item.token,
+          ...(item.quantity ? { quantity: item.quantity } : {}),
+        })),
+      };
+    },
   },
 
   v4: {

@@ -355,7 +355,7 @@ describe('SolanaApiMappers V2', () => {
     it('should correctly map transfer parameters', () => {
       const from = 'fromAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         to: 'toAddress123',
         isCompressed: true
       };
@@ -373,7 +373,7 @@ describe('SolanaApiMappers V2', () => {
     it('should handle optional parameters', () => {
       const from = 'fromAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         to: 'toAddress123'
       };
 

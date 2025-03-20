@@ -4,13 +4,13 @@ import { ClientConfig } from './types';
 import { Keypair } from '@solana/web3.js';
 import { SolanaKeypairWalletProvider, SolanaWalletProvider } from './wallet/solana';
 import { EvmWalletProvider } from './wallet/evm';
-import { Chain, WalletClient } from 'viem';
+import { WalletClient } from 'viem';
 import { ViemWalletProvider, ViemWalletProviderOptions } from './wallet/evm/viemWalletProvider';
 
 /**
- * Magic Eden SDK
+ * Magic Eden SDK V1 implementation
  */
-export class MagicEdenSDK {
+class MagicEdenSDKV1 {
   /**
    * Creates a new Magic Eden API client for Solana
    * @param apiKey Your Magic Eden API key
@@ -92,4 +92,14 @@ export class MagicEdenSDK {
     });
     return this.createEvmClient(apiKey, walletProvider, options?.clientConfig);
   }
+}
+
+/**
+ * Magic Eden SDK
+ */
+export class MagicEdenSDK {
+  /**
+   * Magic Eden SDK V1 API methods
+   */
+  public static v1 = MagicEdenSDKV1;
 }

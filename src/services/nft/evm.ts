@@ -163,9 +163,10 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getTransferOperations(
     params: ChainMethodParams<'evm', 'transfer'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    throw new Error('Not implemented');
-    // const response = await this.v3ApiClient.transfer(EvmApiMappers.v3.transferRequest(params));
-    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    const response = await this.v3ApiClient.transfer(
+      EvmApiMappers.v3.transferRequest(this.config.wallet.getAddress() as `0x${string}`, params),
+    );
+    return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
