@@ -79,9 +79,7 @@ export const EvmApiMappers = {
           ...(params.quantity ? { quantity: params.quantity } : {}),
           ...(params.automatedRoyalties !== undefined ? { automatedRoyalties: params.automatedRoyalties } : {}),
           ...(params.royaltyBps ? { royaltyBps: params.royaltyBps } : {}),
-          ...(params.excludeFlaggedTokens !== undefined ? { excludeFlaggedTokens: params.excludeFlaggedTokens } : {}),
           ...(params.currency ? { currency: params.currency } : {}),
-          ...(params.checkMakerOutstandingBalance !== undefined ? { checkMakerOutstandingBalance: params.checkMakerOutstandingBalance } : {}),
         }],
       };
     },
