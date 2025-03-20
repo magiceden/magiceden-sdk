@@ -30,6 +30,7 @@ export class V3ApiClient extends BaseApiClient {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'bid/v5'), {
       maker: request.maker,
       params: request.params,
+      source: 'magiceden.dev',
     });
   }
 
@@ -43,6 +44,7 @@ export class V3ApiClient extends BaseApiClient {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'list/v5'), {
       maker: request.maker,
       params: request.params,
+      source: 'magiceden.dev',
     });
   }
 
@@ -56,6 +58,7 @@ export class V3ApiClient extends BaseApiClient {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'buy/v7'), {
       taker: request.taker,
       items: request.items,
+      source: 'magiceden.dev',
       ...request.options,
     });
   }
@@ -70,6 +73,7 @@ export class V3ApiClient extends BaseApiClient {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'sell/v7'), {
       taker: request.taker,
       items: request.items,
+      source: 'magiceden.dev',
       ...request.options,
     });
   }
@@ -83,6 +87,7 @@ export class V3ApiClient extends BaseApiClient {
   async cancelOrder(request: V3CancelOrderRequest): Promise<Execute> {
     return this.api.post<Execute>(this.getRequestPath(request.chain, 'cancel/v3'), {
       orderIds: request.orderIds,
+      source: 'magiceden.dev',
       ...request.options,
     });
   }
@@ -111,6 +116,7 @@ export class V3ApiClient extends BaseApiClient {
       to: request.to,
       from: request.from,
       items: request.items,
+      source: 'magiceden.dev',
     });
   }
 

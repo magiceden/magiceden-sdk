@@ -4,13 +4,14 @@ import { EvmTransactionParams } from '../../types/services/nft/shared/steps';
 import { TransactionRequest } from 'viem';
 import { isHexPrefixedString } from '../../validation';
 import { TransactionOperation } from '../../types/operations';
+import { Execute } from '@reservoir0x/reservoir-sdk';
 
 /**
  * Ethereum Transaction Adapters
  * Converts between API responses and Ethereum transaction objects
  */
 export const EvmTransactionAdapters = {
-  fromV3TransactionResponse: (response: any): TransactionOperation<'evm'>[] => {
+  fromV3TransactionResponse: (response: Execute): TransactionOperation<'evm'>[] => {
     return [];
   },
 
