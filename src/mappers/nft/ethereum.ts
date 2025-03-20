@@ -25,6 +25,7 @@ import {
   V3SellRequest,
   V3TransferRequest,
 } from '../../types/api/v3';
+import { DEFAULT_ORDER_KIND, DEFAULT_ORDERBOOK } from '../../constants/evm';
 
 /**
  * Ethereum NFT Service Mappers
@@ -43,8 +44,8 @@ export const EvmApiMappers = {
           {
             token: params.token,
             weiPrice: params.price,
-            orderbook: 'reservoir',
-            orderKind: 'payment-processor-v2',
+            orderbook: DEFAULT_ORDERBOOK,
+            orderKind: DEFAULT_ORDER_KIND,
             ...(params.expiry ? { expirationTime: params.expiry.toString() } : {}),
           },
         ],
