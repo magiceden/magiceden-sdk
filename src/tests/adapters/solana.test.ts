@@ -30,7 +30,10 @@ describe('SolanaTransactionAdapters', () => {
 
       expect(deserializeSpy).toHaveBeenCalled();
       expect(result).toBeInstanceOf(Array);
-      expect(result[0]).toEqual({ mockTransaction: true });
+      expect(result[0]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
 
       deserializeSpy.mockRestore();
     });
@@ -56,7 +59,10 @@ describe('SolanaTransactionAdapters', () => {
       const result = SolanaTransactionAdapters.fromInstructionsResponse(mockResponse as any);
 
       expect(deserializeSpy).toHaveBeenCalled();
-      expect(result[0]).toEqual({ mockTransaction: true });
+      expect(result[0]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
 
       deserializeSpy.mockRestore();
     });
@@ -96,7 +102,10 @@ describe('SolanaTransactionAdapters', () => {
 
       expect(deserializeSpy).toHaveBeenCalledWith(mockBuffer);
       expect(result).toBeInstanceOf(Array);
-      expect(result[0]).toEqual({ mockTransaction: true });
+      expect(result[0]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
 
       deserializeSpy.mockRestore();
     });
@@ -170,7 +179,10 @@ describe('SolanaTransactionAdapters', () => {
       expect(deserializeSpy).toHaveBeenCalled();
       expect(result).toBeInstanceOf(Array);
       expect(result).toHaveLength(1);
-      expect(result[0]).toEqual({ mockTransaction: true });
+      expect(result[0]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
     });
 
     it('should handle V4CreateLaunchpadResponse with metadata', () => {
@@ -195,7 +207,10 @@ describe('SolanaTransactionAdapters', () => {
       expect(deserializeSpy).toHaveBeenCalled();
       expect(result).toBeInstanceOf(Array);
       expect(result).toHaveLength(1);
-      expect(result[0]).toEqual({ mockTransaction: true });
+      expect(result[0]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
     });
 
     it('should handle V4UpdateLaunchpadResponse with metadata', () => {
@@ -219,7 +234,10 @@ describe('SolanaTransactionAdapters', () => {
       expect(deserializeSpy).toHaveBeenCalled();
       expect(result).toBeInstanceOf(Array);
       expect(result).toHaveLength(1);
-      expect(result[0]).toEqual({ mockTransaction: true });
+      expect(result[0]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
     });
 
     it('should handle V4MintResponse', () => {
@@ -239,7 +257,10 @@ describe('SolanaTransactionAdapters', () => {
       expect(deserializeSpy).toHaveBeenCalled();
       expect(result).toBeInstanceOf(Array);
       expect(result).toHaveLength(1);
-      expect(result[0]).toEqual({ mockTransaction: true });
+      expect(result[0]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
     });
 
     it('should handle multiple transactions in a single step', () => {
@@ -263,8 +284,14 @@ describe('SolanaTransactionAdapters', () => {
       expect(deserializeSpy).toHaveBeenCalledTimes(2);
       expect(result).toBeInstanceOf(Array);
       expect(result).toHaveLength(2);
-      expect(result[0]).toEqual({ mockTransaction: true });
-      expect(result[1]).toEqual({ mockTransaction: true });
+      expect(result[0]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
+      expect(result[1]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
     });
 
     it('should handle multiple steps with transactions', () => {
@@ -291,6 +318,14 @@ describe('SolanaTransactionAdapters', () => {
       expect(deserializeSpy).toHaveBeenCalledTimes(2);
       expect(result).toBeInstanceOf(Array);
       expect(result).toHaveLength(2);
+      expect(result[0]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
+      expect(result[1]).toEqual({
+        type: 'transaction',
+        transactionData: { mockTransaction: true }
+      });
     });
 
     it('should throw error for empty steps array', () => {
