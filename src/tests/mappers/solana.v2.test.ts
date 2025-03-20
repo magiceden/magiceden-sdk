@@ -81,7 +81,7 @@ describe('SolanaApiMappers V2', () => {
     it('should correctly map cancel listing parameters', () => {
       const seller = 'sellerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
@@ -111,7 +111,7 @@ describe('SolanaApiMappers V2', () => {
     it('should handle optional parameters', () => {
       const seller = 'sellerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
@@ -184,7 +184,7 @@ describe('SolanaApiMappers V2', () => {
     it('should correctly map cancel item offer parameters', () => {
       const buyer = 'buyerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         buyerReferral: 'referral123',
@@ -212,7 +212,7 @@ describe('SolanaApiMappers V2', () => {
     it('should handle optional parameters', () => {
       const buyer = 'buyerAddress123';
       const params = {
-        tokenAddress: 'tokenMintAddress123',
+        token: 'tokenMintAddress123',
         price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         expiry: 1234567890

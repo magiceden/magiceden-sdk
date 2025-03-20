@@ -59,7 +59,7 @@ export const SolanaApiMappers = {
      */
     cancelListingRequest: (seller: string, params: SolanaCancelListingParams): V2CancelListingRequest => ({
       seller,
-      tokenMint: params.tokenAddress,
+      tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress,
       tokenAccount: params.tokenAccount,
       price: Number(params.price),
@@ -92,7 +92,7 @@ export const SolanaApiMappers = {
      */
     cancelItemOfferRequest: (buyer: string, params: SolanaCancelItemOfferParams): V2CancelItemOfferRequest => ({
       buyer,
-      tokenMint: params.tokenAddress,
+      tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress,
       price: Number(params.price),
       buyerReferral: params.buyerReferral,

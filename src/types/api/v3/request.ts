@@ -22,8 +22,6 @@ type BuyTokenOptions = Partial<Omit<BuyTokenBody, 'source' | 'items'>>;
 export interface V3BuyRequest extends V3EVMRequest {
   taker: string;
   items: Required<BuyTokenBody>['items'];
-  currency?: string;
-  currencyChainId?: number;
   options?: BuyTokenOptions;
 }
 

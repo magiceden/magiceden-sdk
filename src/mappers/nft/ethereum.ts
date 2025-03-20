@@ -50,15 +50,19 @@ export const EvmApiMappers = {
       };
     },
 
-    // /**
-    //  * Maps generic cancel listing parameters to Ethereum-specific API request
-    //  */
-    // cancelListingRequest: (params: EvmCancelListingParams): V3CancelOrderRequest => {
-    //   // TODO: Implement Ethereum-specific mapping
-    //   return {
-    //     // Map params to Ethereum API request format
-    //   };
-    // },
+    /**
+     * Maps generic cancel listing parameters to Ethereum-specific API request
+     */
+    cancelListingRequest: (maker: `0x${string}`, params: EvmCancelListingParams): V3CancelOrderRequest => {
+      return {
+        chain: params.chain,
+        orderIds: params.orderIds,
+        options: {
+          maker,
+          orderKind: DEFAULT_ORDER_KIND,
+        }
+      };
+    },
 
     /**
      * Maps generic make item offer parameters to Ethereum-specific API request
@@ -73,6 +77,8 @@ export const EvmApiMappers = {
         params: params.params.map((param) => ({
           token: param.token,
           weiPrice: param.price,
+          orderbook: DEFAULT_ORDERBOOK,
+          orderKind: DEFAULT_ORDER_KIND,
           ...(param.expiry ? { expirationTime: param.expiry.toString() } : {}),
           ...(param.quantity ? { quantity: param.quantity } : {}),
           ...(param.automatedRoyalties !== undefined ? { automatedRoyalties: param.automatedRoyalties } : {}),
@@ -82,15 +88,19 @@ export const EvmApiMappers = {
       };
     },
 
-    // /**
-    //  * Maps generic cancel item offer parameters to Ethereum-specific API request
-    //  */
-    // cancelItemOfferRequest: (params: EvmCancelItemOfferParams): V3CancelOrderRequest => {
-    //   // TODO: Implement Ethereum-specific mapping
-    //   return {
-    //     // Map params to Ethereum API request format
-    //   };
-    // },
+    /**
+     * Maps generic cancel item offer parameters to Ethereum-specific API request
+     */
+    cancelItemOfferRequest: (maker: `0x${string}`, params: EvmCancelItemOfferParams): V3CancelOrderRequest => {
+      return {
+        chain: params.chain,
+        orderIds: params.orderIds,
+        options: {
+          maker,
+          orderKind: DEFAULT_ORDER_KIND,
+        }
+      };
+    },
 
     /**
      * Maps generic take item offer parameters to Ethereum-specific API request
@@ -114,14 +124,16 @@ export const EvmApiMappers = {
       return {
         taker,
         chain: params.chain,
-        currency: params.currency,
-        currencyChainId: params.currencyChainId,
         items: params.items.map((item) => ({
           ...(item.token ? { token: item.token } : {}),
           ...(item.collection ? { collection: item.collection } : {}),
           ...(item.quantity ? { quantity: item.quantity } : {}),
           ...(item.orderId ? { orderId: item.orderId } : {}),
         })),
+        options: {
+          ...(params?.currency ? { currency: params.currency } : {}),
+          ...(params?.currencyChainId ? { currencyChainId: params.currencyChainId } : {}),
+        }
       };
     },
 

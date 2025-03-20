@@ -86,11 +86,13 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getCancelListingOperations(
     params: ChainMethodParams<'evm', 'cancelListing'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    throw new Error('Not implemented');
-    // const response = await this.v3ApiClient.cancelOrder(
-    //   EvmApiMappers.v3.cancelListingRequest(params),
-    // );
-    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    const response = await this.v3ApiClient.cancelOrder(
+      EvmApiMappers.v3.cancelListingRequest(
+        this.config.wallet.getAddress() as `0x${string}`,
+        params,
+      ),
+    );
+    return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
@@ -132,11 +134,13 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getCancelItemOfferOperations(
     params: ChainMethodParams<'evm', 'cancelItemOffer'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    throw new Error('Not implemented');
-    // const response = await this.v3ApiClient.cancelOrder(
-    //   EvmApiMappers.v3.cancelItemOfferRequest(params),
-    // );
-    // return EvmTransactionAdapters.fromV3TransactionResponse(response);
+    const response = await this.v3ApiClient.cancelOrder(
+      EvmApiMappers.v3.cancelItemOfferRequest(
+        this.config.wallet.getAddress() as `0x${string}`,
+        params,
+      ),
+    );
+    return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
