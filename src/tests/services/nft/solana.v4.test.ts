@@ -139,7 +139,6 @@ describe('SolanaNftService V4', () => {
 
   // Helper function to create standard mint params
   const createMintParams = (): SolanaMintParams => ({
-    chain: Blockchain.SOLANA as Blockchain.SOLANA,
     collectionId: validSolanaPubkey,
     wallet: validSolanaPubkey,
     nftAmount: 1,
@@ -264,7 +263,6 @@ describe('SolanaNftService V4', () => {
     it('should map parameters, call API, and sign transaction', async () => {
       // Setup mocks
       const mockParams: SolanaMintParams = {
-        chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
         wallet: 'walletAddress123',
         nftAmount: 3,
@@ -303,7 +301,6 @@ describe('SolanaNftService V4', () => {
     it('should handle multiple transactions', async () => {
       // Setup mocks
       const mockParams: SolanaMintParams = {
-        chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
         wallet: 'walletAddress123',
         nftAmount: 3,

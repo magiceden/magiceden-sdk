@@ -26,7 +26,7 @@ export * from './publishLaunchpad';
 
 /**
  * EVM chain-specific parameter types mapping
- * Maps each chain to its specific parameter types for each method
+ * Maps each EVM chain to its specific parameter types for each method
  */
 export interface EvmChainParams<T> {
   chain: EvmBlockchain;

@@ -140,7 +140,6 @@ describe('EvmNftService V4', () => {
 
   // Helper function to create standard mint params
   const createMintParams = (): EvmMintParams => ({
-    chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
     collectionId: validEvmAddress,
     wallet: validEvmAddress,
     nftAmount: 1,

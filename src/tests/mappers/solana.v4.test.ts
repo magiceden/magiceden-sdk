@@ -166,7 +166,6 @@ describe('SolanaApiMappers V4', () => {
   describe('mintRequest', () => {
     it('should correctly map mint parameters', () => {
       const params: SolanaMintParams = {
-        chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
         wallet: 'walletAddress123',
         nftAmount: 3,
@@ -184,7 +183,6 @@ describe('SolanaApiMappers V4', () => {
       expect(result).toBeDefined();
       
       // Verify required Solana-specific properties
-      expect(result.chain).toBe(Blockchain.SOLANA);
       expect(result.collectionId).toBe('collectionId123');
       expect(result.wallet).toBe('walletAddress123');
       expect(result.nftAmount).toBe(3);
@@ -198,7 +196,6 @@ describe('SolanaApiMappers V4', () => {
 
     it('should handle optional parameters', () => {
       const params: SolanaMintParams = {
-        chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
         wallet: 'walletAddress123',
         nftAmount: 1,
@@ -211,7 +208,6 @@ describe('SolanaApiMappers V4', () => {
       const result = SolanaApiMappers.v4.mintRequest(params);
 
       // Verify required properties
-      expect(result.chain).toBe(Blockchain.SOLANA);
       expect(result.collectionId).toBe('collectionId123');
       expect(result.wallet).toBe('walletAddress123');
       expect(result.nftAmount).toBe(1);

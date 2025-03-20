@@ -8,7 +8,6 @@ import { MintStageKind } from './shared';
  * Parameters for minting NFTs
  */
 export const MintParams = z.object({
-  chain: z.nativeEnum(Blockchain).describe('Blockchain to mint on'),
   collectionId: z.string().describe('Collection ID to mint from'),
   wallet: z.string().describe('Wallet address to mint with'),
   nftAmount: z.number().int().min(1).describe('Number of NFTs to mint'),
@@ -22,7 +21,6 @@ export const EvmMintParams = MintParams.extend({
 });
 
 export const SolanaMintParams = MintParams.extend({
-  chain: z.literal(Blockchain.SOLANA),
   candyMachineId: zSolanaAddress.describe('Candy machine ID'),
   symbol: SolanaSymbol.describe('Collection symbol'),
   payer: zSolanaAddress.describe('Payer address'),
