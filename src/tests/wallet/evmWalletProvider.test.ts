@@ -126,7 +126,7 @@ describe('EvmWalletProvider', () => {
       });
       
       wallet = new ViemWalletProvider({
-        privateKey: '0x17394335c80bf20320e81a0aa96cd94fb896270224b8eee697c703e845ee41df',
+        privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
         blockchain: Blockchain.BASE,
         options: {
           gas: {
@@ -140,7 +140,7 @@ describe('EvmWalletProvider', () => {
     describe('constructor', () => {
       it('should create a wallet with default gas options', () => {
         const defaultWallet = new ViemWalletProvider({
-          privateKey: '0x17394335c80bf20320e81a0aa96cd94fb896270224b8eee697c703e845ee41df',
+          privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
           blockchain: Blockchain.BASE,
         });
         expect(defaultWallet).toBeInstanceOf(ViemWalletProvider);
@@ -148,7 +148,7 @@ describe('EvmWalletProvider', () => {
 
       it('should create a wallet with custom gas options', () => {
         const customWallet = new ViemWalletProvider({
-          privateKey: '0x17394335c80bf20320e81a0aa96cd94fb896270224b8eee697c703e845ee41df',
+          privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
           blockchain: Blockchain.BASE,
           options: {
             gas: {
@@ -307,7 +307,7 @@ describe('EvmWalletProvider', () => {
         });
         
         const noAccountWallet = new ViemWalletProvider({
-          privateKey: '0x17394335c80bf20320e81a0aa96cd94fb896270224b8eee697c703e845ee41df',
+          privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
           blockchain: Blockchain.BASE,
         });
         
