@@ -4,14 +4,14 @@ import { ZodEvmBlockchain } from "../../chains";
 /**
  * Parameters for making an offer on an NFT
  */
-export const MakeItemOfferParams = z.object({
+export const BaseMakeItemOfferParamsSchema = z.object({
   // Generic parameters that can be shared between chains
   token: z.string().describe("The NFT token in the format of <contract address>:<token id> for EVM and <mint address> for Solana"),
   price: z.string().describe("The offer price"),
   expiry: z.number().optional().describe("Offer expiry timestamp (Unix timestamp in seconds)"),
 });
 
-export const EvmMakeItemOfferParams = MakeItemOfferParams.extend({  
+export const EvmMakeItemOfferParamsSchema = BaseMakeItemOfferParamsSchema.extend({  
   // Optional parameters
   quantity: z.number().optional().describe("Quantity of tokens to bid on"),
   
@@ -21,12 +21,12 @@ export const EvmMakeItemOfferParams = MakeItemOfferParams.extend({
   currency: z.string().optional().describe("Currency address for the offer (defaults to chain's native wrapped token)"),
 });
 
-export const EvmMakeItemOfferParamsWithExtras = z.object({
+export const EvmMultipleMakeItemOfferParamsSchema = z.object({
   chain: ZodEvmBlockchain.describe('The chain to make the offer on'),
-  params: z.array(EvmMakeItemOfferParams).describe('The make item offer parameters'),
+  params: z.array(EvmMakeItemOfferParamsSchema).describe('The make item offer parameters'),
 });
 
-export const SolanaMakeItemOfferParams = MakeItemOfferParams.extend({
+export const SolanaMakeItemOfferParamsSchema = BaseMakeItemOfferParamsSchema.extend({
   // Solana-specific parameters
   // tokenAddress in MakeItemOfferParams maps to tokenMint in V2MakeItemOfferRequest
   // price in MakeItemOfferParams maps to price in V2MakeItemOfferRequest
@@ -41,5 +41,8 @@ export const SolanaMakeItemOfferParams = MakeItemOfferParams.extend({
   exactPrioFeeLamports: z.number().optional().describe("Exact priority fee in lamports"),
 });
 
-export type EvmMakeItemOfferParams = z.infer<typeof EvmMakeItemOfferParamsWithExtras>;
-export type SolanaMakeItemOfferParams = z.infer<typeof SolanaMakeItemOfferParams>;
+export type EvmMakeItemOfferParams = z.infer<typeof EvmMultipleMakeItemOfferParamsSchema>;
+export type SolanaMakeItemOfferParams = z.infer<typeof SolanaMakeItemOfferParamsSchema>;
+
+export const MakeItemOfferParams = z.union([EvmMultipleMakeItemOfferParamsSchema, SolanaMakeItemOfferParamsSchema]);
+export type MakeItemOfferParams = z.infer<typeof MakeItemOfferParams>;

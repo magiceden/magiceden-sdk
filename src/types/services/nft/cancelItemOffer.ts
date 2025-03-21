@@ -4,20 +4,20 @@ import { ZodEvmBlockchain } from '../../chains';
 /**
  * Parameters for canceling an offer
  */
-export const CancelItemOfferParams = z.object({
+export const BaseCancelItemOfferParamsSchema = z.object({
   // Generic parameters that can be shared between chains
 });
 
-export const EvmCancelItemOfferParams = CancelItemOfferParams.extend({
+export const EvmCancelItemOfferParamsSchema = BaseCancelItemOfferParamsSchema.extend({
   // EVM-specific parameters
 });
 
-export const EvmCancelItemOfferParamsWithExtras = z.object({
+export const EvmCancelMultipleItemOfferParamsSchema = z.object({
   chain: ZodEvmBlockchain.describe('The chain to cancel the item offer on'),
   orderIds: z.array(z.string()).describe('The order IDs to cancel'),
 });
 
-export const SolanaCancelItemOfferParams = CancelItemOfferParams.extend({
+export const SolanaCancelItemOfferParamsSchema = BaseCancelItemOfferParamsSchema.extend({
   // Solana-specific parameters
   token: z.string().describe('The NFT token address/mint'),
   price: z.string().describe('The offer price to cancel'),
@@ -29,5 +29,8 @@ export const SolanaCancelItemOfferParams = CancelItemOfferParams.extend({
   exactPrioFeeLamports: z.number().optional().describe('Exact priority fee in lamports'),
 });
 
-export type EvmCancelItemOfferParams = z.infer<typeof EvmCancelItemOfferParamsWithExtras>;
-export type SolanaCancelItemOfferParams = z.infer<typeof SolanaCancelItemOfferParams>;
+export type EvmCancelItemOfferParams = z.infer<typeof EvmCancelMultipleItemOfferParamsSchema>;
+export type SolanaCancelItemOfferParams = z.infer<typeof SolanaCancelItemOfferParamsSchema>;
+
+export const CancelItemOfferParams = z.union([EvmCancelMultipleItemOfferParamsSchema, SolanaCancelItemOfferParamsSchema]);
+export type CancelItemOfferParams = z.infer<typeof CancelItemOfferParams>;
