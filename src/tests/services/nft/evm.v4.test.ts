@@ -12,7 +12,7 @@ import {
   MintStageKind,
   V4CreateLaunchpadResponse,
 } from '../../..';
-import { Blockchain, ChainType } from '../../../types/chain';
+import { Blockchain, ChainType } from '../../../types/chains';
 import { EvmNftService } from '../../../services/nft/evm';
 import { V4TransactionResponse } from '../../../types/api';
 import { V4ApiClient } from '../../../api/clients/v4';
@@ -285,7 +285,7 @@ describe('EvmNftService V4', () => {
   describe('mint', () => {
     it('should map parameters, call API, and sign transaction', async () => {
       // Setup mocks
-      const mockParams: EvmMintParams = {
+      const mockParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721,
         collectionId: validEvmAddress,
@@ -293,7 +293,7 @@ describe('EvmNftService V4', () => {
         nftAmount: 3,
         stageId: 'stage1',
         kind: MintStageKind.Public,
-    };
+      };
 
       const mockApiRequest = { collection: validEvmAddress /* other fields */ };
 
@@ -321,7 +321,7 @@ describe('EvmNftService V4', () => {
 
     it('should handle multiple transactions', async () => {
       // Setup mocks
-      const mockParams: EvmMintParams = {
+      const mockParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
         collectionId: validEvmAddress,
@@ -405,7 +405,7 @@ describe('EvmNftService V4', () => {
 
     it('should handle adapter errors for V4 responses', async () => {
       // Setup mocks
-      const mockParams = {
+      const mockParams: EvmMintParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
         collectionId: validEvmAddress,

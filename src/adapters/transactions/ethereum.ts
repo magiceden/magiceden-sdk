@@ -1,17 +1,69 @@
 import { V4TransactionResponse } from '../../types/api';
-import { ChainTransaction } from '../../wallet';
-import { ZodEvmBlockchain } from '../../types';
+import { EvmSignatureRequest, ZodEvmBlockchain } from '../../types';
 import { EvmTransactionParams } from '../../types/services/nft/shared/steps';
 import { TransactionRequest } from 'viem';
 import { isHexPrefixedString } from '../../validation';
+import { ChainOperation, TransactionOperation } from '../../types/operations';
+import { Execute } from '@reservoir0x/reservoir-sdk';
 
 /**
  * Ethereum Transaction Adapters
  * Converts between API responses and Ethereum transaction objects
  */
 export const EvmTransactionAdapters = {
-  fromV3TransactionResponse: (response: any): ChainTransaction<'evm'>[] => {
-    return [];
+  fromV3TransactionResponse: (response: Execute): ChainOperation<'evm'>[] => {
+    if (response.errors && response.errors.length > 0) {
+      throw new Error(`Magic Eden API errors: ${JSON.stringify(response.errors)}`);
+    }
+
+    const operations: ChainOperation<'evm'>[] = [];
+
+    // Process each step in the API response.
+    for (const step of response.steps) {
+      if (!step.items || step.items.length === 0) continue;
+
+      // Process each item in the step.
+      for (const [index, item] of step.items.entries()) {
+        if (item.status !== 'incomplete') {
+          continue;
+        }
+        if (step.kind === 'transaction') {
+          const transaction: TransactionRequest = {
+            to: item.data.to,
+            from: item.data.from,
+            data: item.data.data,
+            ...(item.data.value ? { value: BigInt(item.data.value) } : {}),
+          };
+          operations.push({
+            type: 'transaction',
+            transactionData: transaction,
+          });
+        } else if (step.kind === 'signature') {
+          const signData = item.data?.sign;
+          if (!signData) {
+            throw new Error('Invalid signature response: missing signature data');
+          }
+
+          const signatureOperation: EvmSignatureRequest = {
+            api: 'v3',
+            chainId: signData.domain.chainId,
+            domain: signData.domain,
+            types: signData.types,
+            message: signData.value,
+            primaryType: signData.primaryType,
+            post: item.data.post
+          };
+          operations.push({
+            type: 'signature',
+            signatureData: signatureOperation,
+          });
+        } else {
+          throw new Error(`Unsupported step kind "${step.kind}" for step "${step.action}"`);
+        }
+      }
+    }
+
+    return operations;
   },
 
   /**
@@ -19,7 +71,7 @@ export const EvmTransactionAdapters = {
    * @param response The API response containing transaction data
    * @returns An array of properly formatted Ethereum transactions
    */
-  fromV4TransactionResponse: (response: V4TransactionResponse): ChainTransaction<'evm'>[] => {
+  fromV4TransactionResponse: (response: V4TransactionResponse): TransactionOperation<'evm'>[] => {
     if (!response.steps || response.steps.length === 0) {
       throw new Error('Invalid transaction response: missing steps');
     }
@@ -71,6 +123,9 @@ export const EvmTransactionAdapters = {
       transactions.push(transaction);
     }
 
-    return transactions;
+    return transactions.map((tx) => ({
+      type: 'transaction',
+      transactionData: tx,
+    }));
   },
 };

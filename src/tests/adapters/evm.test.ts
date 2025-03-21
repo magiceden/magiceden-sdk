@@ -1,9 +1,7 @@
 import { EvmTransactionAdapters } from '../../adapters/transactions';
-import { Blockchain } from '../../types/chain';
+import { Blockchain } from '../../types/chains';
 import { V4TransactionResponse, V4CreateLaunchpadResponse, V4UpdateLaunchpadResponse, V4MintResponse } from '../../types/api';
 import { TransactionStep } from '../../types/services/nft/shared';
-import { EvmTransactionParams } from '../../types/services/nft/shared/steps';
-import { TransactionRequest } from 'viem';
 
 describe('EvmTransactionAdapters', () => {
   describe('fromV4TransactionResponse', () => {
@@ -264,14 +262,6 @@ describe('EvmTransactionAdapters', () => {
       expect(() => {
         EvmTransactionAdapters.fromV4TransactionResponse(mockResponse);
       }).toThrow('No valid EVM transaction steps found in response');
-    });
-  });
-
-  describe('fromV3TransactionResponse', () => {
-    it('should return an empty array', () => {
-      const mockResponse = { someData: 'value' };
-      const result = EvmTransactionAdapters.fromV3TransactionResponse(mockResponse);
-      expect(result).toEqual([]);
     });
   });
 });

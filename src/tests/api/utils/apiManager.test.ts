@@ -233,7 +233,7 @@ describe('ApiManager', () => {
   describe('Error inheritance', () => {
     it('should properly set up inheritance for custom errors', () => {
       // Create instances of each error type
-      const apiError = new ApiError('Generic API error');
+      const apiError = new ApiError('Generic API error', 500);
       const networkError = new NetworkError(404, 'Not Found');
       const authError = new AuthenticationError('Auth failed');
       const rateLimitError = new RateLimitError('Too many requests', 30);

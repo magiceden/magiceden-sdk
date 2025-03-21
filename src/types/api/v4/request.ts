@@ -1,4 +1,4 @@
-import { Blockchain } from '../../chain';
+import { Blockchain } from '../../chains';
 import { TokenProtocolType } from '../../protocol';
 
 interface SocialAccountDetails {
@@ -82,7 +82,6 @@ export interface V4PublishLaunchpadRequest {
 }
 
 export interface V4MintRequest {
-  chain: Blockchain;
   collectionId: string;
   wallet: string;
   nftAmount: number;

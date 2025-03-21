@@ -12,7 +12,7 @@ import {
   SolProtocolType,
   V4CreateLaunchpadResponse,
 } from '../../..';
-import { Blockchain, ChainType } from '../../../types/chain';
+import { Blockchain, ChainType } from '../../../types/chains';
 import { SolanaNftService, V4TransactionResponse } from '../../..';
 import { V4ApiClient } from '../../../api/clients/v4';
 import { V2ApiClient } from '../../../api/clients/v2';

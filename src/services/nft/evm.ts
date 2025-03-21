@@ -1,9 +1,11 @@
 import { BaseNftService } from './base';
-import { ChainMethodParams } from '../../types';
+import { ChainMethodParams, SignatureResponse } from '../../types';
 import { ClientConfig } from '../../types';
-import { ChainTransaction } from '../../wallet';
 import { EvmApiMappers } from '../../mappers/nft';
 import { EvmTransactionAdapters } from '../../adapters/transactions';
+import { ChainOperation, SignatureOperation } from '../../types/operations';
+import { EvmWalletProvider } from '../../wallet';
+import { getEvmChainFromId } from '../../helpers';
 
 /**
  * EVM-specific NFT service implementation
@@ -22,124 +24,197 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getPublishLaunchpadResponse(
     params: ChainMethodParams<'evm', 'publishLaunchpad'>,
   ): Promise<boolean> {
+    // TODO: We should move this into the createLaunchpadOperations
+    // This way we will do the create + publish in one go, rather than two separate calls
     throw new Error('Not supported on EVM');
   }
 
   /**
-   * Get create launchpad transaction instructions from API
+   * Get create launchpad operations from API
    * @param params Launchpad creation parameters
    */
-  protected async getCreateLaunchpadTransactions(
+  protected async getCreateLaunchpadOperations(
     params: ChainMethodParams<'evm', 'createLaunchpad'>,
-  ): Promise<ChainTransaction<'evm'>[]> {
-    const response = await this.v4ApiClient.createLaunchpad(EvmApiMappers.v4.createLaunchpadRequest(params));
+  ): Promise<ChainOperation<'evm'>[]> {
+    const response = await this.v4ApiClient.createLaunchpad(
+      EvmApiMappers.v4.createLaunchpadRequest(params),
+    );
     return EvmTransactionAdapters.fromV4TransactionResponse(response);
   }
 
   /**
-   * Get update launchpad transaction instructions from API
+   * Get update launchpad operations from API
    * @param params Launchpad update parameters
    */
-  protected async getUpdateLaunchpadTransactions(
+  protected async getUpdateLaunchpadOperations(
     params: ChainMethodParams<'evm', 'updateLaunchpad'>,
-  ): Promise<ChainTransaction<'evm'>[]> {
-    const response = await this.v4ApiClient.updateLaunchpad(EvmApiMappers.v4.updateLaunchpadRequest(params));
+  ): Promise<ChainOperation<'evm'>[]> {
+    const response = await this.v4ApiClient.updateLaunchpad(
+      EvmApiMappers.v4.updateLaunchpadRequest(params),
+    );
     return EvmTransactionAdapters.fromV4TransactionResponse(response);
   }
 
   /**
-   * Get mint transaction instructions from API
+   * Get mint operations from API
    * @param params Mint parameters
    */
-  protected async getMintTransactions(
+  protected async getMintOperations(
     params: ChainMethodParams<'evm', 'mint'>,
-  ): Promise<ChainTransaction<'evm'>[]> {
+  ): Promise<ChainOperation<'evm'>[]> {
     const response = await this.v4ApiClient.mint(EvmApiMappers.v4.mintRequest(params));
     return EvmTransactionAdapters.fromV4TransactionResponse(response);
   }
 
   /**
-   * Get list transaction instructions from API
+   * Get list operations from API
    * @param params Listing parameters
    */
-  protected async getListTransactions(
+  protected async getListOperations(
     params: ChainMethodParams<'evm', 'list'>,
-  ): Promise<ChainTransaction<'evm'>[]> {
-    const response = await this.v3ApiClient.list(EvmApiMappers.v3.listRequest(params));
+  ): Promise<ChainOperation<'evm'>[]> {
+    const response = await this.v3ApiClient.list(
+      EvmApiMappers.v3.listRequest(this.config.wallet.getAddress() as `0x${string}`, params),
+    );
     return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
-   * Get cancel listing transaction instructions from API
+   * Get cancel listing operations from API
    * @param params Cancel listing parameters
    */
-  protected async getCancelListingTransactions(
+  protected async getCancelListingOperations(
     params: ChainMethodParams<'evm', 'cancelListing'>,
-  ): Promise<ChainTransaction<'evm'>[]> {
-    const response = await this.v3ApiClient.cancelListing(
-      EvmApiMappers.v3.cancelListingRequest(params),
+  ): Promise<ChainOperation<'evm'>[]> {
+    const response = await this.v3ApiClient.cancelOrder(
+      EvmApiMappers.v3.cancelListingRequest(
+        this.config.wallet.getAddress() as `0x${string}`,
+        params,
+      ),
     );
     return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
-   * Get make item offer transaction instructions from API
+   * Get make item offer operations from API
    * @param params Make item offer parameters
    */
-  protected async getMakeItemOfferTransactions(
+  protected async getMakeItemOfferOperations(
     params: ChainMethodParams<'evm', 'makeItemOffer'>,
-  ): Promise<ChainTransaction<'evm'>[]> {
-    const response = await this.v3ApiClient.makeItemOffer(
-      EvmApiMappers.v3.makeItemOfferRequest(params),
+  ): Promise<ChainOperation<'evm'>[]> {
+    const response = await this.v3ApiClient.placeBid(
+      EvmApiMappers.v3.makeItemOfferRequest(
+        this.config.wallet.getAddress() as `0x${string}`,
+        params,
+      ),
     );
     return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
-   * Get take item offer transaction instructions from API
+   * Get take item offer operations from API
    * @param params Take item offer parameters
    */
-  protected async getTakeItemOfferTransactions(
+  protected async getTakeItemOfferOperations(
     params: ChainMethodParams<'evm', 'takeItemOffer'>,
-  ): Promise<ChainTransaction<'evm'>[]> {
-    const response = await this.v3ApiClient.takeItemOffer(
-      EvmApiMappers.v3.takeItemOfferRequest(params),
+  ): Promise<ChainOperation<'evm'>[]> {
+    const response = await this.v3ApiClient.sell(
+      EvmApiMappers.v3.takeItemOfferRequest(
+        this.config.wallet.getAddress() as `0x${string}`,
+        params,
+      ),
     );
     return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
-   * Get cancel item offer transaction instructions from API
+   * Get cancel item offer operations from API
    * @param params Cancel item offer parameters
    */
-  protected async getCancelItemOfferTransactions(
+  protected async getCancelItemOfferOperations(
     params: ChainMethodParams<'evm', 'cancelItemOffer'>,
-  ): Promise<ChainTransaction<'evm'>[]> {
-    const response = await this.v3ApiClient.cancelItemOffer(
-      EvmApiMappers.v3.cancelItemOfferRequest(params),
+  ): Promise<ChainOperation<'evm'>[]> {
+    const response = await this.v3ApiClient.cancelOrder(
+      EvmApiMappers.v3.cancelItemOfferRequest(
+        this.config.wallet.getAddress() as `0x${string}`,
+        params,
+      ),
     );
     return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
-   * Get buy transaction instructions from API
+   * Get buy operations from API
    * @param params Buy parameters
    */
-  protected async getBuyTransactions(
+  protected async getBuyOperations(
     params: ChainMethodParams<'evm', 'buy'>,
-  ): Promise<ChainTransaction<'evm'>[]> {
-    const response = await this.v3ApiClient.buy(EvmApiMappers.v3.buyRequest(params));
+  ): Promise<ChainOperation<'evm'>[]> {
+    const response = await this.v3ApiClient.buy(
+      EvmApiMappers.v3.buyRequest(this.config.wallet.getAddress() as `0x${string}`, params),
+    );
     return EvmTransactionAdapters.fromV3TransactionResponse(response);
   }
 
   /**
-   * Get transfer transaction instructions from API
+   * Get transfer operations from API
    * @param params Transfer parameters
    */
-  protected async getTransferTransactions(
+  protected async getTransferOperations(
     params: ChainMethodParams<'evm', 'transfer'>,
-  ): Promise<ChainTransaction<'evm'>[]> {
-    const response = await this.v3ApiClient.transfer(EvmApiMappers.v3.transferRequest(params));
+  ): Promise<ChainOperation<'evm'>[]> {
+    const response = await this.v3ApiClient.transfer(
+      EvmApiMappers.v3.transferRequest(this.config.wallet.getAddress() as `0x${string}`, params),
+    );
     return EvmTransactionAdapters.fromV3TransactionResponse(response);
+  }
+
+  /**
+   * Process a signature operation
+   * @param operation Signature operation
+   */
+  protected async processSignatureOperation(
+    operation: SignatureOperation<'evm'>,
+  ): Promise<SignatureResponse> {
+    if (operation.signatureData.api !== 'v3') {
+      throw new Error('Not implemented');
+    }
+
+    try {
+      const evmWallet = this.config.wallet as EvmWalletProvider;
+      const signature = await evmWallet.signTypedData(operation.signatureData);
+
+      if (operation.signatureData.post) {
+        const orderResponse = await this.v3ApiClient
+          .order({
+            chain: getEvmChainFromId(operation.signatureData.chainId),
+            signature,
+            data: operation.signatureData.post.body,
+          })
+          .withRetries({
+            retries: 5,
+            delay: 3000,
+          });
+
+        return {
+          signature,
+          status: 'success',
+          metadata: {
+            results: orderResponse?.results,
+          },
+        };
+      }
+
+      return {
+        signature,
+        status: 'success',
+      };
+    } catch (error) {
+      return {
+        signature: '',
+        status: 'failed',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
   }
 }

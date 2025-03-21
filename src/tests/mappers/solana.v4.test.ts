@@ -1,6 +1,6 @@
 import { SolanaApiMappers } from '../../mappers/nft/solana';
 import { SolanaCreateLaunchpadParams, SolanaUpdateLaunchpadParams, SolanaMintParams } from '../../types';
-import { Blockchain } from '../../types/chain';
+import { Blockchain } from '../../types/chains';
 import { SolProtocolType } from '../../types/protocol';
 import { MintStageKind } from '../../types/services/nft/shared';
 import { V4CreateLaunchpadRequest, V4UpdateLaunchpadRequest, V4MintRequest } from '../../types/api';
@@ -184,7 +184,6 @@ describe('SolanaApiMappers V4', () => {
       expect(result).toBeDefined();
       
       // Verify required Solana-specific properties
-      expect(result.chain).toBe(Blockchain.SOLANA);
       expect(result.collectionId).toBe('collectionId123');
       expect(result.wallet).toBe('walletAddress123');
       expect(result.nftAmount).toBe(3);
@@ -211,7 +210,6 @@ describe('SolanaApiMappers V4', () => {
       const result = SolanaApiMappers.v4.mintRequest(params);
 
       // Verify required properties
-      expect(result.chain).toBe(Blockchain.SOLANA);
       expect(result.collectionId).toBe('collectionId123');
       expect(result.wallet).toBe('walletAddress123');
       expect(result.nftAmount).toBe(1);

@@ -1,17 +1,17 @@
 {
-  "name": "@magiceden/api-client",
+  "name": "@magiceden/magiceden-sdk",
   "version": "1.0.0",
-  "description": "A TypeScript client for interacting with Magic Eden's API across multiple chains.",
+  "description": "A TypeScript SDK for interacting with Magic Eden's API across multiple chains.",
   "author": "Magic Eden",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/magiceden/magiceden-api-client.git"
+    "url": "git+https://github.com/magiceden/magiceden-sdk.git"
   },
   "bugs": {
-    "url": "https://github.com/magiceden/magiceden-api-client/issues"
+    "url": "https://github.com/magiceden/magiceden-sdk/issues"
   },
-  "homepage": "https://github.com/magiceden/magiceden-api-client#readme",
+  "homepage": "https://github.com/magiceden/magiceden-sdk#readme",
   "keywords": [
     "magiceden",
     "nft",
@@ -38,11 +38,13 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "@reservoir0x/reservoir-sdk": "2.5.4",
     "@solana/web3.js": "^1.98.0",
     "axios": "^1.6.7",
     "bs58": "^6.0.0",
+    "ts-retry-promise": "^0.8.1",
     "tweetnacl": "^1.0.3",
-    "viem": "^2.23.9",
+    "viem": "^2.22.19",
     "zod": "^3.24.2"
   },
   "devDependencies": {

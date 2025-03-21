@@ -11,6 +11,7 @@ import {
   V4PublishLaunchpadResponse,
   V4MintResponse,
 } from '../../types/api';
+import { RetryablePromise } from '../../helpers';
 
 /**
  * V4 API client implementation (for launchpad operations)
@@ -24,7 +25,7 @@ export class V4ApiClient extends BaseApiClient {
    * Gets instructions to create a launchpad
    */
   @supportedOn([ChainType.SOLANA, ChainType.EVM])
-  async createLaunchpad(params: V4CreateLaunchpadRequest): Promise<V4CreateLaunchpadResponse> {
+  createLaunchpad(params: V4CreateLaunchpadRequest): RetryablePromise<V4CreateLaunchpadResponse> {
     return this.api.post('/self_serve/nft/create_token', {
       ...params,
     });
@@ -34,14 +35,14 @@ export class V4ApiClient extends BaseApiClient {
    * Gets instructions to update a launchpad
    */
   @supportedOn([ChainType.SOLANA, ChainType.EVM])
-  async updateLaunchpad(params: V4UpdateLaunchpadRequest): Promise<V4UpdateLaunchpadResponse> {
+  updateLaunchpad(params: V4UpdateLaunchpadRequest): RetryablePromise<V4UpdateLaunchpadResponse> {
     return this.api.post(`/self_serve/nft/update_token`, {
       ...params,
     });
   }
 
   @supportedOn([ChainType.SOLANA])
-  async publishLaunchpad(params: V4PublishLaunchpadRequest): Promise<V4PublishLaunchpadResponse> {
+  publishLaunchpad(params: V4PublishLaunchpadRequest): RetryablePromise<V4PublishLaunchpadResponse> {
     return this.api.post(`/self_serve/nft/publish`, {
       ...params,
     });
@@ -51,7 +52,7 @@ export class V4ApiClient extends BaseApiClient {
    * Gets instructions to mint from a launchpad
    */
   @supportedOn([ChainType.SOLANA, ChainType.EVM])
-  async mint(params: V4MintRequest): Promise<V4MintResponse> {
+  mint(params: V4MintRequest): RetryablePromise<V4MintResponse> {
     return this.api.post(`/self_serve/nft/mint_token`, {
       ...params,
     });

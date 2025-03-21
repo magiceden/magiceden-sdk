@@ -28,11 +28,6 @@ export abstract class BaseApiClient implements ApiClient {
     // Initialize API manager with appropriate endpoint
     this.api = new ApiManager(this.getBaseUrl(), {
       apiKey: options.apiKey,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(options.apiKey && { Authorization: `Bearer ${options.apiKey}` }),
-        ...options.headers,
-      },
       timeout: options.timeout,
     });
   }

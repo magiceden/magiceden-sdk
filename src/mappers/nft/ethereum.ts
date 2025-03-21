@@ -17,6 +17,15 @@ import {
   V4MintRequest,
   V4PublishLaunchpadRequest,
 } from '../../types/api';
+import {
+  V3BuyRequest,
+  V3CancelOrderRequest,
+  V3ListRequest,
+  V3PlaceBidRequest,
+  V3SellRequest,
+  V3TransferRequest,
+} from '../../types/api/v3';
+import { DEFAULT_ORDER_KIND, DEFAULT_ORDERBOOK } from '../../constants/evm';
 
 /**
  * Ethereum NFT Service Mappers
@@ -27,70 +36,119 @@ export const EvmApiMappers = {
     /**
      * Maps generic list parameters to Ethereum-specific API request
      */
-    listRequest: (params: EvmListParams): unknown => {
-      // TODO: Implement Ethereum-specific mapping
+    listRequest: (maker: `0x${string}`, params: EvmListParams): V3ListRequest => {
       return {
-        // Map params to Ethereum API request format
+        maker,
+        chain: params.chain,
+        params: params.params.map((param) => ({
+          token: param.token,
+          weiPrice: param.price,
+          orderbook: DEFAULT_ORDERBOOK,
+          orderKind: DEFAULT_ORDER_KIND,
+          ...(param.expiry ? { expirationTime: param.expiry.toString() } : {}),
+        })),
       };
     },
 
     /**
      * Maps generic cancel listing parameters to Ethereum-specific API request
      */
-    cancelListingRequest: (params: EvmCancelListingParams): unknown => {
-      // TODO: Implement Ethereum-specific mapping
+    cancelListingRequest: (maker: `0x${string}`, params: EvmCancelListingParams): V3CancelOrderRequest => {
       return {
-        // Map params to Ethereum API request format
+        chain: params.chain,
+        orderIds: params.orderIds,
+        options: {
+          maker,
+          orderKind: DEFAULT_ORDER_KIND,
+        }
       };
     },
 
     /**
      * Maps generic make item offer parameters to Ethereum-specific API request
      */
-    makeItemOfferRequest: (params: EvmMakeItemOfferParams): unknown => {
-      // TODO: Implement Ethereum-specific mapping
+    makeItemOfferRequest: (
+      maker: `0x${string}`,
+      params: EvmMakeItemOfferParams,
+    ): V3PlaceBidRequest => {
       return {
-        // Map params to Ethereum API request format
+        maker,
+        chain: params.chain,
+        params: params.params.map((param) => ({
+          token: param.token,
+          weiPrice: param.price,
+          orderbook: DEFAULT_ORDERBOOK,
+          orderKind: DEFAULT_ORDER_KIND,
+          ...(param.expiry ? { expirationTime: param.expiry.toString() } : {}),
+          ...(param.quantity ? { quantity: param.quantity } : {}),
+          ...(param.automatedRoyalties !== undefined ? { automatedRoyalties: param.automatedRoyalties } : {}),
+          ...(param.royaltyBps ? { royaltyBps: param.royaltyBps } : {}),
+          ...(param.currency ? { currency: param.currency } : {}),
+        })),
       };
     },
 
     /**
      * Maps generic cancel item offer parameters to Ethereum-specific API request
      */
-    cancelItemOfferRequest: (params: EvmCancelItemOfferParams): unknown => {
-      // TODO: Implement Ethereum-specific mapping
+    cancelItemOfferRequest: (maker: `0x${string}`, params: EvmCancelItemOfferParams): V3CancelOrderRequest => {
       return {
-        // Map params to Ethereum API request format
+        chain: params.chain,
+        orderIds: params.orderIds,
+        options: {
+          maker,
+          orderKind: DEFAULT_ORDER_KIND,
+        }
       };
     },
 
     /**
      * Maps generic take item offer parameters to Ethereum-specific API request
      */
-    takeItemOfferRequest: (params: EvmTakeItemOfferParams): unknown => {
-      // TODO: Implement Ethereum-specific mapping
+    takeItemOfferRequest: (taker: `0x${string}`, params: EvmTakeItemOfferParams): V3SellRequest => {
       return {
-        // Map params to Ethereum API request format
+        taker,
+        chain: params.chain,
+        items: params.items.map((item) => ({
+          token: item.token,
+          ...(item.quantity ? { quantity: item.quantity } : {}),
+          ...(item.orderId ? { orderId: item.orderId } : {}),
+        })),
       };
     },
 
     /**
      * Maps generic buy parameters to Ethereum-specific API request
      */
-    buyRequest: (params: EvmBuyParams): unknown => {
-      // TODO: Implement Ethereum-specific mapping
+    buyRequest: (taker: `0x${string}`, params: EvmBuyParams): V3BuyRequest => {
       return {
-        // Map params to Ethereum API request format
+        taker,
+        chain: params.chain,
+        items: params.items.map((item) => ({
+          ...(item.token ? { token: item.token } : {}),
+          ...(item.collection ? { collection: item.collection } : {}),
+          ...(item.quantity ? { quantity: item.quantity } : {}),
+          ...(item.orderId ? { orderId: item.orderId } : {}),
+        })),
+        options: {
+          ...(params?.currency ? { currency: params.currency } : {}),
+          ...(params?.currencyChainId ? { currencyChainId: params.currencyChainId } : {}),
+        }
       };
     },
 
     /**
      * Maps generic transfer parameters to Ethereum-specific API request
      */
-    transferRequest: (params: EvmTransferParams): unknown => {
-      // TODO: Implement Ethereum-specific mapping
+    transferRequest: (from: `0x${string}`, params: EvmTransferParams): V3TransferRequest => {
       return {
-        // Map params to Ethereum API request format
+        from,
+        chain: params.chain,
+        to: params.to as `0x${string}`,
+        items: params.items.map((item) => ({
+          token: item.token,
+          ...(item.quantity ? { quantity: item.quantity } : {}),
+        })),
       };
     },
   },

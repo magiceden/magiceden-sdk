@@ -1,7 +1,7 @@
-import { SupportedChain } from './chain';
-import { WalletProvider, ChainTransaction } from '../wallet';
-import { ChainType } from './chain';
-import { TransactionStrategy } from './transactions';
+import { SupportedChain } from './chains';
+import { WalletProvider } from '../wallet';
+import { ChainType } from './chains';
+import { ChainTransaction, TransactionStrategy } from './transactions';
 
 /**
  * Environment options

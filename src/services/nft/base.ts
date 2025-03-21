@@ -1,15 +1,16 @@
 import {
   ChainMethodParams,
   ClientConfig,
+  SignatureResponse,
   TransactionResponse,
   TransactionStrategy,
 } from '../../types';
-import { SupportedChain } from '../../types/chain';
-import { ChainTransaction, WalletTxReceipt } from '../../wallet';
+import { SupportedChain } from '../../types/chains';
 import { V2ApiClient } from '../../api/clients/v2';
 import { V4ApiClient } from '../../api/clients/v4';
 import { V3ApiClient } from '../../api/clients/v3';
 import { ApiClientOptions } from '../../api/clients/base';
+import { ChainOperation, OperationResponse, SignatureOperation, TransactionOperation } from '../../types/operations';
 
 /**
  * Base class for NFT services
@@ -59,192 +60,236 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
    */
   async createLaunchpad(
     params: ChainMethodParams<C, 'createLaunchpad'>,
-  ): Promise<TransactionResponse[]> {
-    const transactions = await this.getCreateLaunchpadTransactions(params);
-    return await this.sendAndConfirmTransactions(transactions);
+  ): Promise<OperationResponse[]> {
+    const operations = await this.getCreateLaunchpadOperations(params);
+    return await this.processOperations(operations);
   }
 
   /**
    * Get create launchpad transaction instructions from API
    */
-  protected abstract getCreateLaunchpadTransactions(
+  protected abstract getCreateLaunchpadOperations(
     params: ChainMethodParams<C, 'createLaunchpad'>,
-  ): Promise<ChainTransaction<C>[]>;
+  ): Promise<ChainOperation<C>[]>;
 
   /**
    * Updates an existing launchpad
    */
   async updateLaunchpad(
     params: ChainMethodParams<C, 'updateLaunchpad'>,
-  ): Promise<TransactionResponse[]> {
-    const transactions = await this.getUpdateLaunchpadTransactions(params);
-    return await this.sendAndConfirmTransactions(transactions);
+  ): Promise<OperationResponse[]> {
+    const operations = await this.getUpdateLaunchpadOperations(params);
+    return await this.processOperations(operations);
   }
 
   /**
    * Get update launchpad transaction instructions from API
    */
-  protected abstract getUpdateLaunchpadTransactions(
+  protected abstract getUpdateLaunchpadOperations(
     params: ChainMethodParams<C, 'updateLaunchpad'>,
-  ): Promise<ChainTransaction<C>[]>;
+  ): Promise<ChainOperation<C>[]>;
 
   /**
    * Mints an NFT from a launchpad
    */
-  async mint(params: ChainMethodParams<C, 'mint'>): Promise<TransactionResponse[]> {
-    const transactions = await this.getMintTransactions(params);
-    return await this.sendAndConfirmTransactions(transactions);
+  async mint(params: ChainMethodParams<C, 'mint'>): Promise<OperationResponse[]> {
+    const operations = await this.getMintOperations(params);
+    return await this.processOperations(operations);
   }
 
   /**
    * Get mint transaction instructions from API
    */
-  protected abstract getMintTransactions(
+  protected abstract getMintOperations(
     params: ChainMethodParams<C, 'mint'>,
-  ): Promise<ChainTransaction<C>[]>;
+  ): Promise<ChainOperation<C>[]>;
 
   /**
    * Lists an NFT for sale
    */
-  async list(params: ChainMethodParams<C, 'list'>): Promise<TransactionResponse[]> {
-    const transactions = await this.getListTransactions(params);
-    return await this.sendAndConfirmTransactions(transactions);
+  async list(params: ChainMethodParams<C, 'list'>): Promise<OperationResponse[]> {
+    const operations = await this.getListOperations(params);
+    return await this.processOperations(operations);
   }
 
   /**
    * Get list transaction instructions from API
    */
-  protected abstract getListTransactions(
+  protected abstract getListOperations(
     params: ChainMethodParams<C, 'list'>,
-  ): Promise<ChainTransaction<C>[]>;
+  ): Promise<ChainOperation<C>[]>;
 
   /**
    * Cancels an NFT listing
    */
   async cancelListing(
     params: ChainMethodParams<C, 'cancelListing'>,
-  ): Promise<TransactionResponse[]> {
-    const transactions = await this.getCancelListingTransactions(params);
-    return await this.sendAndConfirmTransactions(transactions);
+  ): Promise<OperationResponse[]> {
+    const operations = await this.getCancelListingOperations(params);
+    return await this.processOperations(operations);
   }
 
   /**
    * Get cancel listing transaction instructions from API
    */
-  protected abstract getCancelListingTransactions(
+  protected abstract getCancelListingOperations(
     params: ChainMethodParams<C, 'cancelListing'>,
-  ): Promise<ChainTransaction<C>[]>;
+  ): Promise<ChainOperation<C>[]>;
 
   /**
    * Takes an item offer on an NFT
    */
   async takeItemOffer(
     params: ChainMethodParams<C, 'takeItemOffer'>,
-  ): Promise<TransactionResponse[]> {
-    const transactions = await this.getTakeItemOfferTransactions(params);
-    return await this.sendAndConfirmTransactions(transactions);
+  ): Promise<OperationResponse[]> {
+    const operations = await this.getTakeItemOfferOperations(params);
+    return await this.processOperations(operations);
   }
 
   /**
    * Get take item offer transaction instructions from API
    */
-  protected abstract getTakeItemOfferTransactions(
+  protected abstract getTakeItemOfferOperations(
     params: ChainMethodParams<C, 'takeItemOffer'>,
-  ): Promise<ChainTransaction<C>[]>;
+  ): Promise<ChainOperation<C>[]>;
 
   /**
    * Makes an item offer on an NFT
    */
   async makeItemOffer(
     params: ChainMethodParams<C, 'makeItemOffer'>,
-  ): Promise<TransactionResponse[]> {
-    const transactions = await this.getMakeItemOfferTransactions(params);
-    return await this.sendAndConfirmTransactions(transactions);
+  ): Promise<OperationResponse[]> {
+    const operations = await this.getMakeItemOfferOperations(params);
+    return await this.processOperations(operations);
   }
 
   /**
    * Get make item offer transaction instructions from API
    */
-  protected abstract getMakeItemOfferTransactions(
+  protected abstract getMakeItemOfferOperations(
     params: ChainMethodParams<C, 'makeItemOffer'>,
-  ): Promise<ChainTransaction<C>[]>;
+  ): Promise<ChainOperation<C>[]>;
 
   /**
    * Cancels an item offer
    */
   async cancelItemOffer(
     params: ChainMethodParams<C, 'cancelItemOffer'>,
-  ): Promise<TransactionResponse[]> {
-    const transactions = await this.getCancelItemOfferTransactions(params);
-    return await this.sendAndConfirmTransactions(transactions);
+  ): Promise<OperationResponse[]> {
+    const operations = await this.getCancelItemOfferOperations(params);
+    return await this.processOperations(operations);
   }
 
   /**
    * Get cancel item offer transaction instructions from API
    */
-  protected abstract getCancelItemOfferTransactions(
+  protected abstract getCancelItemOfferOperations(
     params: ChainMethodParams<C, 'cancelItemOffer'>,
-  ): Promise<ChainTransaction<C>[]>;
+  ): Promise<ChainOperation<C>[]>;
 
   /**
    * Buys an NFT
    */
-  async buy(params: ChainMethodParams<C, 'buy'>): Promise<TransactionResponse[]> {
-    const transactions = await this.getBuyTransactions(params);
-    return await this.sendAndConfirmTransactions(transactions);
+  async buy(params: ChainMethodParams<C, 'buy'>): Promise<OperationResponse[]> {
+    const operations = await this.getBuyOperations(params);
+    return await this.processOperations(operations);
   }
 
   /**
    * Get transfer transaction instructions from API
    */
-  protected abstract getBuyTransactions(
+  protected abstract getBuyOperations(
     params: ChainMethodParams<C, 'buy'>,
-  ): Promise<ChainTransaction<C>[]>;
+  ): Promise<ChainOperation<C>[]>;
 
   /**
    * Transfers an NFT to another wallet
    */
-  async transfer(params: ChainMethodParams<C, 'transfer'>): Promise<TransactionResponse[]> {
-    const transactions = await this.getTransferTransactions(params);
-    return await this.sendAndConfirmTransactions(transactions);
+  async transfer(params: ChainMethodParams<C, 'transfer'>): Promise<OperationResponse[]> {
+    const operations = await this.getTransferOperations(params);
+    return await this.processOperations(operations);
   }
 
   /**
    * Get transfer transaction instructions from API
    */
-  protected abstract getTransferTransactions(
+  protected abstract getTransferOperations(
     params: ChainMethodParams<C, 'transfer'>,
-  ): Promise<ChainTransaction<C>[]>;
+  ): Promise<ChainOperation<C>[]>;
 
   /**
-   * Send and confirm transactions sequentially
+   * Process a sequence of operations
    */
-  private async sendAndConfirmTransactions(
-    transactions: ChainTransaction<C>[],
-  ): Promise<TransactionResponse[]> {
-    const results: TransactionResponse[] = [];
+  protected async processOperations(
+    operations: ChainOperation<C>[],
+  ): Promise<OperationResponse[]> {
+    const results: OperationResponse[] = [];
 
-    for (const tx of transactions) {
-      const signature = await this.config.wallet!.signAndSendTransaction(tx);
-      switch (this.config.transactionOptions?.strategy || TransactionStrategy.SignSendAndConfirm) {
-        case TransactionStrategy.SignSendAndConfirm:
-          const txReceipt = await this.config.wallet!.waitForTransactionConfirmation(signature);
-          results.push({
-            txId: txReceipt.txId,
-            status: txReceipt.status,
-            error: txReceipt.error,
-            metadata: txReceipt.metadata,
-          });
+    for (const operation of operations) {
+      switch (operation.type) {
+        case 'transaction':
+          const txResult = await this.processTransactionOperation(
+            operation as TransactionOperation<C>,
+          );
+          results.push(txResult);
           break;
-        case TransactionStrategy.SignAndSend:
-          results.push({
-            txId: signature,
-            status: 'pending',
-          });
+        case 'signature':
+          const sigResult = await this.processSignatureOperation(
+            operation as SignatureOperation<C>,
+          );
+          results.push(sigResult);
           break;
+        default:
+          throw new Error(`Unsupported operation type: ${(operation as any).type}`);
       }
     }
 
     return results;
   }
+
+  /**
+   * Process a transaction operation
+   */
+  protected async processTransactionOperation(
+    operation: TransactionOperation<C>,
+  ): Promise<TransactionResponse> {
+    try {
+    const signature = await this.config.wallet!.signAndSendTransaction(operation.transactionData);
+
+    switch (this.config.transactionOptions?.strategy || TransactionStrategy.SignSendAndConfirm) {
+      case TransactionStrategy.SignSendAndConfirm:
+        const txReceipt = await this.config.wallet!.waitForTransactionConfirmation(signature);
+        return {
+          txId: txReceipt.txId,
+          status: txReceipt.status,
+          error: txReceipt.error,
+          metadata: {
+            ...txReceipt.metadata,
+          },
+        };
+      case TransactionStrategy.SignAndSend:
+        return {
+          txId: signature,
+          status: 'pending',
+        };
+      default:
+        throw new Error(
+            `Unsupported transaction strategy: ${this.config.transactionOptions?.strategy}`,
+          );
+      }
+    } catch (error) {
+      return {
+        txId: '',
+        status: 'failed',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  /**
+   * Process a signature operation
+   */
+  protected abstract processSignatureOperation(
+    operation: SignatureOperation<C>,
+  ): Promise<SignatureResponse>;
 }

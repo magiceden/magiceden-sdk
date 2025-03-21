@@ -1,34 +1,33 @@
-import { z } from "zod";
+import { z } from 'zod';
+import { ZodEvmBlockchain } from '../../chains';
 
 /**
  * Parameters for canceling an offer
  */
-export const CancelItemOfferParams = {
+export const CancelItemOfferParams = z.object({
   // Generic parameters that can be shared between chains
-  tokenAddress: z.string().describe("The NFT token address/mint"),
-  price: z.number().describe("The offer price to cancel"),
-  buyer: z.string().describe("The buyer's wallet address"),
-  expiry: z.number().optional().describe("Offer expiry timestamp"),
-};
+});
 
-export const EvmCancelItemOfferParams = z.object({
-  ...CancelItemOfferParams,
+export const EvmCancelItemOfferParams = CancelItemOfferParams.extend({
   // EVM-specific parameters
 });
 
-export const SolanaCancelItemOfferParams = z.object({
-  ...CancelItemOfferParams,
-  // Solana-specific parameters
-  // tokenAddress in CancelItemOfferParams maps to tokenMint in V2CancelItemOfferRequest
-  // price in CancelItemOfferParams maps to price in V2CancelItemOfferRequest
-  // buyer in CancelItemOfferParams maps to buyer in V2CancelItemOfferRequest
-  // expiry in CancelItemOfferParams maps to expiry in V2CancelItemOfferRequest
-  auctionHouseAddress: z.string().describe("Auction house address"),
-  buyerReferral: z.string().optional().describe("Buyer referral address"),
-  prioFeeMicroLamports: z.number().optional().describe("Priority fee in micro lamports"),
-  maxPrioFeeLamports: z.number().optional().describe("Maximum priority fee in lamports"),
-  exactPrioFeeLamports: z.number().optional().describe("Exact priority fee in lamports"),
+export const EvmCancelItemOfferParamsWithExtras = z.object({
+  chain: ZodEvmBlockchain.describe('The chain to cancel the item offer on'),
+  orderIds: z.array(z.string()).describe('The order IDs to cancel'),
 });
 
-export type EvmCancelItemOfferParams = z.infer<typeof EvmCancelItemOfferParams>;
-export type SolanaCancelItemOfferParams = z.infer<typeof SolanaCancelItemOfferParams>; 
+export const SolanaCancelItemOfferParams = CancelItemOfferParams.extend({
+  // Solana-specific parameters
+  token: z.string().describe('The NFT token address/mint'),
+  price: z.string().describe('The offer price to cancel'),
+  expiry: z.number().optional().describe('Offer expiry timestamp'),
+  auctionHouseAddress: z.string().describe('Auction house address'),
+  buyerReferral: z.string().optional().describe('Buyer referral address'),
+  prioFeeMicroLamports: z.number().optional().describe('Priority fee in micro lamports'),
+  maxPrioFeeLamports: z.number().optional().describe('Maximum priority fee in lamports'),
+  exactPrioFeeLamports: z.number().optional().describe('Exact priority fee in lamports'),
+});
+
+export type EvmCancelItemOfferParams = z.infer<typeof EvmCancelItemOfferParamsWithExtras>;
+export type SolanaCancelItemOfferParams = z.infer<typeof SolanaCancelItemOfferParams>;

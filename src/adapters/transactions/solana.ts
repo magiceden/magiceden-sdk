@@ -1,7 +1,8 @@
 import { VersionedTransaction } from '@solana/web3.js';
 import { SolanaInstructionsResponse, V4TransactionResponse } from '../../types/api';
-import { ChainTransaction } from '../../wallet';
 import { Blockchain, SolanaTransactionParams } from '../../types';
+import { ChainTransaction } from '../../types/transactions';
+import { TransactionOperation } from '../../types/operations';
 
 /**
  * Solana Transaction Adapters
@@ -15,12 +16,22 @@ export const SolanaTransactionAdapters = {
    */
   fromInstructionsResponse: (
     response: SolanaInstructionsResponse,
-  ): ChainTransaction<'solana'>[] => {
+  ): TransactionOperation<'solana'>[] => {
     // Handle versioned transactions (v0)
     if (response.v0?.txSigned) {
-      return [VersionedTransaction.deserialize(Buffer.from(response.v0.txSigned.data))];
+      return [
+        {
+          type: 'transaction',
+          transactionData: VersionedTransaction.deserialize(Buffer.from(response.v0.txSigned.data)),
+        },
+      ];
     } else if (response.v0?.tx) {
-      return [VersionedTransaction.deserialize(Buffer.from(response.v0.tx.data))];
+      return [
+        {
+          type: 'transaction',
+          transactionData: VersionedTransaction.deserialize(Buffer.from(response.v0.tx.data)),
+        },
+      ];
     }
 
     throw new Error(
@@ -33,7 +44,7 @@ export const SolanaTransactionAdapters = {
    * @param response The API response containing transaction data
    * @returns An array of properly formatted Solana transactions
    */
-  fromV4TransactionResponse(response: V4TransactionResponse): VersionedTransaction[] {
+  fromV4TransactionResponse(response: V4TransactionResponse): TransactionOperation<'solana'>[] {
     if (!response.steps || response.steps.length === 0) {
       throw new Error(
         'Invalid transaction response format, only Solana transactions are supported',
@@ -56,7 +67,7 @@ export const SolanaTransactionAdapters = {
       );
     }
 
-    const transactions: VersionedTransaction[] = [];
+    const transactions: TransactionOperation<'solana'>[] = [];
 
     for (const step of validSteps) {
       const result = SolanaTransactionParams.safeParse(step.params);
@@ -65,13 +76,16 @@ export const SolanaTransactionAdapters = {
       }
 
       const solanaParams = result.data;
-      const stepTransactions = solanaParams.transactions.map((tx) => {
+      const stepTransactions: TransactionOperation<'solana'>[] = solanaParams.transactions.map((tx) => {
         try {
           // TODO: Implement tx.signerPubkeys to make sure the transaction gets signed by the respective private keys for any of the extra signers
           // Currently we don't allow you to pass in any extra signers where this would be relevant, but we should still make sure to implement this
           // Refer to accounts in src/types/services/nft/createLaunchpad.ts for more details
           const txBuffer = Buffer.from(tx.transaction, 'base64');
-          return VersionedTransaction.deserialize(txBuffer);
+          return { 
+            type: 'transaction',
+            transactionData: VersionedTransaction.deserialize(txBuffer),
+          };
         } catch (error) {
           throw error;
         }

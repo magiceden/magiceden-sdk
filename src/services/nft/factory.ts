@@ -1,7 +1,6 @@
 import { ChainType, ClientConfig } from '../../types';
 import { BaseNftService } from './base';
 import { SolanaNftService } from './solana';
-import { ApiError } from '../../errors';
 import { EvmNftService } from './evm';
 
 /**
@@ -18,7 +17,7 @@ export class NftServiceFactory {
       case ChainType.EVM:
         return new EvmNftService(config);
       default:
-        throw new ApiError(`Unsupported chain: ${config.chain}`);
+        throw new Error(`Unsupported chain: ${config.chain}`);
     }
   }
 }

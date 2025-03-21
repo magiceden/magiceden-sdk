@@ -1,25 +1,32 @@
 import { z } from "zod";
-import { SplAmount } from "../../solana";
+import { ZodEvmBlockchain } from "../../chains";
 
 /**
  * Parameters for making an offer on an NFT
  */
-export const MakeItemOfferParams = {
+export const MakeItemOfferParams = z.object({
   // Generic parameters that can be shared between chains
-  tokenAddress: z.string().describe("The NFT token address/mint"),
-  price: z.number().describe("The offer price"),
-  buyer: z.string().describe("The buyer's wallet address"),
-  expiry: z.number().optional().describe("Offer expiry timestamp"),
-};
-
-export const EvmMakeItemOfferParams = z.object({
-  ...MakeItemOfferParams,
-  // EVM-specific parameters
-  expirationTime: z.number().describe("Offer expiration time"),
+  token: z.string().describe("The NFT token in the format of <contract address>:<token id> for EVM and <mint address> for Solana"),
+  price: z.string().describe("The offer price"),
+  expiry: z.number().optional().describe("Offer expiry timestamp (Unix timestamp in seconds)"),
 });
 
-export const SolanaMakeItemOfferParams = z.object({
-  ...MakeItemOfferParams,
+export const EvmMakeItemOfferParams = MakeItemOfferParams.extend({  
+  // Optional parameters
+  quantity: z.number().optional().describe("Quantity of tokens to bid on"),
+  
+  // Advanced options
+  automatedRoyalties: z.boolean().optional().describe("If true, royalty amounts and recipients will be set automatically"),
+  royaltyBps: z.number().optional().describe("Maximum amount of royalties to pay in basis points (1 BPS = 0.01%)"),
+  currency: z.string().optional().describe("Currency address for the offer (defaults to chain's native wrapped token)"),
+});
+
+export const EvmMakeItemOfferParamsWithExtras = z.object({
+  chain: ZodEvmBlockchain.describe('The chain to make the offer on'),
+  params: z.array(EvmMakeItemOfferParams).describe('The make item offer parameters'),
+});
+
+export const SolanaMakeItemOfferParams = MakeItemOfferParams.extend({
   // Solana-specific parameters
   // tokenAddress in MakeItemOfferParams maps to tokenMint in V2MakeItemOfferRequest
   // price in MakeItemOfferParams maps to price in V2MakeItemOfferRequest
@@ -34,5 +41,5 @@ export const SolanaMakeItemOfferParams = z.object({
   exactPrioFeeLamports: z.number().optional().describe("Exact priority fee in lamports"),
 });
 
-export type EvmMakeItemOfferParams = z.infer<typeof EvmMakeItemOfferParams>;
+export type EvmMakeItemOfferParams = z.infer<typeof EvmMakeItemOfferParamsWithExtras>;
 export type SolanaMakeItemOfferParams = z.infer<typeof SolanaMakeItemOfferParams>;
