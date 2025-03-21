@@ -9,9 +9,13 @@ import {
   Abi,
   ContractFunctionName,
   ContractFunctionArgs,
+  createWalletClient,
 } from 'viem';
 import { EvmWalletProvider } from './evmWalletProvider';
 import { WalletTxReceipt } from '../provider';
+import { EvmBlockchain } from '../../types';
+import { privateKeyToAccount } from 'viem/accounts';
+import { getViemChainFromBlockchain } from '../../helpers/evm/chain';
 
 /**
  * Options for the ViewWalletProvider
@@ -38,10 +42,15 @@ export type ViemWalletProviderOptions = {
  */
 export type ViemWalletProviderConfig = {
   /**
-   * The wallet client to use
+   * The private key to use for the wallet
    */
-  walletClient: WalletClient;
+  privateKey: `0x${string}`;
 
+  /**
+   * The blockchain to use for the wallet
+   */
+  blockchain: EvmBlockchain;
+  
   /**
    * Options for the ViemWalletProvider
    */
@@ -62,9 +71,13 @@ export class ViemWalletProvider extends EvmWalletProvider {
   constructor(config: ViemWalletProviderConfig) {
     super();
 
-    this.wallet = config.walletClient;
+    this.wallet = createWalletClient({
+      account: privateKeyToAccount(config.privateKey),
+      chain: getViemChainFromBlockchain(config.blockchain),
+      transport: http(),
+    });
     this.rpcClient = createPublicClient({
-      chain: config.walletClient.chain,
+      chain: getViemChainFromBlockchain(config.blockchain),
       transport: http(),
     });
 

@@ -1,3 +1,4 @@
+import { Blockchain } from '../../types/chains/general';
 import { MockEvmWalletProvider } from '../../wallet/evm/mockEvmWalletProvider';
 import { ViemWalletProvider } from '../../wallet/evm/viemWalletProvider';
 import { TransactionRequest, WalletClient, createWalletClient, http } from 'viem';
@@ -125,7 +126,8 @@ describe('EvmWalletProvider', () => {
       });
       
       wallet = new ViemWalletProvider({
-        walletClient,
+        privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        blockchain: Blockchain.BASE,
         options: {
           gas: {
             limitMultiplier: 1.2,
@@ -138,14 +140,16 @@ describe('EvmWalletProvider', () => {
     describe('constructor', () => {
       it('should create a wallet with default gas options', () => {
         const defaultWallet = new ViemWalletProvider({
-          walletClient,
+          privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          blockchain: Blockchain.BASE,
         });
         expect(defaultWallet).toBeInstanceOf(ViemWalletProvider);
       });
 
       it('should create a wallet with custom gas options', () => {
         const customWallet = new ViemWalletProvider({
-          walletClient,
+          privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          blockchain: Blockchain.BASE,
           options: {
             gas: {
               limitMultiplier: 1.5,
@@ -303,7 +307,8 @@ describe('EvmWalletProvider', () => {
         });
         
         const noAccountWallet = new ViemWalletProvider({
-          walletClient: noAccountClient,
+          privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          blockchain: Blockchain.BASE,
         });
         
         await expect(noAccountWallet.getBalance()).rejects.toThrow('No account connected to wallet');
