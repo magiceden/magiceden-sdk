@@ -24,25 +24,16 @@ const solanaClient = MagicEdenSDK.v1.createSolanaKeypairClient(
   'YOUR_API_KEY',
   solanaKeypair,
   {
-    rpcUrl: 'https://api.mainnet-beta.solana.com'
+    rpcUrl: 'SOLANA_RPC_URL'
   }
 );
 
 // For EVM chains (Ethereum, Polygon, etc.)
-import { createWalletClient, http } from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
-import { mainnet } from 'viem/chains';
-
-const account = privateKeyToAccount('0x...');
-const walletClient = createWalletClient({
-  account,
-  chain: mainnet,
-  transport: http()
-});
 
 const evmClient = MagicEdenSDK.v1.createViemEvmClient(
   'YOUR_API_KEY',
-  walletClient
+  '0x...',
+  Blockchain.BASE
 );
 ```
 
