@@ -1,4 +1,4 @@
-import { ChainType } from './types';
+import { ChainType, EvmBlockchain } from './types';
 import { MagicEdenClient } from './client';
 import { ClientConfig } from './types';
 import { Keypair } from '@solana/web3.js';
@@ -80,14 +80,16 @@ class MagicEdenSDKV1 {
 
   public static createViemEvmClient(
     apiKey: string,
-    walletClient: WalletClient,
+    privateKey: `0x${string}`,
+    blockchain: EvmBlockchain,
     options?: {
       clientConfig?: Partial<Omit<ClientConfig<'evm'>, 'apiKey'>>;
       walletOptions?: ViemWalletProviderOptions;
     },
   ): MagicEdenClient {
     const walletProvider = new ViemWalletProvider({
-      walletClient,
+      privateKey,
+      blockchain,
       options: options?.walletOptions,
     });
     return this.createEvmClient(apiKey, walletProvider, options?.clientConfig);
