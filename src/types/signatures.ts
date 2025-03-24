@@ -1,4 +1,4 @@
-import { SupportedChain } from "./chains";
+import { SupportedChain } from './chains';
 
 /**
  * Signature response
@@ -21,7 +21,7 @@ export type EvmSignatureRequest = {
   message: any;
   primaryType: string;
   post?: any;
-}
+};
 
 /**
  * Solana signature request
@@ -29,8 +29,8 @@ export type EvmSignatureRequest = {
 export type SolanaSignatureRequest = {
   api: 'v2' | 'v4';
   message: Uint8Array | string;
-  display?: 'utf8' | 'hex'; 
-}
+  display?: 'utf8' | 'hex';
+};
 
 /**
  * Define signature data types for each chain

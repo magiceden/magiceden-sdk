@@ -42,7 +42,9 @@ export class V4ApiClient extends BaseApiClient {
   }
 
   @supportedOn([ChainType.SOLANA])
-  publishLaunchpad(params: V4PublishLaunchpadRequest): RetryablePromise<V4PublishLaunchpadResponse> {
+  publishLaunchpad(
+    params: V4PublishLaunchpadRequest,
+  ): RetryablePromise<V4PublishLaunchpadResponse> {
     return this.api.post(`/self_serve/nft/publish`, {
       ...params,
     });

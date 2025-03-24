@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { Blockchain } from '../../chains';
 import { TokenProtocolType } from '../../protocol';
 

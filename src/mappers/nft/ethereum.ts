@@ -53,14 +53,17 @@ export const EvmApiMappers = {
     /**
      * Maps generic cancel listing parameters to Ethereum-specific API request
      */
-    cancelListingRequest: (maker: `0x${string}`, params: EvmCancelListingParams): V3CancelOrderRequest => {
+    cancelListingRequest: (
+      maker: `0x${string}`,
+      params: EvmCancelListingParams,
+    ): V3CancelOrderRequest => {
       return {
         chain: params.chain,
         orderIds: params.orderIds,
         options: {
           maker,
           orderKind: DEFAULT_ORDER_KIND,
-        }
+        },
       };
     },
 
@@ -81,7 +84,9 @@ export const EvmApiMappers = {
           orderKind: DEFAULT_ORDER_KIND,
           ...(param.expiry ? { expirationTime: param.expiry.toString() } : {}),
           ...(param.quantity ? { quantity: param.quantity } : {}),
-          ...(param.automatedRoyalties !== undefined ? { automatedRoyalties: param.automatedRoyalties } : {}),
+          ...(param.automatedRoyalties !== undefined
+            ? { automatedRoyalties: param.automatedRoyalties }
+            : {}),
           ...(param.royaltyBps ? { royaltyBps: param.royaltyBps } : {}),
           ...(param.currency ? { currency: param.currency } : {}),
         })),
@@ -91,14 +96,17 @@ export const EvmApiMappers = {
     /**
      * Maps generic cancel item offer parameters to Ethereum-specific API request
      */
-    cancelItemOfferRequest: (maker: `0x${string}`, params: EvmCancelItemOfferParams): V3CancelOrderRequest => {
+    cancelItemOfferRequest: (
+      maker: `0x${string}`,
+      params: EvmCancelItemOfferParams,
+    ): V3CancelOrderRequest => {
       return {
         chain: params.chain,
         orderIds: params.orderIds,
         options: {
           maker,
           orderKind: DEFAULT_ORDER_KIND,
-        }
+        },
       };
     },
 
@@ -133,7 +141,7 @@ export const EvmApiMappers = {
         options: {
           ...(params?.currency ? { currency: params.currency } : {}),
           ...(params?.currencyChainId ? { currencyChainId: params.currencyChainId } : {}),
-        }
+        },
       };
     },
 

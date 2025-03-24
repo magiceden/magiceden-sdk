@@ -18,7 +18,7 @@ export abstract class WalletProvider<
   TxType = unknown,
   SignedTxType = unknown,
   TxHashType extends string = string,
-  TxReceiptType extends WalletTxReceipt = WalletTxReceipt
+  TxReceiptType extends WalletTxReceipt = WalletTxReceipt,
 > {
   /**
    * Get the public address of the wallet provider.

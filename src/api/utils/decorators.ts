@@ -8,19 +8,16 @@ import { ChainType } from '../../types';
  * @returns A method decorator that validates chain support
  */
 export function supportedOn(chains: ChainType[]) {
-  return function(
-    originalMethod: any,
-    context: ClassMethodDecoratorContext
-  ) {
+  return function (originalMethod: any, context: ClassMethodDecoratorContext) {
     const methodName = String(context.name);
-    
-    return function(this: BaseApiClient, ...args: any[]) {
+
+    return function (this: BaseApiClient, ...args: any[]) {
       const currentChain = this.chain;
-      
+
       if (!chains.includes(currentChain)) {
         throw new Error(`Operation ${methodName} is not supported on ${currentChain}`);
       }
-      
+
       return originalMethod.apply(this, args);
     };
   };

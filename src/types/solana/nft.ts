@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { zSolanaAddress } from "./primitives";
+import { z } from 'zod';
+import { zSolanaAddress } from './primitives';
 
 export const zSolNonFungibleCreator = z.object({
   address: zSolanaAddress,

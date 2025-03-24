@@ -78,7 +78,7 @@ export class TransactionError extends ApiError {
 
   constructor(message: string, txId?: string, logs?: string[], status: number = 400) {
     super(message, status);
-    
+
     this.name = 'TransactionError';
     this.txId = txId;
     this.logs = logs;

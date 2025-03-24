@@ -76,20 +76,22 @@ export const SolanaTransactionAdapters = {
       }
 
       const solanaParams = result.data;
-      const stepTransactions: TransactionOperation<'solana'>[] = solanaParams.transactions.map((tx) => {
-        try {
-          // TODO: Implement tx.signerPubkeys to make sure the transaction gets signed by the respective private keys for any of the extra signers
-          // Currently we don't allow you to pass in any extra signers where this would be relevant, but we should still make sure to implement this
-          // Refer to accounts in src/types/services/nft/createLaunchpad.ts for more details
-          const txBuffer = Buffer.from(tx.transaction, 'base64');
-          return { 
-            type: 'transaction',
-            transactionData: VersionedTransaction.deserialize(txBuffer),
-          };
-        } catch (error) {
-          throw error;
-        }
-      });
+      const stepTransactions: TransactionOperation<'solana'>[] = solanaParams.transactions.map(
+        (tx) => {
+          try {
+            // TODO: Implement tx.signerPubkeys to make sure the transaction gets signed by the respective private keys for any of the extra signers
+            // Currently we don't allow you to pass in any extra signers where this would be relevant, but we should still make sure to implement this
+            // Refer to accounts in src/types/services/nft/createLaunchpad.ts for more details
+            const txBuffer = Buffer.from(tx.transaction, 'base64');
+            return {
+              type: 'transaction',
+              transactionData: VersionedTransaction.deserialize(txBuffer),
+            };
+          } catch (error) {
+            throw error;
+          }
+        },
+      );
 
       transactions.push(...stepTransactions);
     }

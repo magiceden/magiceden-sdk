@@ -7,7 +7,7 @@ import { MintStageKind } from './shared';
 /**
  * Parameters for minting NFTs
  */
-export const MintParams = z.object({
+export const BaseMintParamsSchema = z.object({
   chain: z.nativeEnum(Blockchain).describe('Chain to mint on'),
   collectionId: z.string().describe('Collection ID to mint from'),
   wallet: z.string().describe('Wallet address to mint with'),
@@ -16,20 +16,25 @@ export const MintParams = z.object({
   kind: z.nativeEnum(MintStageKind).describe('Kind of mint stage'),
 });
 
-export const EvmMintParams = MintParams.extend({
+export const EvmMintParamsSchema = BaseMintParamsSchema.extend({
   chain: ZodEvmBlockchain.describe('Chain to mint on'),
   protocol: z.nativeEnum(EvmProtocolType).describe('Token protocol type'),
   tokenId: z.number().int().optional().describe('Token ID for ERC-1155'),
 });
 
-export const SolanaMintParams = MintParams.extend({
+export const SolanaMintParamsSchema = BaseMintParamsSchema.extend({
   chain: z.literal(Blockchain.SOLANA).describe('Chain to mint on'),
   candyMachineId: zSolanaAddress.describe('Candy machine ID'),
   symbol: SolanaSymbol.describe('Collection symbol'),
   payer: zSolanaAddress.describe('Payer address'),
-  recipient: zSolanaAddress.optional().describe('Recipient address (if not specified, then recipient === payer)'),
+  recipient: zSolanaAddress
+    .optional()
+    .describe('Recipient address (if not specified, then recipient === payer)'),
   nftAmount: z.number().int().min(1).max(5).describe('Number of NFTs to mint (max 5 for Solana)'),
 });
 
-export type EvmMintParams = z.infer<typeof EvmMintParams>;
-export type SolanaMintParams = z.infer<typeof SolanaMintParams>;
+export type EvmMintParams = z.infer<typeof EvmMintParamsSchema>;
+export type SolanaMintParams = z.infer<typeof SolanaMintParamsSchema>;
+
+export const MintParams = z.union([EvmMintParamsSchema, SolanaMintParamsSchema]);
+export type MintParams = z.infer<typeof MintParams>;

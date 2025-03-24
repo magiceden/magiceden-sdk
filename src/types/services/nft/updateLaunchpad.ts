@@ -2,7 +2,12 @@ import { z } from 'zod';
 import { Blockchain, ZodEvmBlockchain } from '../../chains';
 import { EvmProtocolType, SolProtocolType, TokenProtocolType } from '../../protocol';
 import { SolanaSymbol, zSolanaAddress } from '../../solana/primitives';
-import { MAX_NAME_LENGTH, MAX_ROYALTY_BPS, MIN_ROYALTY_BPS, SOL_MAX_NAME_LENGTH } from '../../../constants/nft';
+import {
+  MAX_NAME_LENGTH,
+  MAX_ROYALTY_BPS,
+  MIN_ROYALTY_BPS,
+  SOL_MAX_NAME_LENGTH,
+} from '../../../constants/nft';
 import { EVMAddressToLowerCaseSchema } from '../../evm';
 import { MintStages } from './shared';
 import { zSolAuthorization } from '../../solana';
@@ -10,7 +15,7 @@ import { zSolAuthorization } from '../../solana';
 /**
  * Parameters for updating a launchpad
  */
-export const UpdateLaunchpadParams = z.object({
+export const BaseUpdateLaunchpadParamsSchema = z.object({
   collection: EVMAddressToLowerCaseSchema.describe('Collection address/ID'),
   owner: EVMAddressToLowerCaseSchema.describe('Owner wallet address'),
   chain: z.nativeEnum(Blockchain).describe('Blockchain'),
@@ -43,7 +48,7 @@ export const UpdateLaunchpadParams = z.object({
     )
     .min(1)
     .refine(
-      creators => {
+      (creators) => {
         return creators.reduce((acc, creator) => acc + creator.share, 0) === 100;
       },
       {
@@ -52,21 +57,25 @@ export const UpdateLaunchpadParams = z.object({
     )
     .optional()
     .describe('Royalty recipients and their shares'),
-  payoutRecipient: z.string().min(1).optional().describe('Payout recipient address of mint proceeds'),
+  payoutRecipient: z
+    .string()
+    .min(1)
+    .optional()
+    .describe('Payout recipient address of mint proceeds'),
   nftMetadataUrl: z.string().min(1).optional().describe('JSON file that contains all the metadata'),
   mintStages: MintStages.optional().describe('Mint stages configuration'),
   tokenImageUrl: z.string().min(1).optional().describe('URL for image for the token'),
   tokenId: z.number().int().min(0).optional().describe('Token ID for ERC1155'),
 });
 
-export const EvmUpdateLaunchpadParams = UpdateLaunchpadParams.extend({
+export const EvmUpdateLaunchpadParamsSchema = BaseUpdateLaunchpadParamsSchema.extend({
   chain: ZodEvmBlockchain,
   protocol: z.enum([EvmProtocolType.ERC721, EvmProtocolType.ERC1155]),
   message: z.string().describe('Message to sign'),
   signature: z.string().describe('Signature of the message'),
 });
 
-export const SolanaUpdateLaunchpadParams = UpdateLaunchpadParams.extend({
+export const SolanaUpdateLaunchpadParamsSchema = BaseUpdateLaunchpadParamsSchema.extend({
   chain: z.literal(Blockchain.SOLANA),
   protocol: z.literal(SolProtocolType.METAPLEX_CORE),
   payoutRecipient: zSolanaAddress.describe('Payout recipient address of mint proceeds'),
@@ -80,5 +89,11 @@ export const SolanaUpdateLaunchpadParams = UpdateLaunchpadParams.extend({
   authorization: zSolAuthorization.describe('Authorization data'),
 });
 
-export type EvmUpdateLaunchpadParams = z.infer<typeof EvmUpdateLaunchpadParams>;
-export type SolanaUpdateLaunchpadParams = z.infer<typeof SolanaUpdateLaunchpadParams>;
+export type EvmUpdateLaunchpadParams = z.infer<typeof EvmUpdateLaunchpadParamsSchema>;
+export type SolanaUpdateLaunchpadParams = z.infer<typeof SolanaUpdateLaunchpadParamsSchema>;
+
+export const UpdateLaunchpadParams = z.union([
+  EvmUpdateLaunchpadParamsSchema,
+  SolanaUpdateLaunchpadParamsSchema,
+]);
+export type UpdateLaunchpadParams = z.infer<typeof UpdateLaunchpadParams>;

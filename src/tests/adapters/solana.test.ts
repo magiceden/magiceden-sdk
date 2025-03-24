@@ -1,7 +1,12 @@
 import { SolanaTransactionAdapters } from '../../adapters/transactions';
 import { VersionedTransaction } from '@solana/web3.js';
 import { Blockchain } from '../../types/chains';
-import { V4TransactionResponse, V4CreateLaunchpadResponse, V4UpdateLaunchpadResponse, V4MintResponse } from '../../types/api';
+import {
+  V4TransactionResponse,
+  V4CreateLaunchpadResponse,
+  V4UpdateLaunchpadResponse,
+  V4MintResponse,
+} from '../../types/api';
 import { SolanaTransactionParams } from '../../types/services/nft/shared/steps';
 import { TransactionStep } from '../../types/services/nft/shared';
 import { SolanaSignAndSendStep } from '../../types/services/nft/shared/steps';
@@ -11,14 +16,14 @@ describe('SolanaTransactionAdapters', () => {
     it('should handle versioned transaction with signed data', () => {
       // Mock buffer data
       const mockData = new Uint8Array([1, 0, 1, 3, 206, 211]);
-      
+
       const mockResponse = {
         v0: {
           txSigned: {
             type: 'Buffer',
-            data: Array.from(mockData)
-          }
-        }
+            data: Array.from(mockData),
+          },
+        },
       };
 
       // Mock VersionedTransaction.deserialize
@@ -32,7 +37,7 @@ describe('SolanaTransactionAdapters', () => {
       expect(result).toBeInstanceOf(Array);
       expect(result[0]).toEqual({
         type: 'transaction',
-        transactionData: { mockTransaction: true }
+        transactionData: { mockTransaction: true },
       });
 
       deserializeSpy.mockRestore();
@@ -41,14 +46,14 @@ describe('SolanaTransactionAdapters', () => {
     it('should handle versioned transaction with unsigned data', () => {
       // Mock buffer data
       const mockData = new Uint8Array([1, 0, 1, 3, 206, 211]);
-      
+
       const mockResponse = {
         v0: {
           tx: {
             type: 'Buffer',
-            data: Array.from(mockData)
-          }
-        }
+            data: Array.from(mockData),
+          },
+        },
       };
 
       // Mock VersionedTransaction.deserialize
@@ -61,7 +66,7 @@ describe('SolanaTransactionAdapters', () => {
       expect(deserializeSpy).toHaveBeenCalled();
       expect(result[0]).toEqual({
         type: 'transaction',
-        transactionData: { mockTransaction: true }
+        transactionData: { mockTransaction: true },
       });
 
       deserializeSpy.mockRestore();
@@ -79,8 +84,8 @@ describe('SolanaTransactionAdapters', () => {
       const mockResponse = {
         txSigned: {
           type: 'Buffer',
-          data: [1, 0, 1, 3, 206, 211]
-        }
+          data: [1, 0, 1, 3, 206, 211],
+        },
       };
 
       expect(() => {
@@ -94,35 +99,37 @@ describe('SolanaTransactionAdapters', () => {
       // Setup
       const mockBuffer = Buffer.from([1, 2, 3]);
       const mockTransaction = { mockTransaction: true };
-      
+
       // Mock VersionedTransaction.deserialize
-      const deserializeSpy = jest.spyOn(VersionedTransaction, 'deserialize')
+      const deserializeSpy = jest
+        .spyOn(VersionedTransaction, 'deserialize')
         .mockReturnValue(mockTransaction as any);
-      
+
       // Call the method
       const result = SolanaTransactionAdapters.fromBuffer(mockBuffer);
-      
+
       // Verify
       expect(deserializeSpy).toHaveBeenCalledWith(mockBuffer);
       expect(result).toBeInstanceOf(Array);
-      
+
       // Update expectation to match the actual structure
       expect(result[0]).toEqual({
-        mockTransaction: true
+        mockTransaction: true,
       });
-      
+
       // Clean up
       deserializeSpy.mockRestore();
     });
 
     it('should throw error for invalid buffer data', () => {
       const mockBuffer = Buffer.from([0, 1, 2, 3]); // Invalid format
-      
+
       // Mock VersionedTransaction.deserialize to throw
-      jest.spyOn(VersionedTransaction, 'deserialize')
-        .mockImplementation(() => {
-          throw new Error('Invalid transaction response format, only Solana transactions are supported');
-        });
+      jest.spyOn(VersionedTransaction, 'deserialize').mockImplementation(() => {
+        throw new Error(
+          'Invalid transaction response format, only Solana transactions are supported',
+        );
+      });
 
       expect(() => {
         SolanaTransactionAdapters.fromBuffer(mockBuffer);
@@ -132,39 +139,45 @@ describe('SolanaTransactionAdapters', () => {
 
   describe('fromV4TransactionResponse', () => {
     // Mock transaction data
-    const mockTransactionBase64 = 'AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
-    
+    const mockTransactionBase64 =
+      'AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
+
     // Valid Solana public key format for tests
     const validSolanaPubkey = '11111111111111111111111111111111';
-    
+
     // Setup mock for VersionedTransaction.deserialize
     let deserializeSpy: jest.SpyInstance;
-    
+
     beforeEach(() => {
       // Remove console.log statements from the implementation for cleaner test output
       jest.spyOn(console, 'log').mockImplementation(() => {});
-      
-      deserializeSpy = jest.spyOn(VersionedTransaction, 'deserialize')
+
+      deserializeSpy = jest
+        .spyOn(VersionedTransaction, 'deserialize')
         .mockImplementation(() => ({ mockTransaction: true }) as unknown as VersionedTransaction);
     });
-    
+
     afterEach(() => {
       deserializeSpy.mockRestore();
       jest.restoreAllMocks();
     });
 
     // Helper function to create a valid Solana transaction step
-    const createValidSolanaStep = (id: string, feePayer: string, transactions: Array<{
-      transaction: string;
-      signerPubkeys?: string[];
-    }>): TransactionStep => ({
+    const createValidSolanaStep = (
+      id: string,
+      feePayer: string,
+      transactions: Array<{
+        transaction: string;
+        signerPubkeys?: string[];
+      }>,
+    ): TransactionStep => ({
       id,
       chain: Blockchain.SOLANA,
       method: 'signAllAndSendTransactions',
       params: {
         feePayer,
-        transactions
-      }
+        transactions,
+      },
     });
 
     it('should handle basic V4 transaction response with signAllAndSendTransactions method', () => {
@@ -173,10 +186,10 @@ describe('SolanaTransactionAdapters', () => {
           createValidSolanaStep('step1', validSolanaPubkey, [
             {
               transaction: mockTransactionBase64,
-              signerPubkeys: []
-            }
-          ])
-        ]
+              signerPubkeys: [],
+            },
+          ]),
+        ],
       };
 
       const result = SolanaTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -186,7 +199,7 @@ describe('SolanaTransactionAdapters', () => {
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
         type: 'transaction',
-        transactionData: { mockTransaction: true }
+        transactionData: { mockTransaction: true },
       });
     });
 
@@ -196,15 +209,15 @@ describe('SolanaTransactionAdapters', () => {
           createValidSolanaStep('step1', validSolanaPubkey, [
             {
               transaction: mockTransactionBase64,
-              signerPubkeys: []
-            }
-          ])
+              signerPubkeys: [],
+            },
+          ]),
         ],
         metadata: {
           imageUrl: 'https://example.com/image.png',
           tokenImage: 'https://example.com/token.png',
-          metadataUrl: 'https://example.com/metadata.json'
-        }
+          metadataUrl: 'https://example.com/metadata.json',
+        },
       };
 
       const result = SolanaTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -214,7 +227,7 @@ describe('SolanaTransactionAdapters', () => {
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
         type: 'transaction',
-        transactionData: { mockTransaction: true }
+        transactionData: { mockTransaction: true },
       });
     });
 
@@ -224,14 +237,14 @@ describe('SolanaTransactionAdapters', () => {
           createValidSolanaStep('step1', validSolanaPubkey, [
             {
               transaction: mockTransactionBase64,
-              signerPubkeys: []
-            }
-          ])
+              signerPubkeys: [],
+            },
+          ]),
         ],
         metadata: {
           imageUrl: 'https://example.com/updated-image.png',
-          metadataUrl: 'https://example.com/updated-metadata.json'
-        }
+          metadataUrl: 'https://example.com/updated-metadata.json',
+        },
       };
 
       const result = SolanaTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -241,7 +254,7 @@ describe('SolanaTransactionAdapters', () => {
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
         type: 'transaction',
-        transactionData: { mockTransaction: true }
+        transactionData: { mockTransaction: true },
       });
     });
 
@@ -251,10 +264,10 @@ describe('SolanaTransactionAdapters', () => {
           createValidSolanaStep('step1', validSolanaPubkey, [
             {
               transaction: mockTransactionBase64,
-              signerPubkeys: []
-            }
-          ])
-        ]
+              signerPubkeys: [],
+            },
+          ]),
+        ],
       };
 
       const result = SolanaTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -264,7 +277,7 @@ describe('SolanaTransactionAdapters', () => {
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
         type: 'transaction',
-        transactionData: { mockTransaction: true }
+        transactionData: { mockTransaction: true },
       });
     });
 
@@ -274,14 +287,14 @@ describe('SolanaTransactionAdapters', () => {
           createValidSolanaStep('step1', validSolanaPubkey, [
             {
               transaction: mockTransactionBase64,
-              signerPubkeys: []
+              signerPubkeys: [],
             },
             {
               transaction: mockTransactionBase64,
-              signerPubkeys: [validSolanaPubkey, validSolanaPubkey]
-            }
-          ])
-        ]
+              signerPubkeys: [validSolanaPubkey, validSolanaPubkey],
+            },
+          ]),
+        ],
       };
 
       const result = SolanaTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -291,11 +304,11 @@ describe('SolanaTransactionAdapters', () => {
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         type: 'transaction',
-        transactionData: { mockTransaction: true }
+        transactionData: { mockTransaction: true },
       });
       expect(result[1]).toEqual({
         type: 'transaction',
-        transactionData: { mockTransaction: true }
+        transactionData: { mockTransaction: true },
       });
     });
 
@@ -305,16 +318,16 @@ describe('SolanaTransactionAdapters', () => {
           createValidSolanaStep('step1', validSolanaPubkey, [
             {
               transaction: mockTransactionBase64,
-              signerPubkeys: []
-            }
+              signerPubkeys: [],
+            },
           ]),
           createValidSolanaStep('step2', validSolanaPubkey, [
             {
               transaction: mockTransactionBase64,
-              signerPubkeys: [validSolanaPubkey]
-            }
-          ])
-        ]
+              signerPubkeys: [validSolanaPubkey],
+            },
+          ]),
+        ],
       };
 
       const result = SolanaTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -325,17 +338,17 @@ describe('SolanaTransactionAdapters', () => {
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         type: 'transaction',
-        transactionData: { mockTransaction: true }
+        transactionData: { mockTransaction: true },
       });
       expect(result[1]).toEqual({
         type: 'transaction',
-        transactionData: { mockTransaction: true }
+        transactionData: { mockTransaction: true },
       });
     });
 
     it('should throw error for empty steps array', () => {
       const mockResponse: V4TransactionResponse = {
-        steps: []
+        steps: [],
       };
 
       expect(() => {
@@ -354,10 +367,10 @@ describe('SolanaTransactionAdapters', () => {
               from: '0x123',
               to: '0x456',
               value: '0x0',
-              data: '0x0'
-            }
-          }
-        ]
+              data: '0x0',
+            },
+          },
+        ],
       };
 
       expect(() => {
@@ -374,10 +387,10 @@ describe('SolanaTransactionAdapters', () => {
             method: 'unsupportedMethod' as any,
             params: {
               feePayer: 'mockFeePayer',
-              transactions: []
-            }
-          }
-        ]
+              transactions: [],
+            },
+          },
+        ],
       };
 
       expect(() => {
@@ -391,15 +404,17 @@ describe('SolanaTransactionAdapters', () => {
           createValidSolanaStep('step1', 'mockFeePayer', [
             {
               transaction: 'invalid-base64',
-              signerPubkeys: []
-            }
-          ])
-        ]
+              signerPubkeys: [],
+            },
+          ]),
+        ],
       };
 
       // Mock deserialize to throw an error
       deserializeSpy.mockImplementation(() => {
-        throw new Error('Invalid transaction response format, only Solana transactions are supported');
+        throw new Error(
+          'Invalid transaction response format, only Solana transactions are supported',
+        );
       });
 
       expect(() => {

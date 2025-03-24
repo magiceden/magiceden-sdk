@@ -1,4 +1,4 @@
-import { BlockhashWithExpiryBlockHeight } from "@solana/web3.js";
+import { BlockhashWithExpiryBlockHeight } from '@solana/web3.js';
 
 /**
  * Buffer interface

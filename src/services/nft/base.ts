@@ -10,7 +10,12 @@ import { V2ApiClient } from '../../api/clients/v2';
 import { V4ApiClient } from '../../api/clients/v4';
 import { V3ApiClient } from '../../api/clients/v3';
 import { ApiClientOptions } from '../../api/clients/base';
-import { ChainOperation, OperationResponse, SignatureOperation, TransactionOperation } from '../../types/operations';
+import {
+  ChainOperation,
+  OperationResponse,
+  SignatureOperation,
+  TransactionOperation,
+} from '../../types/operations';
 
 /**
  * Base class for NFT services
@@ -122,9 +127,7 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   /**
    * Cancels an NFT listing
    */
-  async cancelListing(
-    params: ChainMethodParams<C, 'cancelListing'>,
-  ): Promise<OperationResponse[]> {
+  async cancelListing(params: ChainMethodParams<C, 'cancelListing'>): Promise<OperationResponse[]> {
     const operations = await this.getCancelListingOperations(params);
     return await this.processOperations(operations);
   }
@@ -139,9 +142,7 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   /**
    * Takes an item offer on an NFT
    */
-  async takeItemOffer(
-    params: ChainMethodParams<C, 'takeItemOffer'>,
-  ): Promise<OperationResponse[]> {
+  async takeItemOffer(params: ChainMethodParams<C, 'takeItemOffer'>): Promise<OperationResponse[]> {
     const operations = await this.getTakeItemOfferOperations(params);
     return await this.processOperations(operations);
   }
@@ -156,9 +157,7 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   /**
    * Makes an item offer on an NFT
    */
-  async makeItemOffer(
-    params: ChainMethodParams<C, 'makeItemOffer'>,
-  ): Promise<OperationResponse[]> {
+  async makeItemOffer(params: ChainMethodParams<C, 'makeItemOffer'>): Promise<OperationResponse[]> {
     const operations = await this.getMakeItemOfferOperations(params);
     return await this.processOperations(operations);
   }
@@ -220,9 +219,7 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   /**
    * Process a sequence of operations
    */
-  protected async processOperations(
-    operations: ChainOperation<C>[],
-  ): Promise<OperationResponse[]> {
+  protected async processOperations(operations: ChainOperation<C>[]): Promise<OperationResponse[]> {
     const results: OperationResponse[] = [];
 
     for (const operation of operations) {
@@ -254,26 +251,26 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
     operation: TransactionOperation<C>,
   ): Promise<TransactionResponse> {
     try {
-    const signature = await this.config.wallet!.signAndSendTransaction(operation.transactionData);
+      const signature = await this.config.wallet!.signAndSendTransaction(operation.transactionData);
 
-    switch (this.config.transactionOptions?.strategy || TransactionStrategy.SignSendAndConfirm) {
-      case TransactionStrategy.SignSendAndConfirm:
-        const txReceipt = await this.config.wallet!.waitForTransactionConfirmation(signature);
-        return {
-          txId: txReceipt.txId,
-          status: txReceipt.status,
-          error: txReceipt.error,
-          metadata: {
-            ...txReceipt.metadata,
-          },
-        };
-      case TransactionStrategy.SignAndSend:
-        return {
-          txId: signature,
-          status: 'pending',
-        };
-      default:
-        throw new Error(
+      switch (this.config.transactionOptions?.strategy || TransactionStrategy.SignSendAndConfirm) {
+        case TransactionStrategy.SignSendAndConfirm:
+          const txReceipt = await this.config.wallet!.waitForTransactionConfirmation(signature);
+          return {
+            txId: txReceipt.txId,
+            status: txReceipt.status,
+            error: txReceipt.error,
+            metadata: {
+              ...txReceipt.metadata,
+            },
+          };
+        case TransactionStrategy.SignAndSend:
+          return {
+            txId: signature,
+            status: 'pending',
+          };
+        default:
+          throw new Error(
             `Unsupported transaction strategy: ${this.config.transactionOptions?.strategy}`,
           );
       }

@@ -5,7 +5,7 @@ import { z } from 'zod';
 /**
  * Parameters for listing an NFT
  */
-export const ListParams = z.object({
+export const BaseListParamsSchema = z.object({
   // Generic parameters that can be shared between chains
   token: z
     .string()
@@ -16,14 +16,14 @@ export const ListParams = z.object({
   expiry: z.number().optional().describe('Listing expiration time (Unix timestamp in seconds)'),
 });
 
-export const EvmListParams = ListParams.extend({});
+export const EvmListParamsSchema = BaseListParamsSchema.extend({});
 
-export const EvmListParamsWithExtras = z.object({
+export const EvmMultipleListParamsSchema = z.object({
   chain: ZodEvmBlockchain.describe('The chain to list on'),
-  params: z.array(EvmListParams).describe('The list parameters'),
+  params: z.array(EvmListParamsSchema).describe('The list parameters'),
 });
 
-export const SolanaListParams = ListParams.extend({
+export const SolanaListParamsSchema = BaseListParamsSchema.extend({
   // Solana-specific parameters
   auctionHouseAddress: z.string().describe('Auction house address'),
   // token in ListParams maps to tokenMint and tokenAccount in V2ListRequest
@@ -38,5 +38,8 @@ export const SolanaListParams = ListParams.extend({
   txFeePayer: z.string().optional().describe('Transaction fee payer address'),
 });
 
-export type EvmListParams = z.infer<typeof EvmListParamsWithExtras>;
-export type SolanaListParams = z.infer<typeof SolanaListParams>;
+export type EvmListParams = z.infer<typeof EvmMultipleListParamsSchema>;
+export type SolanaListParams = z.infer<typeof SolanaListParamsSchema>;
+
+export const ListParams = z.union([EvmMultipleListParamsSchema, SolanaListParamsSchema]);
+export type ListParams = z.infer<typeof ListParams>;

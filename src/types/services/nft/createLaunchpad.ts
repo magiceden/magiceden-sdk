@@ -2,14 +2,20 @@ import { z } from 'zod';
 import { Blockchain, ZodEvmBlockchain } from '../../chains';
 import { EvmProtocolType, SolProtocolType, TokenProtocolType } from '../../protocol';
 import { SolanaSymbol, zSolanaAddress } from '../../solana/primitives';
-import { MAX_NAME_LENGTH, MAX_ROYALTY_BPS, MAX_SYMBOL_LENGTH, MIN_ROYALTY_BPS, SOL_MAX_NAME_LENGTH } from '../../../constants/nft';
+import {
+  MAX_NAME_LENGTH,
+  MAX_ROYALTY_BPS,
+  MAX_SYMBOL_LENGTH,
+  MIN_ROYALTY_BPS,
+  SOL_MAX_NAME_LENGTH,
+} from '../../../constants/nft';
 import { zSolNonFungibleCreator } from '../../solana/nft';
 import { MintStages } from './shared';
 
 /**
  * Parameters for creating a launchpad
  */
-export const CreateLaunchpadParams = z.object({
+export const BaseCreateLaunchpadParamsSchema = z.object({
   chain: z.nativeEnum(Blockchain).describe('Blockchain to deploy on'),
   protocol: TokenProtocolType.describe('Token protocol type'),
   creator: z.string().min(1).describe('Creator wallet address'),
@@ -50,12 +56,12 @@ export const CreateLaunchpadParams = z.object({
   mintStages: MintStages.describe('Mint stages configuration'),
 });
 
-export const EvmCreateLaunchpadParams = CreateLaunchpadParams.extend({
+export const EvmCreateLaunchpadParamsSchema = BaseCreateLaunchpadParamsSchema.extend({
   chain: ZodEvmBlockchain,
   protocol: z.enum([EvmProtocolType.ERC721, EvmProtocolType.ERC1155]),
 });
 
-export const SolanaCreateLaunchpadParams = CreateLaunchpadParams.extend({
+export const SolanaCreateLaunchpadParamsSchema = BaseCreateLaunchpadParamsSchema.extend({
   chain: z.literal(Blockchain.SOLANA).describe('Blockchain to deploy on'),
   protocol: z.literal(SolProtocolType.METAPLEX_CORE).describe('Token protocol type'),
   payoutRecipient: zSolanaAddress.describe('Payout recipient address of mint proceeds'),
@@ -88,5 +94,11 @@ export const SolanaCreateLaunchpadParams = CreateLaunchpadParams.extend({
   isOpenEdition: z.boolean().describe('Whether the collection is an open edition'),
 });
 
-export type EvmCreateLaunchpadParams = z.infer<typeof EvmCreateLaunchpadParams>;
-export type SolanaCreateLaunchpadParams = z.infer<typeof SolanaCreateLaunchpadParams>;
+export type EvmCreateLaunchpadParams = z.infer<typeof EvmCreateLaunchpadParamsSchema>;
+export type SolanaCreateLaunchpadParams = z.infer<typeof SolanaCreateLaunchpadParamsSchema>;
+
+export const CreateLaunchpadParams = z.union([
+  EvmCreateLaunchpadParamsSchema,
+  SolanaCreateLaunchpadParamsSchema,
+]);
+export type CreateLaunchpadParams = z.infer<typeof CreateLaunchpadParams>;

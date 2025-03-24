@@ -30,6 +30,7 @@
     "dist"
   ],
   "scripts": {
+    "publish-package": "npm run clean && npm run build && npm publish",
     "build": "tsc",
     "test": "jest",
     "lint": "eslint . --ext .ts",
