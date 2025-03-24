@@ -51,7 +51,7 @@ export const EvmTransactionAdapters = {
             types: signData.types,
             message: signData.value,
             primaryType: signData.primaryType,
-            post: item.data.post
+            post: item.data.post,
           };
           operations.push({
             type: 'signature',

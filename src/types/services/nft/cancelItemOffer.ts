@@ -32,5 +32,8 @@ export const SolanaCancelItemOfferParamsSchema = BaseCancelItemOfferParamsSchema
 export type EvmCancelItemOfferParams = z.infer<typeof EvmCancelMultipleItemOfferParamsSchema>;
 export type SolanaCancelItemOfferParams = z.infer<typeof SolanaCancelItemOfferParamsSchema>;
 
-export const CancelItemOfferParams = z.union([EvmCancelMultipleItemOfferParamsSchema, SolanaCancelItemOfferParamsSchema]);
+export const CancelItemOfferParams = z.union([
+  EvmCancelMultipleItemOfferParamsSchema,
+  SolanaCancelItemOfferParamsSchema,
+]);
 export type CancelItemOfferParams = z.infer<typeof CancelItemOfferParams>;

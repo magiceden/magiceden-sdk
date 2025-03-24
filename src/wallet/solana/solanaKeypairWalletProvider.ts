@@ -11,7 +11,6 @@ import nacl from 'tweetnacl';
 import { WalletTxReceipt } from '../provider';
 import { SolanaWalletProvider } from './solanaWalletProvider';
 
-
 /**
  * Configuration for the Solana wallet adapter
  */

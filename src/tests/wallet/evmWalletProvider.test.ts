@@ -7,7 +7,7 @@ import { mainnet } from 'viem/chains';
 // Mock viem library
 jest.mock('viem', () => {
   const original = jest.requireActual('viem');
-  
+
   // Mock WalletClient
   const mockWalletClient = {
     account: {
@@ -20,7 +20,7 @@ jest.mock('viem', () => {
     sendTransaction: jest.fn().mockResolvedValue('0xmockTxHash'),
     signTypedData: jest.fn().mockResolvedValue('0xmockTypedDataSignature'),
   };
-  
+
   // Mock PublicClient
   const mockPublicClient = {
     getBalance: jest.fn().mockResolvedValue(BigInt(1000000000000000000)), // 1 ETH
@@ -47,7 +47,7 @@ jest.mock('viem', () => {
     }),
     readContract: jest.fn().mockResolvedValue(123),
   };
-  
+
   return {
     ...original,
     createWalletClient: jest.fn().mockReturnValue(mockWalletClient),
@@ -124,7 +124,7 @@ describe('EvmWalletProvider', () => {
         chain: mainnet,
         transport: http(),
       });
-      
+
       wallet = new ViemWalletProvider({
         privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
         blockchain: Blockchain.BASE,
@@ -194,9 +194,9 @@ describe('EvmWalletProvider', () => {
           primaryType: 'Person',
           message: { name: 'Alice' },
         };
-        
+
         const signature = await wallet.signTypedData(typedData);
-        
+
         expect(signature).toBe('0xmockTypedDataSignature');
         expect(walletClient.signTypedData).toHaveBeenCalledWith({
           account: walletClient.account,
@@ -215,9 +215,9 @@ describe('EvmWalletProvider', () => {
           value: BigInt(1000000000000000),
           data: '0xdata',
         };
-        
+
         const signedTx = await wallet.signTransaction(tx);
-        
+
         expect(signedTx).toBe('0xmockSignedTx');
         expect(walletClient.signTransaction).toHaveBeenCalledWith({
           account: walletClient.account,
@@ -236,9 +236,9 @@ describe('EvmWalletProvider', () => {
           value: BigInt(1000000000000000),
           data: '0xdata',
         };
-        
+
         const txHash = await wallet.signAndSendTransaction(tx);
-        
+
         expect(txHash).toBe('0xmockTxHash');
         expect(walletClient.sendTransaction).toHaveBeenCalled();
       });
@@ -247,7 +247,7 @@ describe('EvmWalletProvider', () => {
     describe('waitForTransactionConfirmation', () => {
       it('should wait for transaction confirmation', async () => {
         const receipt = await wallet.waitForTransactionConfirmation('0xmockTxHash');
-        
+
         expect(receipt).toEqual({
           txId: '0xmockTxHash',
           status: 'confirmed',
@@ -276,19 +276,21 @@ describe('EvmWalletProvider', () => {
       it('should read a contract', async () => {
         const params = {
           address: '0xcontract' as `0x${string}`,
-          abi: [{ 
-            name: 'balanceOf', 
-            type: 'function',
-            inputs: [{ name: 'owner', type: 'address' }],
-            outputs: [{ name: 'balance', type: 'uint256' }],
-            stateMutability: 'view'
-          }],
+          abi: [
+            {
+              name: 'balanceOf',
+              type: 'function',
+              inputs: [{ name: 'owner', type: 'address' }],
+              outputs: [{ name: 'balance', type: 'uint256' }],
+              stateMutability: 'view',
+            },
+          ],
           functionName: 'balanceOf',
           args: ['0xuser' as `0x${string}`],
         };
-        
+
         const result = await wallet.readContract(params);
-        
+
         expect(result).toBe(123);
       });
     });
@@ -300,18 +302,20 @@ describe('EvmWalletProvider', () => {
           chain: mainnet,
           transport: http(),
         });
-        
+
         // Override the account property
         Object.defineProperty(noAccountClient, 'account', {
           value: null,
         });
-        
+
         const noAccountWallet = new ViemWalletProvider({
           privateKey: '0x0000000000000000000000000000000000000000000000000000000000000000',
           blockchain: Blockchain.BASE,
         });
-        
-        await expect(noAccountWallet.getBalance()).rejects.toThrow('No account connected to wallet');
+
+        await expect(noAccountWallet.getBalance()).rejects.toThrow(
+          'No account connected to wallet',
+        );
       });
     });
   });

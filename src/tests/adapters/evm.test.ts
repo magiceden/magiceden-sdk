@@ -1,6 +1,11 @@
 import { EvmTransactionAdapters } from '../../adapters/transactions';
 import { Blockchain } from '../../types/chains';
-import { V4TransactionResponse, V4CreateLaunchpadResponse, V4UpdateLaunchpadResponse, V4MintResponse } from '../../types/api';
+import {
+  V4TransactionResponse,
+  V4CreateLaunchpadResponse,
+  V4UpdateLaunchpadResponse,
+  V4MintResponse,
+} from '../../types/api';
 import { TransactionStep } from '../../types/services/nft/shared';
 
 describe('EvmTransactionAdapters', () => {
@@ -9,13 +14,19 @@ describe('EvmTransactionAdapters', () => {
     beforeEach(() => {
       jest.spyOn(console, 'log').mockImplementation(() => {});
     });
-    
+
     afterEach(() => {
       jest.restoreAllMocks();
     });
 
     // Helper function to create a valid EVM transaction step
-    const createValidEvmStep = (id: string, from: string, to: string, value?: string, data?: string): TransactionStep => ({
+    const createValidEvmStep = (
+      id: string,
+      from: string,
+      to: string,
+      value?: string,
+      data?: string,
+    ): TransactionStep => ({
       id,
       chain: Blockchain.ETHEREUM,
       method: 'eth_sendTransaction',
@@ -23,15 +34,19 @@ describe('EvmTransactionAdapters', () => {
         from,
         to,
         ...(value ? { value } : {}),
-        ...(data ? { data } : {})
-      }
+        ...(data ? { data } : {}),
+      },
     });
 
     it('should handle basic V4 transaction response with eth_sendTransaction method', () => {
       const mockResponse: V4TransactionResponse = {
         steps: [
-          createValidEvmStep('step1', '0x1234567890123456789012345678901234567890', '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd')
-        ]
+          createValidEvmStep(
+            'step1',
+            '0x1234567890123456789012345678901234567890',
+            '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
+          ),
+        ],
       };
 
       const result = EvmTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -40,7 +55,7 @@ describe('EvmTransactionAdapters', () => {
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
         from: '0x1234567890123456789012345678901234567890',
-        to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd'
+        to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
       });
     });
 
@@ -48,18 +63,18 @@ describe('EvmTransactionAdapters', () => {
       const mockResponse: V4CreateLaunchpadResponse = {
         steps: [
           createValidEvmStep(
-            'step1', 
-            '0x1234567890123456789012345678901234567890', 
+            'step1',
+            '0x1234567890123456789012345678901234567890',
             '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
             '0x123',
-            '0x0123456789abcdef'
-          )
+            '0x0123456789abcdef',
+          ),
         ],
         metadata: {
           imageUrl: 'https://example.com/image.png',
           tokenImage: 'https://example.com/token.png',
-          metadataUrl: 'https://example.com/metadata.json'
-        }
+          metadataUrl: 'https://example.com/metadata.json',
+        },
       };
 
       const result = EvmTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -70,7 +85,7 @@ describe('EvmTransactionAdapters', () => {
         from: '0x1234567890123456789012345678901234567890',
         to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
         value: BigInt('0x123'),
-        data: '0x0123456789abcdef'
+        data: '0x0123456789abcdef',
       });
     });
 
@@ -78,17 +93,17 @@ describe('EvmTransactionAdapters', () => {
       const mockResponse: V4UpdateLaunchpadResponse = {
         steps: [
           createValidEvmStep(
-            'step1', 
-            '0x1234567890123456789012345678901234567890', 
+            'step1',
+            '0x1234567890123456789012345678901234567890',
             '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
             '0x0',
-            '0xabcdef'
-          )
+            '0xabcdef',
+          ),
         ],
         metadata: {
           imageUrl: 'https://example.com/updated-image.png',
-          metadataUrl: 'https://example.com/updated-metadata.json'
-        }
+          metadataUrl: 'https://example.com/updated-metadata.json',
+        },
       };
 
       const result = EvmTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -99,7 +114,7 @@ describe('EvmTransactionAdapters', () => {
         from: '0x1234567890123456789012345678901234567890',
         to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
         value: BigInt('0x0'),
-        data: '0xabcdef'
+        data: '0xabcdef',
       });
     });
 
@@ -107,13 +122,13 @@ describe('EvmTransactionAdapters', () => {
       const mockResponse: V4MintResponse = {
         steps: [
           createValidEvmStep(
-            'step1', 
-            '0x1234567890123456789012345678901234567890', 
+            'step1',
+            '0x1234567890123456789012345678901234567890',
             '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
             undefined,
-            '0xabcdef0123456789'
-          )
-        ]
+            '0xabcdef0123456789',
+          ),
+        ],
       };
 
       const result = EvmTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -123,7 +138,7 @@ describe('EvmTransactionAdapters', () => {
       expect(result[0]).toEqual({
         from: '0x1234567890123456789012345678901234567890',
         to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
-        data: '0xabcdef0123456789'
+        data: '0xabcdef0123456789',
       });
     });
 
@@ -131,19 +146,19 @@ describe('EvmTransactionAdapters', () => {
       const mockResponse: V4TransactionResponse = {
         steps: [
           createValidEvmStep(
-            'step1', 
-            '0x1234567890123456789012345678901234567890', 
+            'step1',
+            '0x1234567890123456789012345678901234567890',
             '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
-            '0x123'
+            '0x123',
           ),
           createValidEvmStep(
-            'step2', 
-            '0x2234567890123456789012345678901234567890', 
+            'step2',
+            '0x2234567890123456789012345678901234567890',
             '0xbbcdefabcdefabcdefabcdefabcdefabcdefabcd',
             '0x456',
-            '0xfedcba'
-          )
-        ]
+            '0xfedcba',
+          ),
+        ],
       };
 
       const result = EvmTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -153,13 +168,13 @@ describe('EvmTransactionAdapters', () => {
       expect(result[0]).toEqual({
         from: '0x1234567890123456789012345678901234567890',
         to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
-        value: BigInt('0x123')
+        value: BigInt('0x123'),
       });
       expect(result[1]).toEqual({
         from: '0x2234567890123456789012345678901234567890',
         to: '0xbbcdefabcdefabcdefabcdefabcdefabcdefabcd',
         value: BigInt('0x456'),
-        data: '0xfedcba'
+        data: '0xfedcba',
       });
     });
 
@@ -175,10 +190,10 @@ describe('EvmTransactionAdapters', () => {
               to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
               value: '0x123',
               chainId: 1,
-              gas: '0x5208' // 21000 in hex
-            }
-          }
-        ]
+              gas: '0x5208', // 21000 in hex
+            },
+          },
+        ],
       };
 
       const result = EvmTransactionAdapters.fromV4TransactionResponse(mockResponse);
@@ -190,13 +205,13 @@ describe('EvmTransactionAdapters', () => {
         to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
         value: BigInt('0x123'),
         chainId: 1,
-        gas: BigInt('0x5208')
+        gas: BigInt('0x5208'),
       });
     });
 
     it('should throw error for empty steps array', () => {
       const mockResponse: V4TransactionResponse = {
-        steps: []
+        steps: [],
       };
 
       expect(() => {
@@ -213,10 +228,10 @@ describe('EvmTransactionAdapters', () => {
             method: 'unsupportedMethod' as any,
             params: {
               from: '0x1234567890123456789012345678901234567890',
-              to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd'
-            }
-          }
-        ]
+              to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
+            },
+          },
+        ],
       };
 
       expect(() => {
@@ -233,10 +248,10 @@ describe('EvmTransactionAdapters', () => {
             method: 'eth_sendTransaction',
             params: {
               from: 'invalid-address',
-              to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd'
-            }
-          }
-        ]
+              to: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
+            },
+          },
+        ],
       };
 
       expect(() => {
@@ -253,10 +268,10 @@ describe('EvmTransactionAdapters', () => {
             method: 'eth_sendTransaction',
             params: {
               from: '0x1234567890123456789012345678901234567890',
-              to: 'invalid-address'
-            }
-          }
-        ]
+              to: 'invalid-address',
+            },
+          },
+        ],
       };
 
       expect(() => {

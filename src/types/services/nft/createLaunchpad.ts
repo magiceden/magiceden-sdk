@@ -2,7 +2,13 @@ import { z } from 'zod';
 import { Blockchain, ZodEvmBlockchain } from '../../chains';
 import { EvmProtocolType, SolProtocolType, TokenProtocolType } from '../../protocol';
 import { SolanaSymbol, zSolanaAddress } from '../../solana/primitives';
-import { MAX_NAME_LENGTH, MAX_ROYALTY_BPS, MAX_SYMBOL_LENGTH, MIN_ROYALTY_BPS, SOL_MAX_NAME_LENGTH } from '../../../constants/nft';
+import {
+  MAX_NAME_LENGTH,
+  MAX_ROYALTY_BPS,
+  MAX_SYMBOL_LENGTH,
+  MIN_ROYALTY_BPS,
+  SOL_MAX_NAME_LENGTH,
+} from '../../../constants/nft';
 import { zSolNonFungibleCreator } from '../../solana/nft';
 import { MintStages } from './shared';
 
@@ -91,5 +97,8 @@ export const SolanaCreateLaunchpadParamsSchema = BaseCreateLaunchpadParamsSchema
 export type EvmCreateLaunchpadParams = z.infer<typeof EvmCreateLaunchpadParamsSchema>;
 export type SolanaCreateLaunchpadParams = z.infer<typeof SolanaCreateLaunchpadParamsSchema>;
 
-export const CreateLaunchpadParams = z.union([EvmCreateLaunchpadParamsSchema, SolanaCreateLaunchpadParamsSchema]);
+export const CreateLaunchpadParams = z.union([
+  EvmCreateLaunchpadParamsSchema,
+  SolanaCreateLaunchpadParamsSchema,
+]);
 export type CreateLaunchpadParams = z.infer<typeof CreateLaunchpadParams>;

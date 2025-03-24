@@ -34,5 +34,8 @@ export const SolanaTransferParamsSchema = BaseTransferParamsSchema.extend({
 export type EvmTransferParams = z.infer<typeof EvmMultipleTransferParamsSchema>;
 export type SolanaTransferParams = z.infer<typeof SolanaTransferParamsSchema>;
 
-export const TransferParams = z.union([EvmMultipleTransferParamsSchema, SolanaTransferParamsSchema]);
+export const TransferParams = z.union([
+  EvmMultipleTransferParamsSchema,
+  SolanaTransferParamsSchema,
+]);
 export type TransferParams = z.infer<typeof TransferParams>;

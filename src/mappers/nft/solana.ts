@@ -57,7 +57,10 @@ export const SolanaApiMappers = {
     /**
      * Maps generic cancel listing parameters to Solana-specific API request
      */
-    cancelListingRequest: (seller: string, params: SolanaCancelListingParams): V2CancelListingRequest => ({
+    cancelListingRequest: (
+      seller: string,
+      params: SolanaCancelListingParams,
+    ): V2CancelListingRequest => ({
       seller,
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress,
@@ -73,7 +76,10 @@ export const SolanaApiMappers = {
     /**
      * Maps generic make item offer parameters to Solana-specific API request
      */
-    makeItemOfferRequest: (buyer: string, params: SolanaMakeItemOfferParams): V2MakeItemOfferRequest => ({
+    makeItemOfferRequest: (
+      buyer: string,
+      params: SolanaMakeItemOfferParams,
+    ): V2MakeItemOfferRequest => ({
       buyer,
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress,
@@ -90,7 +96,10 @@ export const SolanaApiMappers = {
     /**
      * Maps generic cancel item offer parameters to Solana-specific API request
      */
-    cancelItemOfferRequest: (buyer: string, params: SolanaCancelItemOfferParams): V2CancelItemOfferRequest => ({
+    cancelItemOfferRequest: (
+      buyer: string,
+      params: SolanaCancelItemOfferParams,
+    ): V2CancelItemOfferRequest => ({
       buyer,
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress,
@@ -105,7 +114,10 @@ export const SolanaApiMappers = {
     /**
      * Maps generic take item offer parameters to Solana-specific API request
      */
-    takeItemOfferRequest: (seller: string,params: SolanaTakeItemOfferParams): V2TakeItemOfferRequest => ({
+    takeItemOfferRequest: (
+      seller: string,
+      params: SolanaTakeItemOfferParams,
+    ): V2TakeItemOfferRequest => ({
       seller,
       buyer: params.buyer,
       auctionHouseAddress: params.auctionHouseAddress,
@@ -159,7 +171,7 @@ export const SolanaApiMappers = {
      * Maps Solana publish launchpad parameters to V4 publish launchpad request
      */
     publishLaunchpadRequest: (params: SolanaPublishLaunchpadParams): V4PublishLaunchpadRequest => ({
-      ...params
+      ...params,
     }),
 
     /**
@@ -167,21 +179,21 @@ export const SolanaApiMappers = {
      */
     createLaunchpadRequest: (params: SolanaCreateLaunchpadParams): V4CreateLaunchpadRequest => ({
       // All variables have the same name
-      ...params
+      ...params,
     }),
 
     /**
      * Maps Solana update launchpad parameters to V4 update launchpad request
      */
     updateLaunchpadRequest: (params: SolanaUpdateLaunchpadParams): V4UpdateLaunchpadRequest => ({
-      ...params
+      ...params,
     }),
 
     /**
      * Maps Solana mint parameters to V4 mint request
      */
     mintRequest: (params: SolanaMintParams): V4MintRequest => ({
-      ...params
+      ...params,
     }),
   },
 };

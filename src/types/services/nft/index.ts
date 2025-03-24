@@ -62,5 +62,5 @@ export interface ChainParamTypes {
  */
 export type ChainMethodParams<
   C extends SupportedChain,
-  M extends keyof ChainParamTypes[C]
+  M extends keyof ChainParamTypes[C],
 > = ChainParamTypes[C][M];

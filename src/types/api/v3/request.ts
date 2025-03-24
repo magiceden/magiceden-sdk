@@ -40,7 +40,9 @@ export interface V3CancelOrderRequest extends V3EVMRequest {
   options?: CancelOrderOptions;
 }
 
-type TransferTokenBody = NonNullable<paths['/execute/transfer/v1']['post']['parameters']['body']['body']>;
+type TransferTokenBody = NonNullable<
+  paths['/execute/transfer/v1']['post']['parameters']['body']['body']
+>;
 export interface V3TransferRequest extends V3EVMRequest {
   to: `0x${string}`;
   from: `0x${string}`;

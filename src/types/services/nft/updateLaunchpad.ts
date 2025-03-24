@@ -2,7 +2,12 @@ import { z } from 'zod';
 import { Blockchain, ZodEvmBlockchain } from '../../chains';
 import { EvmProtocolType, SolProtocolType, TokenProtocolType } from '../../protocol';
 import { SolanaSymbol, zSolanaAddress } from '../../solana/primitives';
-import { MAX_NAME_LENGTH, MAX_ROYALTY_BPS, MIN_ROYALTY_BPS, SOL_MAX_NAME_LENGTH } from '../../../constants/nft';
+import {
+  MAX_NAME_LENGTH,
+  MAX_ROYALTY_BPS,
+  MIN_ROYALTY_BPS,
+  SOL_MAX_NAME_LENGTH,
+} from '../../../constants/nft';
 import { EVMAddressToLowerCaseSchema } from '../../evm';
 import { MintStages } from './shared';
 import { zSolAuthorization } from '../../solana';
@@ -43,7 +48,7 @@ export const BaseUpdateLaunchpadParamsSchema = z.object({
     )
     .min(1)
     .refine(
-      creators => {
+      (creators) => {
         return creators.reduce((acc, creator) => acc + creator.share, 0) === 100;
       },
       {
@@ -52,7 +57,11 @@ export const BaseUpdateLaunchpadParamsSchema = z.object({
     )
     .optional()
     .describe('Royalty recipients and their shares'),
-  payoutRecipient: z.string().min(1).optional().describe('Payout recipient address of mint proceeds'),
+  payoutRecipient: z
+    .string()
+    .min(1)
+    .optional()
+    .describe('Payout recipient address of mint proceeds'),
   nftMetadataUrl: z.string().min(1).optional().describe('JSON file that contains all the metadata'),
   mintStages: MintStages.optional().describe('Mint stages configuration'),
   tokenImageUrl: z.string().min(1).optional().describe('URL for image for the token'),
@@ -83,5 +92,8 @@ export const SolanaUpdateLaunchpadParamsSchema = BaseUpdateLaunchpadParamsSchema
 export type EvmUpdateLaunchpadParams = z.infer<typeof EvmUpdateLaunchpadParamsSchema>;
 export type SolanaUpdateLaunchpadParams = z.infer<typeof SolanaUpdateLaunchpadParamsSchema>;
 
-export const UpdateLaunchpadParams = z.union([EvmUpdateLaunchpadParamsSchema, SolanaUpdateLaunchpadParamsSchema]);
+export const UpdateLaunchpadParams = z.union([
+  EvmUpdateLaunchpadParamsSchema,
+  SolanaUpdateLaunchpadParamsSchema,
+]);
 export type UpdateLaunchpadParams = z.infer<typeof UpdateLaunchpadParams>;

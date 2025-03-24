@@ -1,14 +1,14 @@
-import { SupportedChain } from "./chains";
-import { TransactionRequest } from "viem";
-import { VersionedTransaction } from "@solana/web3.js";
+import { SupportedChain } from './chains';
+import { TransactionRequest } from 'viem';
+import { VersionedTransaction } from '@solana/web3.js';
 
 /**
  * Transaction strategy
- * 
+ *
  * SignAndSend: Sign and immediately send any transactions
- * 
+ *
  * SignSendAndConfirm: Sign and send transactions, then wait for confirmation
- * 
+ *
  * SignSendAndConfirm will be used by default if no strategy is provided.
  * If you want to sign and send transactions async, use SignAndSend.
  * This will allow you to continue executing some other code while the transactions are being sent, and you can check the status of the transactions later.
@@ -31,7 +31,7 @@ export enum TransactionStrategy {
 export interface TransactionResponse {
   /**
    * Transaction ID or signature.
-   * 
+   *
    * For Solana, this is the signature.
    * For EVM, this is the transaction hash.
    */

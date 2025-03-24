@@ -1,1 +1,1 @@
-export * from "./evmWalletProvider";
+export * from './evmWalletProvider';

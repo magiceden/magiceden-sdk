@@ -27,7 +27,9 @@ export const SolanaMintParamsSchema = BaseMintParamsSchema.extend({
   candyMachineId: zSolanaAddress.describe('Candy machine ID'),
   symbol: SolanaSymbol.describe('Collection symbol'),
   payer: zSolanaAddress.describe('Payer address'),
-  recipient: zSolanaAddress.optional().describe('Recipient address (if not specified, then recipient === payer)'),
+  recipient: zSolanaAddress
+    .optional()
+    .describe('Recipient address (if not specified, then recipient === payer)'),
   nftAmount: z.number().int().min(1).max(5).describe('Number of NFTs to mint (max 5 for Solana)'),
 });
 

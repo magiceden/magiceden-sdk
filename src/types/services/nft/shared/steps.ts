@@ -45,7 +45,10 @@ export const SolanaTransactionParams = z.object({
     .array(
       z.object({
         transaction: z.string().describe('Base64 encoded transaction'),
-        signerPubkeys: z.array(zSolanaAddress).optional().describe('Public keys of required signers'),
+        signerPubkeys: z
+          .array(zSolanaAddress)
+          .optional()
+          .describe('Public keys of required signers'),
       }),
     )
     .describe('Array of transactions'),

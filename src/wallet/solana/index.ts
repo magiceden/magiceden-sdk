@@ -1,2 +1,2 @@
-export * from "./solanaWalletProvider";
-export * from "./solanaKeypairWalletProvider";
+export * from './solanaWalletProvider';
+export * from './solanaKeypairWalletProvider';

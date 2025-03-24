@@ -1,24 +1,20 @@
 import { SolanaKeypairWalletProvider } from '../../wallet/solana/solanaKeypairWalletProvider';
-import {
-  Keypair,
-  Connection,
-  VersionedTransaction,
-} from '@solana/web3.js';
+import { Keypair, Connection, VersionedTransaction } from '@solana/web3.js';
 
 // Mock the Connection class and other Solana objects
 jest.mock('@solana/web3.js', () => {
   const original = jest.requireActual('@solana/web3.js');
-  
+
   // Create a mock Keypair class
   class MockKeypair {
-    publicKey = { 
+    publicKey = {
       toBase58: () => 'mock-public-key',
       toBytes: () => new Uint8Array(32),
       toString: () => 'mock-public-key',
     };
     secretKey = new Uint8Array(64).fill(1);
   }
-  
+
   // Create a mock VersionedTransaction class
   class MockVersionedTransaction {
     constructor() {
@@ -26,7 +22,7 @@ jest.mock('@solana/web3.js', () => {
     }
     sign = jest.fn();
   }
-  
+
   return {
     ...original,
     Keypair: {
@@ -63,8 +59,8 @@ jest.mock('@solana/web3.js', () => {
       setComputeUnitLimit: jest.fn().mockReturnValue({}),
     },
     PublicKey: jest.fn().mockImplementation((key) => ({
-      toBase58: () => typeof key === 'string' ? key : 'mock-public-key',
-      toString: () => typeof key === 'string' ? key : 'mock-public-key',
+      toBase58: () => (typeof key === 'string' ? key : 'mock-public-key'),
+      toString: () => (typeof key === 'string' ? key : 'mock-public-key'),
     })),
   };
 });
@@ -153,7 +149,7 @@ describe('SolanaKeypairWalletProvider', () => {
       // Create a mock transaction with a dummy message
       mockTransaction = new VersionedTransaction(
         // Pass a mock message to the constructor
-        {} as any
+        {} as any,
       );
     });
 
@@ -176,9 +172,9 @@ describe('SolanaKeypairWalletProvider', () => {
       it('should sign and send a transaction', async () => {
         const signSpy = jest.spyOn(wallet, 'signTransaction');
         const sendSpy = jest.spyOn(wallet, 'signAndSendTransaction');
-        
+
         const signature = await wallet.signAndSendTransaction(mockTransaction);
-        
+
         expect(signSpy).toHaveBeenCalledWith(mockTransaction);
         expect(sendSpy).toHaveBeenCalled();
         expect(signature).toBe('mock-signature');
@@ -196,7 +192,7 @@ describe('SolanaKeypairWalletProvider', () => {
         metadata: {
           blockhash: 'mock-blockhash',
           lastValidBlockHeight: 123456,
-        }
+        },
       });
     });
   });

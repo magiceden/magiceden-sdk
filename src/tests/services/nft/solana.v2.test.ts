@@ -9,7 +9,6 @@ jest.mock('../../../mappers/nft/solana');
 jest.mock('../../../adapters/transactions/solana');
 jest.mock('../../../api/clients/v2');
 
-
 describe('SolanaNftService V2', () => {
   let service: SolanaNftService;
   let mockWallet: any;

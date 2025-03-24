@@ -1,4 +1,4 @@
-import { EvmChainId } from "../chains/evm";
+import { EvmChainId } from '../chains/evm';
 
 export interface PaymentTokenWithoutChain {
   address: `0x${string}`;

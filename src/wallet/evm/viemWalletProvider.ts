@@ -50,7 +50,7 @@ export type ViemWalletProviderConfig = {
    * The blockchain to use for the wallet
    */
   blockchain: EvmBlockchain;
-  
+
   /**
    * Options for the ViemWalletProvider
    */

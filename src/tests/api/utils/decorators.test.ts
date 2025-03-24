@@ -4,7 +4,6 @@ import { ApiError } from '../../../errors';
 import { BaseApiClient } from '../../../api/clients/base';
 import { ChainType } from '../../../types';
 
-
 // Mock class that extends BaseApiClient for testing
 class TestApiClient extends BaseApiClient {
   constructor(chain: ChainType) {

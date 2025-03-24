@@ -31,5 +31,8 @@ export const SolanaPublishLaunchpadParamsSchema = BasePublishLaunchpadParamsSche
 export type EvmPublishLaunchpadParams = z.infer<typeof EvmPublishLaunchpadParamsSchema>;
 export type SolanaPublishLaunchpadParams = z.infer<typeof SolanaPublishLaunchpadParamsSchema>;
 
-export const PublishLaunchpadParams = z.union([EvmPublishLaunchpadParamsSchema, SolanaPublishLaunchpadParamsSchema]);
+export const PublishLaunchpadParams = z.union([
+  EvmPublishLaunchpadParamsSchema,
+  SolanaPublishLaunchpadParamsSchema,
+]);
 export type PublishLaunchpadParams = z.infer<typeof PublishLaunchpadParams>;

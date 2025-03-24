@@ -15,7 +15,7 @@ describe('SolanaApiMappers V2', () => {
         prioFeeMicroLamports: 5000,
         maxPrioFeeLamports: 10000,
         exactPrioFeeLamports: 7500,
-        txFeePayer: 'feePayer123'
+        txFeePayer: 'feePayer123',
       };
 
       const result = SolanaApiMappers.v2.listRequest(seller, params);
@@ -31,7 +31,7 @@ describe('SolanaApiMappers V2', () => {
         prioFeeMicroLamports: 5000,
         maxPrioFeeLamports: 10000,
         exactPrioFeeLamports: 7500,
-        txFeePayer: 'feePayer123'
+        txFeePayer: 'feePayer123',
       });
     });
 
@@ -42,7 +42,7 @@ describe('SolanaApiMappers V2', () => {
         price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
-        expiry: 1234567890
+        expiry: 1234567890,
       };
 
       const result = SolanaApiMappers.v2.listRequest(seller, params);
@@ -58,7 +58,7 @@ describe('SolanaApiMappers V2', () => {
       const splPrice: SplAmount = {
         address: 'splTokenMint123',
         rawAmount: BigInt(1000000),
-        decimals: 9
+        decimals: 9,
       };
 
       const seller = 'sellerAddress123';
@@ -68,7 +68,7 @@ describe('SolanaApiMappers V2', () => {
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
         expiry: 1234567890,
-        splPrice
+        splPrice,
       };
 
       const result = SolanaApiMappers.v2.listRequest(seller, params);
@@ -89,7 +89,7 @@ describe('SolanaApiMappers V2', () => {
         sellerReferral: 'referral123',
         prioFeeMicroLamports: 5000,
         maxPrioFeeLamports: 10000,
-        exactPrioFeeLamports: 7500
+        exactPrioFeeLamports: 7500,
       };
 
       const result = SolanaApiMappers.v2.cancelListingRequest(seller, params);
@@ -104,7 +104,7 @@ describe('SolanaApiMappers V2', () => {
         sellerReferral: 'referral123',
         prioFeeMicroLamports: 5000,
         maxPrioFeeLamports: 10000,
-        exactPrioFeeLamports: 7500
+        exactPrioFeeLamports: 7500,
       });
     });
 
@@ -115,7 +115,7 @@ describe('SolanaApiMappers V2', () => {
         price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
         tokenAccount: 'tokenAccount123',
-        expiry: 1234567890
+        expiry: 1234567890,
       };
 
       const result = SolanaApiMappers.v2.cancelListingRequest(seller, params);
@@ -140,7 +140,7 @@ describe('SolanaApiMappers V2', () => {
         buyerCreatorRoyaltyPercent: 5,
         prioFeeMicroLamports: 5000,
         maxPrioFeeLamports: 10000,
-        exactPrioFeeLamports: 7500
+        exactPrioFeeLamports: 7500,
       };
 
       const result = SolanaApiMappers.v2.makeItemOfferRequest(buyer, params);
@@ -156,7 +156,7 @@ describe('SolanaApiMappers V2', () => {
         buyerCreatorRoyaltyPercent: 5,
         prioFeeMicroLamports: 5000,
         maxPrioFeeLamports: 10000,
-        exactPrioFeeLamports: 7500
+        exactPrioFeeLamports: 7500,
       });
     });
 
@@ -166,7 +166,7 @@ describe('SolanaApiMappers V2', () => {
         token: 'tokenMintAddress123',
         price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
-        expiry: 1234567890
+        expiry: 1234567890,
       };
 
       const result = SolanaApiMappers.v2.makeItemOfferRequest(buyer, params);
@@ -191,7 +191,7 @@ describe('SolanaApiMappers V2', () => {
         expiry: 1234567890,
         prioFeeMicroLamports: 5000,
         maxPrioFeeLamports: 10000,
-        exactPrioFeeLamports: 7500
+        exactPrioFeeLamports: 7500,
       };
 
       const result = SolanaApiMappers.v2.cancelItemOfferRequest(buyer, params);
@@ -205,7 +205,7 @@ describe('SolanaApiMappers V2', () => {
         expiry: 1234567890,
         prioFeeMicroLamports: 5000,
         maxPrioFeeLamports: 10000,
-        exactPrioFeeLamports: 7500
+        exactPrioFeeLamports: 7500,
       });
     });
 
@@ -215,7 +215,7 @@ describe('SolanaApiMappers V2', () => {
         token: 'tokenMintAddress123',
         price: '1000000000',
         auctionHouseAddress: 'auctionHouse123',
-        expiry: 1234567890
+        expiry: 1234567890,
       };
 
       const result = SolanaApiMappers.v2.cancelItemOfferRequest(buyer, params);
@@ -243,7 +243,7 @@ describe('SolanaApiMappers V2', () => {
         sellerExpiry: 1234567891,
         prioFeeMicroLamports: 5000,
         maxPrioFeeLamports: 10000,
-        exactPrioFeeLamports: 7500
+        exactPrioFeeLamports: 7500,
       };
 
       const result = SolanaApiMappers.v2.takeItemOfferRequest(seller, params);
@@ -262,7 +262,7 @@ describe('SolanaApiMappers V2', () => {
         sellerExpiry: 1234567891,
         prioFeeMicroLamports: 5000,
         maxPrioFeeLamports: 10000,
-        exactPrioFeeLamports: 7500
+        exactPrioFeeLamports: 7500,
       });
     });
 
@@ -274,7 +274,7 @@ describe('SolanaApiMappers V2', () => {
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
         newPrice: '1100000000',
-        sellerExpiry: 1234567891
+        sellerExpiry: 1234567891,
       };
 
       const result = SolanaApiMappers.v2.takeItemOfferRequest(seller, params);
@@ -294,7 +294,7 @@ describe('SolanaApiMappers V2', () => {
       const splPrice: SplAmount = {
         address: 'splTokenMint123',
         rawAmount: BigInt(1000000),
-        decimals: 9
+        decimals: 9,
       };
 
       const buyer = 'buyerAddress123';
@@ -309,7 +309,7 @@ describe('SolanaApiMappers V2', () => {
         buyerExpiry: 1234567890,
         sellerExpiry: 1234567891,
         buyerCreatorRoyaltyPercent: 5,
-        splPrice
+        splPrice,
       };
 
       const result = SolanaApiMappers.v2.buyRequest(buyer, params);
@@ -326,7 +326,7 @@ describe('SolanaApiMappers V2', () => {
         buyerExpiry: 1234567890,
         sellerExpiry: 1234567891,
         buyerCreatorRoyaltyPercent: 5,
-        splPrice
+        splPrice,
       });
     });
 
@@ -338,7 +338,7 @@ describe('SolanaApiMappers V2', () => {
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
         price: '1000000000',
-        sellerExpiry: 1234567891
+        sellerExpiry: 1234567891,
       };
 
       const result = SolanaApiMappers.v2.buyRequest(buyer, params);
@@ -357,7 +357,7 @@ describe('SolanaApiMappers V2', () => {
       const params = {
         token: 'tokenMintAddress123',
         to: 'toAddress123',
-        isCompressed: true
+        isCompressed: true,
       };
 
       const result = SolanaApiMappers.v2.transferRequest(from, params);
@@ -366,7 +366,7 @@ describe('SolanaApiMappers V2', () => {
         mint: 'tokenMintAddress123',
         from: 'fromAddress123',
         to: 'toAddress123',
-        isCompressed: true
+        isCompressed: true,
       });
     });
 
@@ -374,7 +374,7 @@ describe('SolanaApiMappers V2', () => {
       const from = 'fromAddress123';
       const params = {
         token: 'tokenMintAddress123',
-        to: 'toAddress123'
+        to: 'toAddress123',
       };
 
       const result = SolanaApiMappers.v2.transferRequest(from, params);

@@ -34,15 +34,15 @@ describe('EvmApiMappers V4', () => {
               kind: MintStageKind.Public,
               price: {
                 currency: 'ETH',
-                raw: '100000000000000000'
+                raw: '100000000000000000',
               },
               startTime: '2023-01-01T00:00:00Z',
               endTime: '2023-01-02T00:00:00Z',
               walletLimit: 5,
-              maxSupply: 100
-            }
+              maxSupply: 100,
+            },
           ],
-          maxSupply: 100
+          maxSupply: 100,
         },
       };
 
@@ -50,7 +50,7 @@ describe('EvmApiMappers V4', () => {
 
       // Verify the result is a valid V4CreateLaunchpadRequest
       expect(result).toBeDefined();
-      
+
       // Verify required EVM-specific properties
       expect(result.chain).toBe(Blockchain.ETHEREUM);
       expect(result.protocol).toBe(EvmProtocolType.ERC721);
@@ -67,7 +67,7 @@ describe('EvmApiMappers V4', () => {
       expect(result.payoutRecipient).toBe('0x2345678901abcdef2345678901abcdef23456789');
       expect(result.nftMetadataUrl).toBe('https://example.com/metadata.json');
       expect(result.tokenImageUrl).toBe('https://example.com/token.png');
-      
+
       // Verify mint stages
       expect(result.mintStages).toBeDefined();
       expect(result.mintStages.stages).toHaveLength(1);
@@ -92,9 +92,7 @@ describe('EvmApiMappers V4', () => {
         imageUrl: 'https://example.com/image.png',
         description: 'Test description',
         royaltyBps: 500,
-        royaltyRecipients: [
-          { address: '0xabcdef1234567890abcdef1234567890abcdef12', share: 100 },
-        ],
+        royaltyRecipients: [{ address: '0xabcdef1234567890abcdef1234567890abcdef12', share: 100 }],
         payoutRecipient: '0x2345678901abcdef2345678901abcdef23456789',
         nftMetadataUrl: 'https://example.com/metadata.json',
         tokenImageUrl: 'https://example.com/token.png',
@@ -104,15 +102,15 @@ describe('EvmApiMappers V4', () => {
               kind: MintStageKind.Public,
               price: {
                 currency: 'MATIC',
-                raw: '1000000000000000000'
+                raw: '1000000000000000000',
               },
               startTime: '2023-01-01T00:00:00Z',
               endTime: '2023-01-02T00:00:00Z',
               walletLimit: 10,
-              maxSupply: 1000
-            }
+              maxSupply: 1000,
+            },
           ],
-          maxSupply: 1000
+          maxSupply: 1000,
         },
       };
 
@@ -120,14 +118,14 @@ describe('EvmApiMappers V4', () => {
 
       // Verify the result is a valid V4CreateLaunchpadRequest
       expect(result).toBeDefined();
-      
+
       // Verify required EVM-specific properties
       expect(result.chain).toBe(Blockchain.POLYGON);
       expect(result.protocol).toBe(EvmProtocolType.ERC1155);
       expect(result.creator).toBe('0x1234567890abcdef1234567890abcdef12345678');
       expect(result.name).toBe('Test Collection');
       expect(result.symbol).toBe('TEST');
-      
+
       // Verify mint stages for ERC1155
       expect(result.mintStages).toBeDefined();
       expect(result.mintStages.stages[0].price.currency).toBe('MATIC');
@@ -164,15 +162,15 @@ describe('EvmApiMappers V4', () => {
               kind: MintStageKind.Public,
               price: {
                 currency: 'ETH',
-                raw: '200000000000000000'
+                raw: '200000000000000000',
               },
               startTime: '2023-02-01T00:00:00Z',
               endTime: '2023-02-02T00:00:00Z',
               walletLimit: 3,
-              maxSupply: 50
-            }
+              maxSupply: 50,
+            },
           ],
-          maxSupply: 50
+          maxSupply: 50,
         },
       };
 
@@ -180,40 +178,46 @@ describe('EvmApiMappers V4', () => {
 
       // Verify the result is a valid V4UpdateLaunchpadRequest
       expect(result).toBeDefined();
-      
+
       // Verify chain and protocol
       expect(result.chain).toBe(Blockchain.ETHEREUM);
       expect(result.protocol).toBe(EvmProtocolType.ERC721);
-      
+
       // Verify collection and owner identifiers
       expect(result.collection).toBe('0x3456789012abcdef3456789012abcdef34567890');
       expect(result.owner).toBe('0x4567890123abcdef4567890123abcdef45678901');
-      
+
       // Verify social media links
       expect(result.social?.discordUrl).toBe('https://discord.com/updated');
       expect(result.social?.externalUrl).toBe('https://example.com/updated');
       expect(result.social?.twitterUsername).toBe('updateduser');
-      
+
       // Verify metadata updates
       expect(result.name).toBe('Updated Collection');
       expect(result.imageUrl).toBe('https://example.com/updated-image.png');
       expect(result.description).toBe('Updated description');
-      
+
       // Verify royalty updates
       expect(result.royaltyBps).toBe(700);
       expect(result.royaltyRecipients).toHaveLength(2);
-      expect(result.royaltyRecipients![0].address).toBe('0xabcdef1234567890abcdef1234567890abcdef12');
+      expect(result.royaltyRecipients![0].address).toBe(
+        '0xabcdef1234567890abcdef1234567890abcdef12',
+      );
       expect(result.royaltyRecipients![0].share).toBe(70);
-      expect(result.royaltyRecipients![1].address).toBe('0x7890abcdef1234567890abcdef1234567890abcd');
+      expect(result.royaltyRecipients![1].address).toBe(
+        '0x7890abcdef1234567890abcdef1234567890abcd',
+      );
       expect(result.royaltyRecipients![1].share).toBe(30);
-      
+
       // Verify payout recipient
       expect(result.payoutRecipient).toBe('0x5678901234abcdef5678901234abcdef56789012');
-      
+
       // Verify EVM-specific properties
       expect(result.message).toBe('Update collection message to sign');
-      expect(result.signature).toBe('0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890');
-      
+      expect(result.signature).toBe(
+        '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
+      );
+
       // Verify mint stages
       expect(result.mintStages).toBeDefined();
       expect(result.mintStages!.stages[0].price.currency).toBe('ETH');
@@ -242,8 +246,10 @@ describe('EvmApiMappers V4', () => {
       expect(result.name).toBe('Updated ERC1155 Collection');
       expect(result.tokenId).toBe(1);
       expect(result.message).toBe('Update ERC1155 collection message');
-      expect(result.signature).toBe('0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890');
-      
+      expect(result.signature).toBe(
+        '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
+      );
+
       // Verify optional properties are undefined
       expect(result.description).toBeUndefined();
       expect(result.royaltyBps).toBeUndefined();
@@ -267,7 +273,7 @@ describe('EvmApiMappers V4', () => {
 
       // Verify the result is a valid V4MintRequest
       expect(result).toBeDefined();
-      
+
       // Verify required EVM-specific properties
       expect(result.collectionId).toBe('0x3456789012abcdef3456789012abcdef34567890');
       expect(result.wallet).toBe('0x4567890123abcdef4567890123abcdef45678901');
@@ -298,7 +304,7 @@ describe('EvmApiMappers V4', () => {
       expect(result.kind).toBe(MintStageKind.Public);
       expect(result.protocol).toBe(EvmProtocolType.ERC1155);
       expect(result.tokenId).toBe(1);
-      
+
       // Verify optional properties are undefined
       expect(result.stageId).toBeUndefined();
     });
@@ -321,7 +327,7 @@ describe('EvmApiMappers V4', () => {
       expect(result.nftAmount).toBe(1);
       expect(result.kind).toBe(MintStageKind.Public);
       expect(result.protocol).toBe(EvmProtocolType.ERC721);
-      
+
       // Verify optional properties are undefined
       expect(result.stageId).toBeUndefined();
       expect(result.tokenId).toBeUndefined();

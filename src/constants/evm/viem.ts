@@ -1,4 +1,4 @@
-import { EvmChainId } from "../../types/chains/evm";
+import { EvmChainId } from '../../types/chains/evm';
 
 // TODO(apechain): Remove this after viem is updated
 export const APECHAIN_VIEM_DEFINITION = {
