@@ -4,8 +4,9 @@ import { ClientConfig } from './types';
 import { Keypair } from '@solana/web3.js';
 import { SolanaKeypairWalletProvider, SolanaWalletProvider } from './wallet/solana';
 import { EvmWalletProvider } from './wallet/evm';
-import { WalletClient } from 'viem';
 import { ViemWalletProvider, ViemWalletProviderOptions } from './wallet/evm/viemWalletProvider';
+import { EvmNftService } from './services/nft/evm';
+import { SolanaNftService } from './services/nft/solana';
 
 /**
  * Magic Eden SDK V1 implementation
@@ -22,7 +23,7 @@ class MagicEdenSDKV1 {
     apiKey: string,
     walletProvider: T,
     clientConfig: Partial<Omit<ClientConfig<'solana'>, 'apiKey'>> = {},
-  ): MagicEdenClient {
+  ): MagicEdenClient<SolanaNftService> {
     if (!apiKey) {
       throw new Error('API key is required to create a Magic Eden client');
     }
@@ -51,7 +52,7 @@ class MagicEdenSDKV1 {
       rpcUrl?: string;
       clientConfig?: Partial<Omit<ClientConfig<'solana'>, 'apiKey'>>;
     },
-  ): MagicEdenClient {
+  ): MagicEdenClient<SolanaNftService> {
     const rpcUrl = options?.rpcUrl || 'https://api.mainnet-beta.solana.com';
     const walletProvider = new SolanaKeypairWalletProvider({
       secretKey: keypair.secretKey,
@@ -65,7 +66,7 @@ class MagicEdenSDKV1 {
     apiKey: string,
     walletProvider: T,
     clientConfig: Partial<Omit<ClientConfig<'evm'>, 'apiKey'>> = {},
-  ): MagicEdenClient {
+  ): MagicEdenClient<EvmNftService> {
     if (!apiKey) {
       throw new Error('API key is required to create a Magic Eden client');
     }
@@ -86,7 +87,7 @@ class MagicEdenSDKV1 {
       clientConfig?: Partial<Omit<ClientConfig<'evm'>, 'apiKey'>>;
       walletOptions?: ViemWalletProviderOptions;
     },
-  ): MagicEdenClient {
+  ): MagicEdenClient<EvmNftService> {
     const walletProvider = new ViemWalletProvider({
       privateKey,
       blockchain,
