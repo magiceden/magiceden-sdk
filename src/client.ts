@@ -5,9 +5,9 @@ import { ApiError } from './errors';
 /**
  * Magic Eden API client
  */
-export class MagicEdenClient {
+export class MagicEdenClient<NftService extends BaseNftService> {
   private readonly _config: ClientConfig;
-  private readonly _nft: BaseNftService;
+  private readonly _nft: NftService;
 
   /**
    * Creates a new Magic Eden API client
@@ -15,7 +15,7 @@ export class MagicEdenClient {
    */
   constructor(config: ClientConfig) {
     this._config = this.validateConfig(config);
-    this._nft = NftServiceFactory.create(this._config);
+    this._nft = NftServiceFactory.create(this._config) as NftService;
   }
 
   /**
