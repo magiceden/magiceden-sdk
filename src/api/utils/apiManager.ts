@@ -7,9 +7,33 @@ import https from 'https';
  * API configuration options
  */
 export interface ApiOptions {
+  /**
+   * API key
+   */
   apiKey: string;
+
+  /**
+   * Headers to send with requests
+   * 
+   * @default {
+   *   'Content-Type': 'application/json',
+   *   'Authorization': `Bearer ${apiKey}`,
+   * }
+   */
   headers?: Record<string, string>;
+
+  /**
+   * Timeout for requests
+   * 
+   * @default 30000
+   */
   timeout?: number;
+
+  /**
+   * Whether to reject unauthorized requests
+   * 
+   * @default true
+   */
   rejectUnauthorized?: boolean;
 }
 
