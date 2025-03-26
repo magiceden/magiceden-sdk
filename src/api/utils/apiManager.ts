@@ -30,7 +30,7 @@ export interface ApiOptions {
   timeout?: number;
 
   /**
-   * Whether to reject unauthorized requests
+   * Whether the API should reject unauthorized requests
    * 
    * @default true
    */
