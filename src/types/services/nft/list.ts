@@ -29,10 +29,8 @@ export const SolanaListParamsSchema = BaseListParamsSchema.extend({
   // token in ListParams maps to tokenMint and tokenAccount in V2ListRequest
   // price in ListParams maps to price in V2ListRequest
   // seller in ListParams maps to seller in V2ListRequest
-  tokenAccount: z.string().optional().describe('Token account address'),
   splPrice: z.custom<SplAmount>().optional().describe('SPL token price details'),
   sellerReferral: z.string().optional().describe('Seller referral address'),
-  expiry: z.number().describe('Listing expiry timestamp'),
   prioFeeMicroLamports: z.number().optional().describe('Priority fee in micro lamports'),
   maxPrioFeeLamports: z.number().optional().describe('Maximum priority fee in lamports'),
   exactPrioFeeLamports: z.number().optional().describe('Exact priority fee in lamports'),

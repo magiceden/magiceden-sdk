@@ -109,7 +109,13 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   ): Promise<ChainOperation<C>[]>;
 
   /**
-   * Lists an NFT for sale
+   * Lists an NFT for sale.
+   *
+   * - Supported on EVM.
+   * - Supported on Solana (every NFT type excluding cNFT).
+   *
+   * @param params - The parameters for the list operation
+   * @returns The operation response
    */
   async list(params: ChainMethodParams<C, 'list'>): Promise<OperationResponse[]> {
     const operations = await this.getListOperations(params);

@@ -12,7 +12,6 @@ import {
   SolanaMintParams,
   SolanaPublishLaunchpadParams,
 } from '../../types/services/nft';
-
 import {
   V2ListRequest,
   V2CancelListingRequest,
@@ -27,7 +26,7 @@ import {
   V4PublishLaunchpadRequest,
 } from '../../types/api';
 import { AUCTION_HOUSE_ADDRESS } from '../../constants/solana';
-import { getTokenAccount } from '../../helpers/solana';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 /**
  * Solana NFT Service Mappers
@@ -41,15 +40,15 @@ export const SolanaApiMappers = {
     /**
      * Maps generic list parameters to Solana-specific API request
      */
-    listRequest: async (seller: string, params: SolanaListParams): Promise<V2ListRequest> => ({
+    listRequest: (seller: string, params: SolanaListParams): V2ListRequest => ({
       seller,
-      tokenAccount: params.tokenAccount || (await getTokenAccount(seller, params.token)),
+      tokenAccount: params.token,
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
-      price: Number(params.price),
+      price: Number(params.price) / LAMPORTS_PER_SOL,
       splPrice: params.splPrice,
       sellerReferral: params.sellerReferral,
-      expiry: params.expiry,
+      expiry: params.expiry || -1,
       prioFeeMicroLamports: params.prioFeeMicroLamports,
       maxPrioFeeLamports: params.maxPrioFeeLamports,
       exactPrioFeeLamports: params.exactPrioFeeLamports,
@@ -59,15 +58,15 @@ export const SolanaApiMappers = {
     /**
      * Maps generic cancel listing parameters to Solana-specific API request
      */
-    cancelListingRequest: async (
+    cancelListingRequest: (
       seller: string,
       params: SolanaCancelListingParams,
-    ): Promise<V2CancelListingRequest> => ({
+    ): V2CancelListingRequest => ({
       seller,
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
-      tokenAccount: params.tokenAccount || (await getTokenAccount(seller, params.token)),
-      price: Number(params.price),
+      tokenAccount: params.token,
+      price: Number(params.price) / LAMPORTS_PER_SOL,
       sellerReferral: params.sellerReferral,
       expiry: params.expiry,
       prioFeeMicroLamports: params.prioFeeMicroLamports,
@@ -85,7 +84,7 @@ export const SolanaApiMappers = {
       buyer,
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
-      price: Number(params.price),
+      price: Number(params.price) / LAMPORTS_PER_SOL,
       buyerReferral: params.buyerReferral,
       expiry: params.expiry,
       useBuyV2: params.useBuyV2,
@@ -105,7 +104,7 @@ export const SolanaApiMappers = {
       buyer,
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
-      price: Number(params.price),
+      price: Number(params.price) / LAMPORTS_PER_SOL,
       buyerReferral: params.buyerReferral,
       expiry: params.expiry,
       prioFeeMicroLamports: params.prioFeeMicroLamports,
@@ -125,8 +124,8 @@ export const SolanaApiMappers = {
       auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       tokenMint: params.token,
       tokenATA: params.tokenATA,
-      price: Number(params.price),
-      newPrice: Number(params.newPrice),
+      price: Number(params.price) / LAMPORTS_PER_SOL,
+      newPrice: Number(params.newPrice) / LAMPORTS_PER_SOL,
       buyerReferral: params.buyerReferral,
       sellerReferral: params.sellerReferral,
       buyerExpiry: params.buyerExpiry,
@@ -145,7 +144,7 @@ export const SolanaApiMappers = {
       auctionHouseAddress: params.auctionHouseAddress,
       tokenMint: params.token,
       tokenATA: params.tokenATA,
-      price: Number(params.price),
+      price: Number(params.price) / LAMPORTS_PER_SOL,
       buyerReferral: params.buyerReferral,
       sellerReferral: params.sellerReferral,
       buyerExpiry: params.buyerExpiry,
