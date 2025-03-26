@@ -25,7 +25,7 @@ export const EvmMultipleListParamsSchema = z.object({
 
 export const SolanaListParamsSchema = BaseListParamsSchema.extend({
   // Solana-specific parameters
-  auctionHouseAddress: z.string().describe('Auction house address'),
+  auctionHouseAddress: z.string().optional().describe('Auction house address'),
   // token in ListParams maps to tokenMint and tokenAccount in V2ListRequest
   // price in ListParams maps to price in V2ListRequest
   // seller in ListParams maps to seller in V2ListRequest

@@ -1,14 +1,18 @@
-import { EvmBlockchain, EvmBlockchains, EvmChainId } from '../../types/chains/evm';
+import { EvmBlockchain, EvmChainId } from '../../types/chains/evm';
 import { Blockchain } from '../../types/chains';
-import { mainnet } from 'viem/_types/chains/definitions/mainnet';
-import { polygon } from 'viem/_types/chains/definitions/polygon';
-import { arbitrum } from 'viem/_types/chains/definitions/arbitrum';
-import { base } from 'viem/_types/chains/definitions/base';
-import { sei } from 'viem/_types/chains/definitions/sei';
-import { apechain, berachain } from '@reservoir0x/reservoir-sdk';
-import { bsc } from 'viem/_types/chains/definitions/bsc';
-import { ABSTRACT_VIEM_DEFINITION, MONAD_TESTNET_VIEM_DEFINITION } from '../../constants/evm/viem';
-import { Chain } from 'viem';
+import {
+  abstract,
+  apeChain,
+  berachain,
+  arbitrum,
+  base,
+  bsc,
+  Chain,
+  mainnet,
+  polygon,
+  sei,
+  monadTestnet,
+} from 'viem/chains';
 
 /**
  * Get the EVM blockchain from a chain ID
@@ -79,14 +83,14 @@ export function getViemChainFromBlockchain(chain: EvmBlockchain): Chain {
     case Blockchain.ARBITRUM:
       return arbitrum;
     case Blockchain.APECHAIN:
-      return apechain;
+      return apeChain;
     case Blockchain.BERACHAIN:
       return berachain;
     case Blockchain.MONAD_TESTNET:
-      return MONAD_TESTNET_VIEM_DEFINITION;
+      return monadTestnet;
     case Blockchain.BSC:
       return bsc;
     case Blockchain.ABSTRACT:
-      return ABSTRACT_VIEM_DEFINITION;
+      return abstract;
   }
 }
