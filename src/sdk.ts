@@ -49,7 +49,15 @@ class MagicEdenSDKV1 {
     apiKey: string,
     keypair: Keypair,
     options?: {
+      /**
+       * Custom Solana RPC URL
+       *
+       * @default 'https://api.mainnet-beta.solana.com'
+       */
       rpcUrl?: string;
+      /**
+       * Additional client configuration
+       */
       clientConfig?: Partial<Omit<ClientConfig<'solana'>, 'apiKey'>>;
     },
   ): MagicEdenClient<SolanaNftService> {
@@ -62,6 +70,13 @@ class MagicEdenSDKV1 {
     return this.createSolanaClient(apiKey, walletProvider, options?.clientConfig);
   }
 
+  /**
+   * Creates a new Magic Eden API client for an EVM blockchain
+   * @param apiKey Your Magic Eden API key
+   * @param walletProvider The wallet provider to use
+   * @param clientConfig Additional client configuration
+   * @returns A new Magic Eden API client for an EVM blockchain
+   */
   public static createEvmClient<T extends EvmWalletProvider>(
     apiKey: string,
     walletProvider: T,
@@ -79,12 +94,28 @@ class MagicEdenSDKV1 {
     });
   }
 
+  /**
+   * Creates a new Magic Eden API client for an EVM blockchain using a private key
+   * @param apiKey Your Magic Eden API key
+   * @param privateKey The private key to use for the client
+   * @param blockchain The blockchain to use
+   * @param options Optional configuration
+   * @param options.clientConfig Additional client configuration
+   * @param options.walletOptions Wallet options
+   * @returns A new Magic Eden API client for an EVM blockchain
+   */
   public static createViemEvmClient(
     apiKey: string,
     privateKey: `0x${string}`,
     blockchain: EvmBlockchain,
     options?: {
+      /**
+       * Additional client configuration
+       */
       clientConfig?: Partial<Omit<ClientConfig<'evm'>, 'apiKey'>>;
+      /**
+       * Wallet options
+       */
       walletOptions?: ViemWalletProviderOptions;
     },
   ): MagicEdenClient<EvmNftService> {
