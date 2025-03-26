@@ -33,8 +33,7 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
     const apiOptions: ApiClientOptions = {
       chain: config.chain,
       apiKey: config.apiKey,
-      headers: config.headers,
-      timeout: config.timeout,
+      ...config.apiOptions,
     };
 
     this.v2ApiClient = new V2ApiClient(apiOptions);

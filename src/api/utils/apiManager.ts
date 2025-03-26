@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import { NetworkError, AuthenticationError, RateLimitError, ApiError } from '../../errors';
 import { RetryablePromise } from '../../helpers';
+import https from 'https';
 
 /**
  * API configuration options
@@ -9,6 +10,7 @@ export interface ApiOptions {
   apiKey: string;
   headers?: Record<string, string>;
   timeout?: number;
+  rejectUnauthorized?: boolean;
 }
 
 /**
@@ -28,6 +30,11 @@ export class ApiManager {
   private readonly client: AxiosInstance;
 
   constructor(baseURL: string, options: ApiOptions) {
+    // Create custom https agent that can disable certificate validation
+    const httpsAgent = new https.Agent({
+      rejectUnauthorized: options.rejectUnauthorized ?? true,
+    });
+
     this.client = axios.create({
       baseURL,
       headers: {
@@ -36,6 +43,7 @@ export class ApiManager {
         ...options.headers,
       },
       timeout: options.timeout || 30000,
+      httpsAgent,
     });
 
     // Add response interceptor for error handling

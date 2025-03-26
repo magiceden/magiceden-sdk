@@ -35,6 +35,12 @@ export class MagicEdenClient<NftService extends BaseNftService> {
 
     return {
       ...config,
+      // Ensure apiOptions exists with apiKey
+      apiOptions: {
+        ...(config.apiOptions || {}),
+        // Reject unauthorized requests by default
+        rejectUnauthorized: config.apiOptions?.rejectUnauthorized ?? true,
+      },
       transactionOptions: {
         ...(config.transactionOptions || {}),
         // Default to signing and sending transactions, then waiting for confirmation
