@@ -77,7 +77,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     params: ChainMethodParams<'solana', 'list'>,
   ): Promise<ChainOperation<'solana'>[]> {
     const response = await this.v2ApiClient.list(
-      SolanaApiMappers.v2.listRequest(this.config.wallet.getAddress(), params),
+      await SolanaApiMappers.v2.listRequest(this.config.wallet.getAddress(), params),
     );
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }
@@ -90,7 +90,7 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     params: ChainMethodParams<'solana', 'cancelListing'>,
   ): Promise<ChainOperation<'solana'>[]> {
     const response = await this.v2ApiClient.cancelListing(
-      SolanaApiMappers.v2.cancelListingRequest(this.config.wallet.getAddress(), params),
+      await SolanaApiMappers.v2.cancelListingRequest(this.config.wallet.getAddress(), params),
     );
     return SolanaTransactionAdapters.fromInstructionsResponse(response);
   }

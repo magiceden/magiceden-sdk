@@ -22,7 +22,7 @@ export const SolanaCancelListingParamsSchema = BaseCancelListingParamsSchema.ext
   token: z.string().describe('The NFT token address/mint'),
   price: z.string().describe('The listing price to cancel'),
   auctionHouseAddress: z.string().describe('Auction house address'),
-  tokenAccount: z.string().describe('Token account address'),
+  tokenAccount: z.string().optional().describe('Token account address'),
   sellerReferral: z.string().optional().describe('Seller referral address'),
   expiry: z.number().describe('Listing expiry timestamp'),
   prioFeeMicroLamports: z.number().optional().describe('Priority fee in micro lamports'),

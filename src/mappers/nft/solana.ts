@@ -27,6 +27,7 @@ import {
   V4PublishLaunchpadRequest,
 } from '../../types/api';
 import { AUCTION_HOUSE_ADDRESS } from '../../constants/solana';
+import { getTokenAccount } from '../../helpers/solana';
 
 /**
  * Solana NFT Service Mappers
@@ -40,9 +41,9 @@ export const SolanaApiMappers = {
     /**
      * Maps generic list parameters to Solana-specific API request
      */
-    listRequest: (seller: string, params: SolanaListParams): V2ListRequest => ({
+    listRequest: async (seller: string, params: SolanaListParams): Promise<V2ListRequest> => ({
       seller,
-      tokenAccount: params.token,
+      tokenAccount: params.tokenAccount || (await getTokenAccount(seller, params.token)),
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       price: Number(params.price),
@@ -58,14 +59,14 @@ export const SolanaApiMappers = {
     /**
      * Maps generic cancel listing parameters to Solana-specific API request
      */
-    cancelListingRequest: (
+    cancelListingRequest: async (
       seller: string,
       params: SolanaCancelListingParams,
-    ): V2CancelListingRequest => ({
+    ): Promise<V2CancelListingRequest> => ({
       seller,
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
-      tokenAccount: params.tokenAccount,
+      tokenAccount: params.tokenAccount || (await getTokenAccount(seller, params.token)),
       price: Number(params.price),
       sellerReferral: params.sellerReferral,
       expiry: params.expiry,
@@ -141,7 +142,7 @@ export const SolanaApiMappers = {
     buyRequest: (buyer: string, params: SolanaBuyParams): V2BuyRequest => ({
       buyer,
       seller: params.seller,
-      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
+      auctionHouseAddress: params.auctionHouseAddress,
       tokenMint: params.token,
       tokenATA: params.tokenATA,
       price: Number(params.price),
