@@ -2,7 +2,7 @@ import { SplAmount } from '../../solana';
 
 export interface V2ListRequest {
   seller: string;
-  auctionHouseAddress?: string;
+  auctionHouseAddress: string;
   tokenMint: string;
   tokenAccount: string;
   price: number;

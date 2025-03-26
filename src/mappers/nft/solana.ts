@@ -26,6 +26,7 @@ import {
   V4MintRequest,
   V4PublishLaunchpadRequest,
 } from '../../types/api';
+import { AUCTION_HOUSE_ADDRESS } from '../../constants/solana';
 
 /**
  * Solana NFT Service Mappers
@@ -43,7 +44,7 @@ export const SolanaApiMappers = {
       seller,
       tokenAccount: params.token,
       tokenMint: params.token,
-      auctionHouseAddress: params.auctionHouseAddress,
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       price: Number(params.price),
       splPrice: params.splPrice,
       sellerReferral: params.sellerReferral,
@@ -63,7 +64,7 @@ export const SolanaApiMappers = {
     ): V2CancelListingRequest => ({
       seller,
       tokenMint: params.token,
-      auctionHouseAddress: params.auctionHouseAddress,
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       tokenAccount: params.tokenAccount,
       price: Number(params.price),
       sellerReferral: params.sellerReferral,
@@ -82,7 +83,7 @@ export const SolanaApiMappers = {
     ): V2MakeItemOfferRequest => ({
       buyer,
       tokenMint: params.token,
-      auctionHouseAddress: params.auctionHouseAddress,
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       price: Number(params.price),
       buyerReferral: params.buyerReferral,
       expiry: params.expiry,
@@ -102,7 +103,7 @@ export const SolanaApiMappers = {
     ): V2CancelItemOfferRequest => ({
       buyer,
       tokenMint: params.token,
-      auctionHouseAddress: params.auctionHouseAddress,
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       price: Number(params.price),
       buyerReferral: params.buyerReferral,
       expiry: params.expiry,
@@ -120,7 +121,7 @@ export const SolanaApiMappers = {
     ): V2TakeItemOfferRequest => ({
       seller,
       buyer: params.buyer,
-      auctionHouseAddress: params.auctionHouseAddress,
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       tokenMint: params.token,
       tokenATA: params.tokenATA,
       price: Number(params.price),
@@ -140,7 +141,7 @@ export const SolanaApiMappers = {
     buyRequest: (buyer: string, params: SolanaBuyParams): V2BuyRequest => ({
       buyer,
       seller: params.seller,
-      auctionHouseAddress: params.auctionHouseAddress,
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       tokenMint: params.token,
       tokenATA: params.tokenATA,
       price: Number(params.price),
