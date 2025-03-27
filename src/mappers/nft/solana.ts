@@ -161,6 +161,7 @@ export const SolanaApiMappers = {
       to: params.to,
       mint: params.token,
       isCompressed: params.isCompressed,
+      priorityFee: params.priorityFee
     }),
   },
 

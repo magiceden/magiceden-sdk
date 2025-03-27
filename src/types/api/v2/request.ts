@@ -104,4 +104,5 @@ export interface V2TransferRequest {
   to: string;
   mint: string;
   isCompressed?: boolean;
+  priorityFee?: number;
 }
