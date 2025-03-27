@@ -14,7 +14,7 @@ export const EvmCancelListingParamsSchema = BaseCancelListingParamsSchema.extend
 
 export const EvmCancelMultipleListingParamsSchema = z.object({
   /**
-   * The EVM chain to cancel the item offer on
+   * The EVM chain to cancel the listing on
    */
   chain: ZodEvmBlockchain.describe('The chain to cancel the item offer on'),
 
