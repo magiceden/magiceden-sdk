@@ -68,7 +68,7 @@ export const SolanaApiMappers = {
       tokenAccount: params.token,
       price: Number(params.price) / LAMPORTS_PER_SOL,
       sellerReferral: params.sellerReferral,
-      expiry: params.expiry,
+      expiry: params.expiry || -1,
       prioFeeMicroLamports: params.prioFeeMicroLamports,
       maxPrioFeeLamports: params.maxPrioFeeLamports,
       exactPrioFeeLamports: params.exactPrioFeeLamports,
