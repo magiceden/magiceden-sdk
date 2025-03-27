@@ -273,6 +273,7 @@ describe('SolanaApiMappers V2', () => {
         buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
+        price: '1000000000',
         newPrice: '1100000000',
         sellerExpiry: 1234567891,
       };
