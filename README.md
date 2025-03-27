@@ -15,10 +15,19 @@ The Magic Eden SDK provides a unified interface for interacting with NFTs across
 ### Initialize the SDK
 
 ```typescript
-import { MagicEdenSDK } from 'magiceden-api-client';
-import { Keypair } from '@solana/web3.js';
+import { MagicEdenSDK } from '@magiceden/magiceden-sdk';
+```
 
-// For Solana
+## Solana SDK
+
+### Initialization
+
+```typescript
+import { MagicEdenSDK } from '@magiceden/magiceden-sdk';
+import { Keypair } from '@solana/web3.js';
+import { Blockchain } from '@magiceden/magiceden-sdk';
+
+// Initialize with a keypair
 const solanaKeypair = Keypair.generate(); // Or load your existing keypair
 const solanaClient = MagicEdenSDK.v1.createSolanaKeypairClient(
   'YOUR_API_KEY',
@@ -27,105 +36,147 @@ const solanaClient = MagicEdenSDK.v1.createSolanaKeypairClient(
     rpcUrl: 'SOLANA_RPC_URL'
   }
 );
-
-// For EVM chains (Ethereum, Polygon, etc.)
-
-const evmClient = MagicEdenSDK.v1.createViemEvmClient(
-  'YOUR_API_KEY',
-  '0x...',
-  Blockchain.BASE
-);
 ```
 
-## Working with NFTs
-
-### Listing an NFT (Solana)
+### Listing an NFT
 
 ```typescript
+// List an NFT for sale
 const listResult = await solanaClient.nft.list({
-  token: 'TOKEN_MINT_ADDRESS',
+  token: '7um9nU7CDhss1fepFMRpjHhB3qm7exfQf47cdbRSUGuS', // NFT mint address
   price: '1000000000', // Price in lamports (1 SOL)
-  auctionHouseAddress: 'AUCTION_HOUSE_ADDRESS',
-  tokenAccount: 'TOKEN_ACCOUNT_ADDRESS',
-  expiry: Math.floor(Date.now() / 1000) + 86400 // 24 hours from now
 });
 
 console.log('Listing created:', listResult);
 ```
 
-### Buying an NFT (EVM)
+### Canceling a Listing
 
 ```typescript
-const buyResult = await evmClient.nft.buy({
-  token: '0xNFT_CONTRACT_ADDRESS',
-  tokenId: '123',
-  price: '1000000000000000000', // Price in wei (1 ETH)
-  seller: '0xSELLER_ADDRESS',
-  marketplace: 'MARKETPLACE_ADDRESS'
+// Cancel an existing listing
+const cancelResult = await solanaClient.nft.cancelListing({
+  token: '7um9nU7CDhss1fepFMRpjHhB3qm7exfQf47cdbRSUGuS', // NFT mint address
+  price: '1000000000', // Price in lamports (1 SOL)
 });
 
-console.log('Purchase completed:', buyResult);
+console.log('Listing canceled:', cancelResult);
 ```
 
-### Making an Offer on an NFT (Solana)]
+### Making an Offer
 
 ```typescript
+// Make an offer on an NFT
 const offerResult = await solanaClient.nft.makeItemOffer({
-  token: 'TOKEN_MINT_ADDRESS',
-  price: '500000000', // Price in lamports (0.5 SOL)
-  auctionHouseAddress: 'AUCTION_HOUSE_ADDRESS',
-  expiry: Math.floor(Date.now() / 1000) + 86400 // 24 hours from now
+  token: '7YCrxt8Ux9dym832BKLDQQWJYZ2uziXgbF6cYfZaChdP', // NFT mint address
+  price: '900000', // Price in lamports (0.0009 SOL)
 });
 
 console.log('Offer made:', offerResult);
 ```
 
-### Creating a Launchpad (EVM)
+### Canceling an Offer
 
 ```typescript
-const launchpadResult = await evmClient.nft.createLaunchpad({
-  name: 'My NFT Collection',
-  symbol: 'MYNFT',
-  description: 'A collection of amazing NFTs',
-  chain: 'ethereum',
-  protocol: 'erc721',
-  creator: '0xCREATOR_ADDRESS',
-  payoutRecipient: '0xPAYOUT_ADDRESS',
-  royaltyBps: 500, // 5%
-  royaltyRecipients: [{ address: '0xROYALTY_ADDRESS', share: 100 }], // 100% of royalties
-  imageUrl: 'https://example.com/image.png',
-  mintStages: {
-    maxSupply: 1000,
-    stages: [
-      {
-        kind: 'public',
-        price: {
-          currency: 'ETH',
-          raw: '100000000000000000' // 0.1 ETH
-        },
-        startTime: '2023-01-01T00:00:00Z',
-        endTime: '2023-01-02T00:00:00Z',
-        walletLimit: 5,
-        maxSupply: 1000
-      }
-    ]
+// Cancel an existing offer
+const cancelOfferResult = await solanaClient.nft.cancelItemOffer({
+  token: '7YCrxt8Ux9dym832BKLDQQWJYZ2uziXgbF6cYfZaChdP', // NFT mint address
+  price: '900000', // Price in lamports (0.0009 SOL)
+});
+
+console.log('Offer canceled:', cancelOfferResult);
+```
+
+### Taking an Offer (Selling to an Offer)
+
+```typescript
+// Accept an offer from a buyer
+const takeOfferResult = await solanaClient.nft.takeItemOffer({
+  token: '7um9nU7CDhss1fepFMRpjHhB3qm7exfQf47cdbRSUGuS', // NFT mint address
+  buyer: '4H2bigFBsMoTAwkn7THDnThiRQuLCrFDGUWHf4YDpf14', // Buyer's wallet address
+  price: '1500000', // Original offer price in lamports (0.0015 SOL)
+  newPrice: '1000000', // Accepted price in lamports (0.001 SOL)
+});
+
+console.log('Offer accepted:', takeOfferResult);
+```
+
+### Buying an NFT
+
+```typescript
+// Buy an NFT at the listed price
+const buyResult = await solanaClient.nft.buy({
+  token: '7um9nU7CDhss1fepFMRpjHhB3qm7exfQf47cdbRSUGuS', // NFT mint address
+  seller: '4H2bigFBsMoTAwkn7THDnThiRQuLCrFDGUWHf4YDpf14', // Seller's wallet address
+  price: '1500000', // Price in lamports (0.0015 SOL)
+});
+
+console.log('Purchase completed:', buyResult);
+```
+
+### Transferring an NFT
+
+```typescript
+// Transfer an NFT to another wallet
+const transferResult = await solanaClient.nft.transfer({
+  token: 'BxRLKzJVJzyNBRqE6bnhqthbHGMSvyv9GotKihwX6LqJ', // NFT mint address
+  to: '4H2bigFBsMoTAwkn7THDnThiRQuLCrFDGUWHf4YDpf14', // Recipient's wallet address
+  isCompressed: true, // Whether the NFT is compressed
+});
+
+console.log('Transfer completed:', transferResult);
+```
+
+### Complete Example
+
+```typescript
+// Example testing file
+import { MagicEdenSDK } from '@magiceden/magiceden-sdk';
+import { Keypair } from '@solana/web3.js';
+import { Blockchain, SolProtocolType, MintStageKind } from '@magiceden/magiceden-sdk';
+import bs58 from 'bs58';
+
+// Initialize with your keypair
+const apiKey = 'YOUR_API_KEY';
+const keypair = Keypair.fromSecretKey(
+  bs58.decode('YOUR_PRIVATE_KEY')
+);
+
+// Create a Solana client
+const client = MagicEdenSDK.v1.createSolanaKeypairClient(apiKey, keypair, {
+  rpcUrl: 'https://mainnet.helius-rpc.com/?api-key=YOUR_HELIUS_API_KEY',
+});
+
+// Example function to list an NFT
+async function listNFT() {
+  try {
+    await client.nft.list({
+      token: '7um9nU7CDhss1fepFMRpjHhB3qm7exfQf47cdbRSUGuS',
+      price: '1000000000', // 1 SOL
+    });
+    console.log('NFT listed successfully!');
+  } catch (error) {
+    console.error('Error listing NFT:', error);
   }
-});
+}
 
-console.log('Launchpad created:', launchpadResult);
+// Run the example
+listNFT();
 ```
 
-### Minting from a Launchpad (Solana)
+## EVM SDK (Ethereum, Polygon, Base, etc)
+
+### Initialization
 
 ```typescript
-const mintResult = await solanaClient.nft.mint({
-  collectionId: 'COLLECTION_ID',
-  nftAmount: 1,
-  stageId: 'STAGE_ID',
-  kind: 'public',
-  candyMachineId: 'CANDY_MACHINE_ID',
-  symbol: 'SYMBOL'
-});
+import { MagicEdenSDK } from '@magiceden/magiceden-sdk';
+import { Blockchain } from '@magiceden/magiceden-sdk';
 
-console.log('NFT minted:', mintResult);
+// Initialize with a private key or wallet
+const evmClient = MagicEdenSDK.v1.createViemEvmClient(
+  'YOUR_API_KEY',
+  '0xYOUR_PRIVATE_KEY',
+  Blockchain.BASE // or Blockchain.ETHEREUM, Blockchain.POLYGON, etc.
+);
 ```
+
+TODO
