@@ -38,7 +38,7 @@ describe('SolanaApiMappers V4', () => {
             {
               kind: MintStageKind.Public,
               price: {
-                currency: 'SOL',
+                currency: { chain: Blockchain.SOLANA, assetId: 'So11111111111111111111111111111111111111112' },
                 raw: '1000000000',
               },
               startTime: '2023-01-01T00:00:00Z',

@@ -16,6 +16,7 @@ export interface V4CreateLaunchpadRequest {
   social?: SocialAccountDetails;
   name: string;
   symbol: string;
+  tokenImageUrl?: string;
   imageUrl?: string;
   description?: string;
   royaltyBps: number;
@@ -25,7 +26,6 @@ export interface V4CreateLaunchpadRequest {
   }[];
   payoutRecipient: string;
   nftMetadataUrl?: string;
-  tokenImageUrl?: string;
   mintStages: any;
   // Solana-specific fields
   accounts?: {

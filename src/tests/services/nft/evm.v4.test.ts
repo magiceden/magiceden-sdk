@@ -125,7 +125,7 @@ describe('EvmNftService V4', () => {
         {
           kind: MintStageKind.Public,
           price: {
-            currency: 'ETH',
+            currency: { chain: Blockchain.ETHEREUM, assetId: '0x0000000000000000000000000000000000000000' },
             raw: '1000000000000000000',
           },
           startTime: '2023-01-01T00:00:00Z',

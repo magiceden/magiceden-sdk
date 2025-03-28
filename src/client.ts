@@ -19,6 +19,13 @@ export class MagicEdenClient<NftService extends BaseNftService> {
   }
 
   /**
+   * Access wallet-related functionality
+   */
+  public get wallet() {
+    return this._config.wallet;
+  }
+
+  /**
    * Access NFT-related functionality
    */
   public get nft() {

@@ -180,8 +180,11 @@ export const SolanaApiMappers = {
      * Maps Solana create launchpad parameters to V4 create launchpad request
      */
     createLaunchpadRequest: (params: SolanaCreateLaunchpadParams): V4CreateLaunchpadRequest => ({
-      // All variables have the same name
       ...params,
+      // The tokenImageUrl is not used for non-open editions
+      // If tokenImageUrl is not provided for open editions, use imageUrl
+      // If non-open editions, just override and set to undefined
+      tokenImageUrl: params.isOpenEdition ? params.tokenImageUrl || params.imageUrl : undefined,
     }),
 
     /**
