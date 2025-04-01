@@ -65,7 +65,9 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   ): Promise<ChainOperation<'solana'>[]> {
     // TODO: Later on, properly implement extra signers for the mint routes
     // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
-    const response = await this.v4ApiClient.mint(SolanaApiMappers.v4.mintRequest(params));
+    const response = await this.v4ApiClient.mint(
+      SolanaApiMappers.v4.mintRequest(this.config.wallet.getAddress(), params),
+    );
     return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }
 

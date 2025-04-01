@@ -266,13 +266,17 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
             status: txReceipt.status,
             error: txReceipt.error,
             metadata: {
-              ...txReceipt.metadata,
+              operation: operation.metadata,
+              receipt: txReceipt.metadata,
             },
           };
         case TransactionStrategy.SignAndSend:
           return {
             txId: signature,
             status: 'pending',
+            metadata: {
+              operation: operation.metadata,
+            },
           };
         default:
           throw new Error(
@@ -284,6 +288,9 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
         txId: '',
         status: 'failed',
         error: error instanceof Error ? error.message : 'Unknown error',
+        metadata: {
+          operation: operation.metadata
+        }
       };
     }
   }

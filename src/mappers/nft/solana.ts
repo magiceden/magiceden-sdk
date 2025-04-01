@@ -197,8 +197,14 @@ export const SolanaApiMappers = {
     /**
      * Maps Solana mint parameters to V4 mint request
      */
-    mintRequest: (params: SolanaMintParams): V4MintRequest => ({
+    mintRequest: (wallet: string, params: SolanaMintParams): V4MintRequest => ({
       ...params,
+
+      wallet: {
+        chain: params.chain,
+        address: wallet,
+      },
+      payer: wallet
     }),
   },
 };

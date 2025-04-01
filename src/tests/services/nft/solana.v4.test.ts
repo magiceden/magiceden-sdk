@@ -141,13 +141,11 @@ describe('SolanaNftService V4', () => {
   const createMintParams = (): SolanaMintParams => ({
     chain: Blockchain.SOLANA as Blockchain.SOLANA,
     collectionId: validSolanaPubkey,
-    wallet: validSolanaPubkey,
     nftAmount: 1,
     stageId: 'stage1',
     kind: MintStageKind.Public,
     candyMachineId: validSolanaPubkey,
     symbol: 'TEST',
-    payer: validSolanaPubkey,
     recipient: validSolanaPubkey,
   });
 
@@ -266,13 +264,11 @@ describe('SolanaNftService V4', () => {
       const mockParams: SolanaMintParams = {
         chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
-        wallet: 'walletAddress123',
         nftAmount: 3,
         stageId: 'stage1',
         kind: MintStageKind.Public,
         candyMachineId: 'candyMachineId123',
         symbol: 'TEST',
-        payer: 'payerAddress123',
         recipient: 'recipientAddress123',
       };
 
@@ -305,13 +301,11 @@ describe('SolanaNftService V4', () => {
       const mockParams: SolanaMintParams = {
         chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
-        wallet: 'walletAddress123',
         nftAmount: 3,
         stageId: 'stage1',
         kind: MintStageKind.Public,
         candyMachineId: 'candyMachineId123',
         symbol: 'TEST',
-        payer: 'payerAddress123',
         recipient: 'recipientAddress123',
       };
 

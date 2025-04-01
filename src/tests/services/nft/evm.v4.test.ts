@@ -142,7 +142,6 @@ describe('EvmNftService V4', () => {
   const createMintParams = (): EvmMintParams => ({
     chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
     collectionId: validEvmAddress,
-    wallet: validEvmAddress,
     nftAmount: 1,
     stageId: 'stage1',
     kind: MintStageKind.Public,
@@ -409,7 +408,6 @@ describe('EvmNftService V4', () => {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
         collectionId: validEvmAddress,
-        wallet: validEvmAddress,
         nftAmount: 3,
         stageId: 'stage1',
         kind: MintStageKind.Public,

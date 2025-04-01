@@ -187,8 +187,12 @@ export const EvmApiMappers = {
     /**
      * Maps EVM mint parameters to V4 mint request
      */
-    mintRequest: (params: EvmMintParams): V4MintRequest => ({
+    mintRequest: (wallet: `0x${string}`, params: EvmMintParams): V4MintRequest => ({
       ...params,
+      wallet: {
+        chain: params.chain,
+        address: wallet,
+      },
     }),
   },
 };

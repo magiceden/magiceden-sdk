@@ -84,7 +84,10 @@ export interface V4PublishLaunchpadRequest {
 
 export interface V4MintRequest {
   collectionId: string;
-  wallet: string;
+  wallet: {
+    chain: string;
+    address: string;
+  };
   nftAmount: number;
   stageId?: string;
   kind: string; // MintStageKind
