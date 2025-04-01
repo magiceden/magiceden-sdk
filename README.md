@@ -179,4 +179,56 @@ const evmClient = MagicEdenSDK.v1.createViemEvmClient(
 );
 ```
 
-TODO
+### Minting an NFT
+
+```typescript
+// Mint an NFT from a collection
+const mintResult = await evmClient.nft.mint({
+  chain: Blockchain.BASE,
+  collectionId: '0x949de1b4d4cc4a8e63b7565b6dc525d8eb5dd15a', // Collection contract address
+  nftAmount: 1, // Number of NFTs to mint
+  tokenId: 0, // Token ID to mint
+  kind: MintStageKind.Public, // Mint stage type
+  protocol: EvmProtocolType.ERC1155, // NFT standard (ERC721 or ERC1155)
+});
+console.log('Mint completed:', mintResult);
+```
+
+### Complete Example
+
+```typescript
+// Example testing file for EVM
+import { MagicEdenSDK } from '@magiceden/magiceden-sdk';
+import { Blockchain, EvmProtocolType, MintStageKind } from '@magiceden/magiceden-sdk';
+
+// Initialize with your private key
+const apiKey = 'YOUR_API_KEY';
+const privateKey = '0xYOUR_PRIVATE_KEY';
+
+// Create an EVM client
+const evmClient = MagicEdenSDK.v1.createViemEvmClient(
+  apiKey,
+  privateKey,
+  Blockchain.BASE
+);
+
+// Example function to mint an NFT
+async function mintNFT() {
+  try {
+    const result = await evmClient.nft.mint({
+      chain: Blockchain.BASE,
+      collectionId: '0x949de1b4d4cc4a8e63b7565b6dc525d8eb5dd15a',
+      nftAmount: 1,
+      tokenId: 0,
+      kind: MintStageKind.Public,
+      protocol: EvmProtocolType.ERC1155,
+    });
+    console.log('NFT minted successfully!', result);
+  } catch (error) {
+    console.error('Error minting NFT:', error);
+  }
+}
+
+// Run the example
+mintNFT();
+```
