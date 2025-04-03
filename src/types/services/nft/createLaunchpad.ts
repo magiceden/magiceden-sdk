@@ -30,6 +30,12 @@ export const BaseCreateLaunchpadParamsSchema = z.object({
     .describe('Social media links'),
   name: z.string().min(1).max(MAX_NAME_LENGTH).describe('Collection name'),
   symbol: z.string().min(1).max(MAX_SYMBOL_LENGTH).describe('Collection symbol'),
+  
+  /**
+   * URL pointing to the collection image.
+   * For all collections, this image represents the entire collection.
+   * For open editions, this is also used as the default image for individual NFTs if tokenImageUrl is not provided.
+   */
   imageUrl: z.string().optional().describe('URL pointing to image for the collection'),
   description: z.string().optional().describe('Collection description'),
   royaltyBps: z
@@ -51,7 +57,21 @@ export const BaseCreateLaunchpadParamsSchema = z.object({
     })
     .describe('Royalty recipients and their shares'),
   payoutRecipient: z.string().min(1).describe('Payout recipient address of mint proceeds'),
+
+  /**
+   * For non-open editions: Required URL pointing to a directory containing metadata JSON files for each NFT (0.json, 1.json, etc.).
+   * Each JSON file should include its own image URL for that specific NFT.
+   * For open editions: Optional URL for additional metadata.
+   */
   nftMetadataUrl: z.string().min(1).optional().describe('JSON file that contains all the metadata'),
+
+  /**
+   * For open editions only: URL pointing to the image used for all NFTs in the open edition.
+   * If not provided for open editions, imageUrl will be used instead.
+   * Not used for non-open editions, as individual NFT images are defined in the metadata files at nftMetadataUrl.
+   * 
+   * This will be ignored for non-open editions.
+   */
   tokenImageUrl: z.string().min(1).optional().describe('URL for image for the token'),
   mintStages: MintStages.describe('Mint stages configuration'),
 });

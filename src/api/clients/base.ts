@@ -26,10 +26,7 @@ export abstract class BaseApiClient implements ApiClient {
   constructor(options: ApiClientOptions) {
     this.chain = options.chain;
     // Initialize API manager with appropriate endpoint
-    this.api = new ApiManager(this.getBaseUrl(), {
-      apiKey: options.apiKey,
-      timeout: options.timeout,
-    });
+    this.api = new ApiManager(this.getBaseUrl(), options);
   }
 
   /**

@@ -1,6 +1,6 @@
 import { VersionedTransaction } from '@solana/web3.js';
 import { SolanaInstructionsResponse, V4TransactionResponse } from '../../types/api';
-import { Blockchain, SolanaTransactionParams } from '../../types';
+import { Blockchain, SolanaSubmitParams, SolanaTransactionParams } from '../../types';
 import { ChainTransaction } from '../../types/transactions';
 import { TransactionOperation } from '../../types/operations';
 
@@ -51,8 +51,8 @@ export const SolanaTransactionAdapters = {
       );
     }
 
-    // Filter for valid Solana steps with signAllAndSendTransactions method
-    const validSteps = response.steps.filter((step) => {
+    // Filter for valid Solana transaction steps with signAllAndSendTransactions method
+    const validTransactionSteps = response.steps.filter((step) => {
       if (step.chain !== Blockchain.SOLANA || step.method !== 'signAllAndSendTransactions') {
         return false;
       }
@@ -61,15 +61,38 @@ export const SolanaTransactionAdapters = {
       return result.success;
     });
 
-    if (validSteps.length === 0) {
+    if (validTransactionSteps.length === 0) {
       throw new Error(
         'Invalid transaction response format, only Solana transactions are supported',
       );
     }
 
+    // Filter for valid submit steps with the Post method
+    const validSubmitSteps = response.steps.filter((step) => {
+      if (step.chain !== Blockchain.SOLANA || step.method !== 'Post') {
+        return false;
+      }
+
+      const result = SolanaSubmitParams.safeParse(step.params);
+      return result.success;
+    });
+
+    if (validSubmitSteps.length === 0) {
+      throw new Error(
+        'No submit step found in transaction response',
+      );
+    }
+    
+    // Get the first valid submit step and convert it to a SolanaSubmitParams object
+    // Currently the only way to extract the candyMachineId, collectionId, and symbol is to get it from the submit step
+    // This is a bit of a hack, but it works for now
+    // Normally for each V4TransactionResponse, there should be one transaction step and one submit step
+    // # of transaction steps could change, but there should always be only one submit step
+    const submitParams = SolanaSubmitParams.safeParse(validSubmitSteps[0].params).data;
+
     const transactions: TransactionOperation<'solana'>[] = [];
 
-    for (const step of validSteps) {
+    for (const step of validTransactionSteps) {
       const result = SolanaTransactionParams.safeParse(step.params);
       if (!result.success) {
         continue; // Skip non-Solana steps
@@ -86,6 +109,9 @@ export const SolanaTransactionAdapters = {
             return {
               type: 'transaction',
               transactionData: VersionedTransaction.deserialize(txBuffer),
+              metadata: {
+                ...(submitParams?.payload ? { payload: submitParams.payload } : {}),
+              },
             };
           } catch (error) {
             throw error;

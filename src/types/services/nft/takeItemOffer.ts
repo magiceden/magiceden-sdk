@@ -5,7 +5,12 @@ import { ZodEvmBlockchain } from '../../chains';
  * Parameters for taking an NFT offer
  */
 export const BaseTakeItemOfferParamsSchema = z.object({
-  // Generic parameters that can be shared between chains
+  /**
+   * The NFT token
+   *
+   * - For EVM, the token is in the format of <contract address>:<token id>
+   * - For Solana, the token is the mint address
+   */
   token: z
     .string()
     .describe(
@@ -14,30 +19,85 @@ export const BaseTakeItemOfferParamsSchema = z.object({
 });
 
 export const EvmTakeItemOfferParamsSchema = BaseTakeItemOfferParamsSchema.extend({
-  // EVM-specific parameters
-  quantity: z.number().optional().describe('Quantity of tokens to sell.'),
+  /**
+   * The number of tokens to sell
+   */
+  quantity: z.number().optional().describe('The number of tokens to sell.'),
+
+  /**
+   * The order ID to sell into
+   */
   orderId: z.string().optional().describe('Optional order id to sell into.'),
 });
 
 export const EvmMultipleTakeItemOfferParamsSchema = z.object({
+  /**
+   * The EVM chain to take the item offer on
+   */
   chain: ZodEvmBlockchain.describe('The chain to take the item offer on'),
+
+  /**
+   * The take item offer parameters
+   */
   items: z.array(EvmTakeItemOfferParamsSchema).describe('The take item offer parameters'),
 });
 
 export const SolanaTakeItemOfferParamsSchema = BaseTakeItemOfferParamsSchema.extend({
-  // Solana-specific parameters
-  // token in TakeItemOfferParams maps to tokenMint in V2TakeItemOfferRequest
+  /**
+   * The buyer's wallet address
+   */
   buyer: z.string().describe("The buyer's wallet address"),
-  price: z.string().optional().describe('The original offer price'),
+
+  /**
+   * The original offer price
+   */
+  price: z.string().describe('The original offer price'),
+
+  /**
+   * The new price to accept
+   */
   newPrice: z.string().describe('The new price to accept'),
-  auctionHouseAddress: z.string().describe('Auction house address'),
-  tokenATA: z.string().describe('Token associated token account'),
+
+  /**
+   * The auction house address
+   *
+   * @default AUCTION_HOUSE_ADDRESS (found in constants/solana/marketplace.ts)
+   */
+  auctionHouseAddress: z.string().optional().describe('Auction house address'),
+
+  /**
+   * The buyer referral address
+   */
   buyerReferral: z.string().optional().describe('Buyer referral address'),
+
+  /**
+   * The seller referral address
+   */
   sellerReferral: z.string().optional().describe('Seller referral address'),
+
+  /**
+   * The buyer expiry timestamp
+   */
   buyerExpiry: z.number().optional().describe('Buyer expiry timestamp'),
-  sellerExpiry: z.number().describe('Seller expiry timestamp'),
+
+  /**
+   * The seller expiry timestamp
+   */
+  sellerExpiry: z.number().optional().describe('Seller expiry timestamp'),
+
+  /**
+   * The priority fee in micro lamports
+   */
   prioFeeMicroLamports: z.number().optional().describe('Priority fee in micro lamports'),
+
+  /**
+   * The maximum priority fee in lamports
+   */
   maxPrioFeeLamports: z.number().optional().describe('Maximum priority fee in lamports'),
+
+  /**
+   * The exact priority fee in lamports
+   */
   exactPrioFeeLamports: z.number().optional().describe('Exact priority fee in lamports'),
 });
 

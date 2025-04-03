@@ -1,0 +1,1 @@
+export const AUCTION_HOUSE_ADDRESS = 'E8cU1WiRWjanGxmn96ewBgk9vPTcL6AEZ1t6F6fkgUWe';

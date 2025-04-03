@@ -38,7 +38,7 @@ describe('SolanaApiMappers V4', () => {
             {
               kind: MintStageKind.Public,
               price: {
-                currency: 'SOL',
+                currency: { chain: Blockchain.SOLANA, assetId: 'So11111111111111111111111111111111111111112' },
                 raw: '1000000000',
               },
               startTime: '2023-01-01T00:00:00Z',
@@ -172,17 +172,15 @@ describe('SolanaApiMappers V4', () => {
       const params: SolanaMintParams = {
         chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
-        wallet: 'walletAddress123',
         nftAmount: 3,
         stageId: 'stage1',
         kind: MintStageKind.Public,
         candyMachineId: 'candyMachineId123',
         symbol: 'TEST',
-        payer: 'payerAddress123',
         recipient: 'recipientAddress123',
       };
 
-      const result = SolanaApiMappers.v4.mintRequest(params);
+      const result = SolanaApiMappers.v4.mintRequest('walletAddress123', params);
 
       // Verify the result is a valid V4MintRequest
       expect(result).toBeDefined();
@@ -203,15 +201,14 @@ describe('SolanaApiMappers V4', () => {
       const params: SolanaMintParams = {
         chain: Blockchain.SOLANA as Blockchain.SOLANA,
         collectionId: 'collectionId123',
-        wallet: 'walletAddress123',
         nftAmount: 1,
         kind: MintStageKind.Public,
         candyMachineId: 'candyMachineId123',
         symbol: 'TEST',
-        payer: 'payerAddress123',
+        recipient: 'recipientAddress123',
       };
 
-      const result = SolanaApiMappers.v4.mintRequest(params);
+      const result = SolanaApiMappers.v4.mintRequest('walletAddress123', params);
 
       // Verify required properties
       expect(result.collectionId).toBe('collectionId123');

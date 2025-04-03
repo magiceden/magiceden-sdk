@@ -12,7 +12,6 @@ import {
   SolanaMintParams,
   SolanaPublishLaunchpadParams,
 } from '../../types/services/nft';
-
 import {
   V2ListRequest,
   V2CancelListingRequest,
@@ -26,6 +25,8 @@ import {
   V4MintRequest,
   V4PublishLaunchpadRequest,
 } from '../../types/api';
+import { AUCTION_HOUSE_ADDRESS } from '../../constants/solana';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 /**
  * Solana NFT Service Mappers
@@ -41,13 +42,13 @@ export const SolanaApiMappers = {
      */
     listRequest: (seller: string, params: SolanaListParams): V2ListRequest => ({
       seller,
-      tokenAccount: params.token,
+      tokenAccount: params.tokenAccount || params.token,
       tokenMint: params.token,
-      auctionHouseAddress: params.auctionHouseAddress,
-      price: Number(params.price),
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
+      price: Number(params.price) / LAMPORTS_PER_SOL,
       splPrice: params.splPrice,
       sellerReferral: params.sellerReferral,
-      expiry: params.expiry,
+      expiry: params.expiry || -1,
       prioFeeMicroLamports: params.prioFeeMicroLamports,
       maxPrioFeeLamports: params.maxPrioFeeLamports,
       exactPrioFeeLamports: params.exactPrioFeeLamports,
@@ -63,11 +64,11 @@ export const SolanaApiMappers = {
     ): V2CancelListingRequest => ({
       seller,
       tokenMint: params.token,
-      auctionHouseAddress: params.auctionHouseAddress,
-      tokenAccount: params.tokenAccount,
-      price: Number(params.price),
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
+      tokenAccount: params.tokenAccount || params.token,
+      price: Number(params.price) / LAMPORTS_PER_SOL,
       sellerReferral: params.sellerReferral,
-      expiry: params.expiry,
+      expiry: params.expiry || -1,
       prioFeeMicroLamports: params.prioFeeMicroLamports,
       maxPrioFeeLamports: params.maxPrioFeeLamports,
       exactPrioFeeLamports: params.exactPrioFeeLamports,
@@ -82,8 +83,8 @@ export const SolanaApiMappers = {
     ): V2MakeItemOfferRequest => ({
       buyer,
       tokenMint: params.token,
-      auctionHouseAddress: params.auctionHouseAddress,
-      price: Number(params.price),
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
+      price: Number(params.price) / LAMPORTS_PER_SOL,
       buyerReferral: params.buyerReferral,
       expiry: params.expiry,
       useBuyV2: params.useBuyV2,
@@ -102,8 +103,8 @@ export const SolanaApiMappers = {
     ): V2CancelItemOfferRequest => ({
       buyer,
       tokenMint: params.token,
-      auctionHouseAddress: params.auctionHouseAddress,
-      price: Number(params.price),
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
+      price: Number(params.price) / LAMPORTS_PER_SOL,
       buyerReferral: params.buyerReferral,
       expiry: params.expiry,
       prioFeeMicroLamports: params.prioFeeMicroLamports,
@@ -120,15 +121,15 @@ export const SolanaApiMappers = {
     ): V2TakeItemOfferRequest => ({
       seller,
       buyer: params.buyer,
-      auctionHouseAddress: params.auctionHouseAddress,
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       tokenMint: params.token,
-      tokenATA: params.tokenATA,
-      price: Number(params.price),
-      newPrice: Number(params.newPrice),
+      tokenATA: params.token,
+      price: Number(params.price) / LAMPORTS_PER_SOL,
+      newPrice: Number(params.newPrice) / LAMPORTS_PER_SOL,
       buyerReferral: params.buyerReferral,
       sellerReferral: params.sellerReferral,
       buyerExpiry: params.buyerExpiry,
-      sellerExpiry: params.sellerExpiry,
+      sellerExpiry: params.sellerExpiry || -1,
       prioFeeMicroLamports: params.prioFeeMicroLamports,
       maxPrioFeeLamports: params.maxPrioFeeLamports,
       exactPrioFeeLamports: params.exactPrioFeeLamports,
@@ -140,14 +141,14 @@ export const SolanaApiMappers = {
     buyRequest: (buyer: string, params: SolanaBuyParams): V2BuyRequest => ({
       buyer,
       seller: params.seller,
-      auctionHouseAddress: params.auctionHouseAddress,
+      auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       tokenMint: params.token,
-      tokenATA: params.tokenATA,
-      price: Number(params.price),
+      tokenATA: params.token,
+      price: Number(params.price) / LAMPORTS_PER_SOL,
       buyerReferral: params.buyerReferral,
       sellerReferral: params.sellerReferral,
       buyerExpiry: params.buyerExpiry,
-      sellerExpiry: params.sellerExpiry,
+      sellerExpiry: params.sellerExpiry || -1,
       buyerCreatorRoyaltyPercent: params.buyerCreatorRoyaltyPercent,
       splPrice: params.splPrice,
     }),
@@ -160,6 +161,7 @@ export const SolanaApiMappers = {
       to: params.to,
       mint: params.token,
       isCompressed: params.isCompressed,
+      priorityFee: params.priorityFee
     }),
   },
 
@@ -178,8 +180,11 @@ export const SolanaApiMappers = {
      * Maps Solana create launchpad parameters to V4 create launchpad request
      */
     createLaunchpadRequest: (params: SolanaCreateLaunchpadParams): V4CreateLaunchpadRequest => ({
-      // All variables have the same name
       ...params,
+      // The tokenImageUrl is not used for non-open editions
+      // If tokenImageUrl is not provided for open editions, use imageUrl
+      // If non-open editions, just override and set to undefined
+      tokenImageUrl: params.isOpenEdition ? params.tokenImageUrl || params.imageUrl : undefined,
     }),
 
     /**
@@ -192,8 +197,14 @@ export const SolanaApiMappers = {
     /**
      * Maps Solana mint parameters to V4 mint request
      */
-    mintRequest: (params: SolanaMintParams): V4MintRequest => ({
+    mintRequest: (wallet: string, params: SolanaMintParams): V4MintRequest => ({
       ...params,
+
+      wallet: {
+        chain: params.chain,
+        address: wallet,
+      },
+      payer: wallet
     }),
   },
 };

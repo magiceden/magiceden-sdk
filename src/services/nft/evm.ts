@@ -62,7 +62,9 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getMintOperations(
     params: ChainMethodParams<'evm', 'mint'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v4ApiClient.mint(EvmApiMappers.v4.mintRequest(params));
+    const response = await this.v4ApiClient.mint(
+      EvmApiMappers.v4.mintRequest(this.config.wallet.getAddress() as `0x${string}`, params),
+    );
     return EvmTransactionAdapters.fromV4TransactionResponse(response);
   }
 

@@ -6,7 +6,12 @@ import { ZodEvmBlockchain } from '../../chains';
  * Parameters for buying an NFT
  */
 export const BaseBuyParamsSchema = z.object({
-  // Generic parameters that can be shared between chains
+  /**
+   * The NFT token
+   *
+   * - For EVM, the token is in the format of <contract address>:<token id>
+   * - For Solana, the token is the mint address
+   */
   token: z
     .string()
     .describe(
@@ -15,30 +20,90 @@ export const BaseBuyParamsSchema = z.object({
 });
 
 export const EvmBuyParamsSchema = BaseBuyParamsSchema.extend({
+  /**
+   * The collection to buy
+   */
   collection: z.string().optional().describe('Collection to buy.'),
-  quantity: z.number().optional().describe('Quantity of tokens to buy.'),
+
+  /**
+   * The number of NFTs to buy
+   */
+  quantity: z.number().optional().describe('The number of NFTs to buy.'),
+
+  /**
+   * The order id to fill
+   */
   orderId: z.string().optional().describe('Optional order id to fill.'),
 });
 
 export const EvmMultipleBuyParamsSchema = z.object({
+  /**
+   * The EVM chain to buy on
+   */
   chain: ZodEvmBlockchain.describe('The chain to buy on'),
+
+  /**
+   * The currency to use for the purchase
+   */
   currency: z.string().optional().describe('The currency to use for the purchase'),
+
+  /**
+   * The chain id of the currency
+   */
   currencyChainId: z.number().optional().describe('The chain id of the currency'),
+
+  /**
+   * The buy parameters
+   */
   items: z.array(EvmBuyParamsSchema).describe('The buy parameters'),
 });
 
 export const SolanaBuyParamsSchema = BaseBuyParamsSchema.extend({
-  // Solana-specific parameters
-  // token in BuyParams maps to tokenMint in V2BuyRequest
+  /**
+   * The seller's wallet address
+   */
   seller: z.string().describe("The seller's wallet address"),
+
+  /**
+   * The purchase price
+   */
   price: z.string().describe('The purchase price'),
-  auctionHouseAddress: z.string().describe('Auction house address'),
-  tokenATA: z.string().describe('Token associated token account'),
+
+  /**
+   * The auction house address
+   *
+   * @default AUCTION_HOUSE_ADDRESS (found in constants/solana/marketplace.ts)
+   */
+  auctionHouseAddress: z.string().optional().describe('Auction house address'),
+
+  /**
+   * The buyer referral address
+   */
   buyerReferral: z.string().optional().describe('Buyer referral address'),
+
+  /**
+   * The seller referral address
+   */
   sellerReferral: z.string().optional().describe('Seller referral address'),
+
+  /**
+   * The buyer expiry timestamp
+   */
   buyerExpiry: z.number().optional().describe('Buyer expiry timestamp'),
-  sellerExpiry: z.number().describe('Seller expiry timestamp'),
+
+  /**
+   * The seller expiry timestamp
+   */
+  sellerExpiry: z.number().optional().describe('Seller expiry timestamp'),
+
+  /**
+   * The buyer creator royalty percentage
+   */
   buyerCreatorRoyaltyPercent: z.number().optional().describe('Buyer creator royalty percentage'),
+
+  /**
+   * The SPL token price details
+   */
   splPrice: z.custom<SplAmount>().optional().describe('SPL token price details'),
 });
 

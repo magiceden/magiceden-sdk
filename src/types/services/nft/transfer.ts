@@ -5,7 +5,12 @@ import { ZodEvmBlockchain } from '../../chains';
  * Parameters for transferring an NFT
  */
 export const BaseTransferParamsSchema = z.object({
-  // Generic parameters that can be shared between chains
+  /**
+   * The NFT token
+   *
+   * - For EVM, the token is in the format of <contract address>:<token id>
+   * - For Solana, the token is the mint address
+   */
   token: z
     .string()
     .describe(
@@ -14,21 +19,44 @@ export const BaseTransferParamsSchema = z.object({
 });
 
 export const EvmTransferParamsSchema = BaseTransferParamsSchema.extend({
-  // EVM-specific parameters
+  /**
+   * The number of NFTs to transfer
+   */
   quantity: z.number().optional().describe('The quantity of NFTs to transfer'),
 });
 
 export const EvmMultipleTransferParamsSchema = z.object({
+  /**
+   * The EVM chain to transfer the NFT on
+   */
   chain: ZodEvmBlockchain.describe('The chain to transfer the NFT on'),
+
+  /**
+   * The recipient's wallet address
+   */
   to: z.string().describe("The recipient's wallet address"),
+
+  /**
+   * The items (NFTs) to transfer
+   */
   items: z.array(EvmTransferParamsSchema).describe('The transfer parameters'),
 });
 
 export const SolanaTransferParamsSchema = BaseTransferParamsSchema.extend({
-  // Solana-specific parameters
-  // token in TransferParams maps to mint in V2TransferRequest
+  /**
+   * The recipient's wallet address
+   */
   to: z.string().describe("The recipient's wallet address"),
-  isCompressed: z.boolean().optional().describe('Whether the NFT is compressed'),
+
+  /**
+   * Whether the NFT is a compressed NFT
+   */
+  isCompressed: z.boolean().optional().describe('Whether the NFT is a compressed NFT'),
+
+  /**
+   * The priority fee in micro lamports
+   */
+  priorityFee: z.number().optional().describe('The priority fee in micro lamports'),
 });
 
 export type EvmTransferParams = z.infer<typeof EvmMultipleTransferParamsSchema>;

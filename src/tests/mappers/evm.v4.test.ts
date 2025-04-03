@@ -33,7 +33,7 @@ describe('EvmApiMappers V4', () => {
             {
               kind: MintStageKind.Public,
               price: {
-                currency: 'ETH',
+                currency: { chain: Blockchain.ETHEREUM, assetId: '0x0000000000000000000000000000000000000000' },
                 raw: '100000000000000000',
               },
               startTime: '2023-01-01T00:00:00Z',
@@ -101,7 +101,7 @@ describe('EvmApiMappers V4', () => {
             {
               kind: MintStageKind.Public,
               price: {
-                currency: 'MATIC',
+                currency: { chain: Blockchain.POLYGON, assetId: '0x0000000000000000000000000000000000000000' },
                 raw: '1000000000000000000',
               },
               startTime: '2023-01-01T00:00:00Z',
@@ -161,7 +161,7 @@ describe('EvmApiMappers V4', () => {
             {
               kind: MintStageKind.Public,
               price: {
-                currency: 'ETH',
+                currency: { chain: Blockchain.ETHEREUM, assetId: '0x0000000000000000000000000000000000000000' },
                 raw: '200000000000000000',
               },
               startTime: '2023-02-01T00:00:00Z',
@@ -263,13 +263,12 @@ describe('EvmApiMappers V4', () => {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
         collectionId: '0x3456789012abcdef3456789012abcdef34567890',
-        wallet: '0x4567890123abcdef4567890123abcdef45678901',
         nftAmount: 3,
         stageId: 'stage1',
         kind: MintStageKind.Public,
       };
 
-      const result = EvmApiMappers.v4.mintRequest(params);
+      const result = EvmApiMappers.v4.mintRequest('0x4567890123abcdef4567890123abcdef45678901', params);
 
       // Verify the result is a valid V4MintRequest
       expect(result).toBeDefined();
@@ -289,13 +288,12 @@ describe('EvmApiMappers V4', () => {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC1155 as EvmProtocolType.ERC1155,
         collectionId: '0x3456789012abcdef3456789012abcdef34567890',
-        wallet: '0x4567890123abcdef4567890123abcdef45678901',
         nftAmount: 5,
         kind: MintStageKind.Public,
         tokenId: 1,
       };
 
-      const result = EvmApiMappers.v4.mintRequest(params);
+      const result = EvmApiMappers.v4.mintRequest('0x4567890123abcdef4567890123abcdef45678901', params);
 
       // Verify required properties
       expect(result.collectionId).toBe('0x3456789012abcdef3456789012abcdef34567890');
@@ -314,12 +312,11 @@ describe('EvmApiMappers V4', () => {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
         collectionId: '0x3456789012abcdef3456789012abcdef34567890',
-        wallet: '0x4567890123abcdef4567890123abcdef45678901',
         nftAmount: 1,
         kind: MintStageKind.Public,
       };
 
-      const result = EvmApiMappers.v4.mintRequest(params);
+      const result = EvmApiMappers.v4.mintRequest('0x4567890123abcdef4567890123abcdef45678901', params);
 
       // Verify required properties
       expect(result.collectionId).toBe('0x3456789012abcdef3456789012abcdef34567890');

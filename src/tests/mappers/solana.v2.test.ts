@@ -35,7 +35,7 @@ describe('SolanaApiMappers V2', () => {
       });
     });
 
-    it('should handle optional parameters', () => {
+    it('should handle optional parameters', async () => {
       const seller = 'sellerAddress123';
       const params = {
         token: 'tokenMintAddress123',
@@ -45,7 +45,7 @@ describe('SolanaApiMappers V2', () => {
         expiry: 1234567890,
       };
 
-      const result = SolanaApiMappers.v2.listRequest(seller, params);
+      const result = await SolanaApiMappers.v2.listRequest(seller, params);
 
       expect(result.sellerReferral).toBeUndefined();
       expect(result.prioFeeMicroLamports).toBeUndefined();
@@ -54,7 +54,7 @@ describe('SolanaApiMappers V2', () => {
       expect(result.txFeePayer).toBeUndefined();
     });
 
-    it('should correctly map SPL token price', () => {
+    it('should correctly map SPL token price', async () => {
       const splPrice: SplAmount = {
         address: 'splTokenMint123',
         rawAmount: BigInt(1000000),
@@ -71,14 +71,14 @@ describe('SolanaApiMappers V2', () => {
         splPrice,
       };
 
-      const result = SolanaApiMappers.v2.listRequest(seller, params);
+      const result = await SolanaApiMappers.v2.listRequest(seller, params);
 
       expect(result.splPrice).toEqual(splPrice);
     });
   });
 
   describe('cancelListingRequest', () => {
-    it('should correctly map cancel listing parameters', () => {
+    it('should correctly map cancel listing parameters', async () => {
       const seller = 'sellerAddress123';
       const params = {
         token: 'tokenMintAddress123',
@@ -92,7 +92,7 @@ describe('SolanaApiMappers V2', () => {
         exactPrioFeeLamports: 7500,
       };
 
-      const result = SolanaApiMappers.v2.cancelListingRequest(seller, params);
+      const result = await SolanaApiMappers.v2.cancelListingRequest(seller, params);
 
       expect(result).toEqual({
         tokenMint: 'tokenMintAddress123',
@@ -108,7 +108,7 @@ describe('SolanaApiMappers V2', () => {
       });
     });
 
-    it('should handle optional parameters', () => {
+    it('should handle optional parameters', async () => {
       const seller = 'sellerAddress123';
       const params = {
         token: 'tokenMintAddress123',
@@ -118,7 +118,7 @@ describe('SolanaApiMappers V2', () => {
         expiry: 1234567890,
       };
 
-      const result = SolanaApiMappers.v2.cancelListingRequest(seller, params);
+      const result = await SolanaApiMappers.v2.cancelListingRequest(seller, params);
 
       expect(result.sellerReferral).toBeUndefined();
       expect(result.prioFeeMicroLamports).toBeUndefined();
@@ -273,6 +273,7 @@ describe('SolanaApiMappers V2', () => {
         buyer: 'buyerAddress123',
         auctionHouseAddress: 'auctionHouse123',
         tokenATA: 'tokenATA123',
+        price: '1000000000',
         newPrice: '1100000000',
         sellerExpiry: 1234567891,
       };

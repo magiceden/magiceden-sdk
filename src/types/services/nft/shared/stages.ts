@@ -7,6 +7,7 @@ import {
   MIN_SUPPLY,
   MIN_WALLET_LIMIT,
 } from '../../../../constants/nft';
+import { ChainAsset } from '../../../../types/chains';
 
 /**
  * Enum for different types of mint stages
@@ -23,7 +24,7 @@ const BaseMintStage = {
   kind: z.nativeEnum(MintStageKind).describe('Type of mint stage'),
   price: z
     .object({
-      currency: z.string().describe('Currency asset identifier'),
+      currency: ChainAsset.describe('Currency asset identifier'),
       raw: z.string().describe('Raw price amount as string'),
     })
     .describe('Price configuration for the mint'),

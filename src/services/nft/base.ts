@@ -33,8 +33,7 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
     const apiOptions: ApiClientOptions = {
       chain: config.chain,
       apiKey: config.apiKey,
-      headers: config.headers,
-      timeout: config.timeout,
+      ...config.apiOptions,
     };
 
     this.v2ApiClient = new V2ApiClient(apiOptions);
@@ -110,7 +109,13 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
   ): Promise<ChainOperation<C>[]>;
 
   /**
-   * Lists an NFT for sale
+   * Lists an NFT for sale.
+   *
+   * - Supported on EVM.
+   * - Supported on Solana (every NFT type excluding cNFT).
+   *
+   * @param params - The parameters for the list operation
+   * @returns The operation response
    */
   async list(params: ChainMethodParams<C, 'list'>): Promise<OperationResponse[]> {
     const operations = await this.getListOperations(params);
@@ -261,13 +266,17 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
             status: txReceipt.status,
             error: txReceipt.error,
             metadata: {
-              ...txReceipt.metadata,
+              operation: operation.metadata,
+              receipt: txReceipt.metadata,
             },
           };
         case TransactionStrategy.SignAndSend:
           return {
             txId: signature,
             status: 'pending',
+            metadata: {
+              operation: operation.metadata,
+            },
           };
         default:
           throw new Error(
@@ -279,6 +288,9 @@ export abstract class BaseNftService<C extends SupportedChain = SupportedChain> 
         txId: '',
         status: 'failed',
         error: error instanceof Error ? error.message : 'Unknown error',
+        metadata: {
+          operation: operation.metadata
+        }
       };
     }
   }

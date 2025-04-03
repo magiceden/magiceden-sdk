@@ -26,6 +26,7 @@ export interface Operation {
 export interface TransactionOperation<C extends SupportedChain> extends Operation {
   type: 'transaction';
   transactionData: ChainTransaction<C>;
+  metadata?: Record<string, any>;
 }
 
 /**
@@ -35,6 +36,7 @@ export interface TransactionOperation<C extends SupportedChain> extends Operatio
 export interface SignatureOperation<C extends SupportedChain> extends Operation {
   type: 'signature';
   signatureData: ChainSignature<C>;
+  metadata?: Record<string, any>;
 }
 
 /**
