@@ -57,6 +57,13 @@ export const SolanaListParamsSchema = BaseListParamsSchema.extend({
   auctionHouseAddress: z.string().optional().describe('Auction house address'),
 
   /**
+   * The token account.
+   * 
+   * Required when using legacy NFTs. When using MPL Core, this can be left empty.
+   */
+  tokenAccount: z.string().optional().describe('The token account'),
+
+  /**
    * The SPL token price details
    */
   splPrice: z.custom<SplAmount>().optional().describe('SPL token price details'),

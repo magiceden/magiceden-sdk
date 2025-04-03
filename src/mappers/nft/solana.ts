@@ -42,7 +42,7 @@ export const SolanaApiMappers = {
      */
     listRequest: (seller: string, params: SolanaListParams): V2ListRequest => ({
       seller,
-      tokenAccount: params.token,
+      tokenAccount: params.tokenAccount || params.token,
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
       price: Number(params.price) / LAMPORTS_PER_SOL,
@@ -65,7 +65,7 @@ export const SolanaApiMappers = {
       seller,
       tokenMint: params.token,
       auctionHouseAddress: params.auctionHouseAddress || AUCTION_HOUSE_ADDRESS,
-      tokenAccount: params.token,
+      tokenAccount: params.tokenAccount || params.token,
       price: Number(params.price) / LAMPORTS_PER_SOL,
       sellerReferral: params.sellerReferral,
       expiry: params.expiry || -1,

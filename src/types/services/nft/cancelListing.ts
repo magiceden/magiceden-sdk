@@ -31,6 +31,13 @@ export const SolanaCancelListingParamsSchema = BaseCancelListingParamsSchema.ext
   token: z.string().describe('The NFT token address/mint'),
 
   /**
+   * The token account.
+   * 
+   * Required when using legacy NFTs. When using MPL Core, this can be left empty.
+   */
+  tokenAccount: z.string().optional().describe('The token account'),
+  
+  /**
    * The listing price to cancel
    */
   price: z.string().describe('The listing price to cancel'),
