@@ -61,6 +61,7 @@ export const BaseCreateLaunchpadParamsSchema = z.object({
   /**
    * For non-open editions: Required URL pointing to a directory containing metadata JSON files for each NFT (0.json, 1.json, etc.).
    * Each JSON file should include its own image URL for that specific NFT.
+   * 
    * For open editions: Optional URL for additional metadata.
    */
   nftMetadataUrl: z.string().min(1).optional().describe('JSON file that contains all the metadata'),
