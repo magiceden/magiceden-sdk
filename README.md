@@ -128,6 +128,166 @@ const transferResult = await solanaClient.nft.transfer({
 console.log('Transfer completed:', transferResult);
 ```
 
+### Creating a Launchpad
+
+```typescript
+// Create a new NFT launchpad
+const launchpadResult = await client.nft.createLaunchpad({
+  chain: Blockchain.SOLANA,
+  protocol: SolProtocolType.METAPLEX_CORE,
+  creator: walletAddress,
+  name: 'TestCollection',
+  symbol: 'TEST',
+  description: 'This is a test collection created with the Magic Eden self-serve API',
+  nftMetadataUrl: 'https://bafybeic3rs6wmnnhqachwxsiizlblignek6aitc5b3ooenhhtkez3onmwu.ipfs.w3s.link',
+  royaltyBps: 500, // 5%
+  royaltyRecipients: [{ address: walletAddress, share: 100 }],
+  payoutRecipient: walletAddress,
+  social: {
+    discordUrl: 'https://discord.gg/magiceden',
+    twitterUsername: 'magiceden',
+    externalUrl: 'https://magiceden.io',
+  },
+  mintStages: {
+    maxSupply: 10000,
+    stages: [
+      {
+        kind: MintStageKind.Allowlist,
+        price: {
+          currency: {
+            chain: Blockchain.SOLANA,
+            assetId: 'So11111111111111111111111111111111111111112',
+          },
+          raw: '1', // Price in lamports
+        },
+        startTime: '2025-03-20T00:00:00.000Z',
+        endTime: '2025-03-27T00:00:00.000Z',
+        walletLimit: 2,
+        allowlist: [
+          walletAddress,
+          "5FHwkrdxkrR7zKy1jHmqh5uWyKj1ZbM7PKhRgw7F8Z8K",
+          "8HXhDbwLVeS7neCC93dYeM9LCokRMSbSw2q9ofsPRgWi"
+        ],
+      },
+      {
+        kind: MintStageKind.Public,
+        price: {
+          currency: {
+            chain: Blockchain.SOLANA,
+            assetId: 'So11111111111111111111111111111111111111112',
+          },
+          raw: '1', // Price in lamports
+        },
+        startTime: '2025-03-28T00:00:00.000Z',
+        endTime: '2030-03-30T00:00:00.000Z',
+        walletLimit: 10
+      },
+    ],
+  },
+  isOpenEdition: false,
+});
+
+// Gives you the following response, which contains all transactions that were created and sent in the process as well as some metadata about the launchpad:
+/**
+ * [
+  {
+    "txId": "<TX_ID>",
+    "status": "confirmed",
+    "metadata": {
+      "operation": {
+        "payload": {
+          "chain": "solana",
+          "candyMachineId": "<CANDY_MACHINE_ID>",
+          "collectionId": "<COLLECTION_ID>",
+          "symbol": "<SYMBOL>",
+          "authorization": {
+            "signer": "<SIGNER>",
+          }
+        }
+      },
+      "receipt": {
+        "blockhash": "<BLOCK_HASH>",
+        "lastValidBlockHeight": <BLOCK_HEIGHT>
+      }
+    }
+  },
+  {
+    "txId": "<TX_ID>",
+    "status": "confirmed",
+    "metadata": {
+      "operation": {
+        "payload": {
+          "chain": "solana",
+          "candyMachineId": "<CANDY_MACHINE_ID>",
+          "collectionId": "<COLLECTION_ID>",
+          "symbol": "<SYMBOL>",
+          "authorization": {
+            "signer": "<SIGNER>",
+          }
+        }
+      },
+      "receipt": {
+        "blockhash": "<BLOCK_HASH>",
+        "lastValidBlockHeight": <BLOCK_HEIGHT>
+      }
+    }
+  },
+  {
+    "txId": "<TX_ID>",
+    "status": "confirmed",
+    "metadata": {
+      "operation": {
+        "payload": {
+          "chain": "solana",
+          "candyMachineId": "<CANDY_MACHINE_ID>",
+          "collectionId": "<COLLECTION_ID>",
+          "symbol": "<SYMBOL>",
+          "authorization": {
+            "signer": "<SIGNER>",
+          }
+        }
+      },
+      "receipt": {
+        "blockhash": "<BLOCK_HASH>",
+        "lastValidBlockHeight": <BLOCK_HEIGHT>
+      }
+    }
+  },
+  {
+    "txId": "<TX_ID>",
+    "status": "confirmed",
+    "metadata": {
+      "operation": {
+        "payload": {
+          "chain": "solana",
+          "candyMachineId": "<CANDY_MACHINE_ID>",
+          "collectionId": "<COLLECTION_ID>",
+          "symbol": "<SYMBOL>",
+          "authorization": {
+            "signer": "<SIGNER>",
+          }
+        }
+      },
+      "receipt": {
+        "blockhash": "<BLOCK_HASH>",
+        "lastValidBlockHeight": <BLOCK_HEIGHT>
+      }
+    }
+  }
+]
+ */
+```
+
+The `createLaunchpad` function allows you to set up a new NFT collection with multiple mint stages, including an allowlist (whitelist) stage and a public stage. You can configure:
+
+- Collection details (name, symbol, description)
+- Royalty settings
+- Social media links
+- Mint stages with different pricing and access controls
+- Supply limits and wallet limits
+
+This example creates a collection with a 10,000 NFT supply, 5% royalties, and two mint stages.
+
 ### Complete Example
 
 ```typescript
