@@ -138,11 +138,6 @@ export const EvmUpdateLaunchpadParamsSchema = BaseUpdateLaunchpadParamsSchema.ex
    * The protocol used for the token.
    */
   protocol: z.enum([EvmProtocolType.ERC721, EvmProtocolType.ERC1155]),
-  
-  /**
-   * Signature of the message for authentication.
-   */
-  signature: z.string().describe('Signature of the message'),
 });
 
 export const SolanaUpdateLaunchpadParamsSchema = BaseUpdateLaunchpadParamsSchema.extend({

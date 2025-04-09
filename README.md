@@ -535,6 +535,23 @@ const launchpadResult = await client.nft.createLaunchpad({
 console.log('Launchpad created successfully!', launchpadResult);
 ```
 
+### Updating a Launchpad (EVM)
+
+```typescript
+// Update an existing NFT launchpad on EVM chains
+const updateResult = await client.nft.updateLaunchpad({
+  chain: Blockchain.BASE,
+  protocol: EvmProtocolType.ERC1155,
+  tokenId: 0,
+  collectionId: '0x949de1b4d4cc4a8e63b7565b6dc525d8eb5dd15a',
+  owner: walletAddress,
+  name: 'TestCollection2',
+  payoutRecipient: walletAddress,
+});
+
+console.log('Launchpad updated successfully!', updateResult);
+```
+
 ### Minting an NFT (EVM)
 
 ```typescript
