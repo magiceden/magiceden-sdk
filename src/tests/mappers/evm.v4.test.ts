@@ -11,11 +11,6 @@ describe('EvmApiMappers V4', () => {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
         creator: '0x1234567890abcdef1234567890abcdef12345678',
-        social: {
-          discordUrl: 'https://discord.com/test',
-          externalUrl: 'https://example.com',
-          twitterUsername: 'testuser',
-        },
         name: 'Test Collection',
         symbol: 'TEST',
         imageUrl: 'https://example.com/image.png',
@@ -82,11 +77,6 @@ describe('EvmApiMappers V4', () => {
         chain: Blockchain.POLYGON as Blockchain.POLYGON,
         protocol: EvmProtocolType.ERC1155 as EvmProtocolType.ERC1155,
         creator: '0x1234567890abcdef1234567890abcdef12345678',
-        social: {
-          discordUrl: 'https://discord.com/test',
-          externalUrl: 'https://example.com',
-          twitterUsername: 'testuser',
-        },
         name: 'Test Collection',
         symbol: 'TEST',
         imageUrl: 'https://example.com/image.png',

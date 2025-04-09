@@ -477,6 +477,64 @@ const transferResult = await client.nft.transfer({
 console.log('Transfer completed successfully!', transferResult);
 ```
 
+### Creating a Launchpad (EVM)
+
+```typescript
+// Create a new NFT launchpad on EVM chains
+const launchpadResult = await client.nft.createLaunchpad({
+  chain: Blockchain.BASE,
+  protocol: EvmProtocolType.ERC1155,
+  creator: walletAddress,
+  name: 'TestCollection',
+  symbol: 'TEST',
+  description: 'This is a test collection created with the Magic Eden self-serve API',
+  nftMetadataUrl: 'https://bafybeic3rs6wmnnhqachwxsiizlblignek6aitc5b3ooenhhtkez3onmwu.ipfs.w3s.link',
+  royaltyBps: 500, // 5%
+  royaltyRecipients: [{ address: walletAddress, share: 100 }],
+  payoutRecipient: walletAddress,
+  mintStages: {
+    tokenId: 0,
+    maxSupply: 10000,
+    walletLimit: 10,
+    stages: [
+      {
+        kind: MintStageKind.Allowlist,
+        price: {
+          currency: {
+            chain: Blockchain.BASE,
+            assetId: '0x0000000000000000000000000000000000000000',
+          },
+          raw: '1', // Price in wei
+        },
+        startTime: '2025-03-20T00:00:00.000Z',
+        endTime: '2025-03-27T00:00:00.000Z',
+        walletLimit: 2,
+        allowlist: [
+          walletAddress,
+          '0x1fDcfcdeE9e8fA32D95b9648a30E5Cb8C6C7197b',
+          '0x43B6BF3DD080D5a7055Ee6785a6f1d4Ba54fa09d',
+        ],
+      },
+      {
+        kind: MintStageKind.Public,
+        price: {
+          currency: {
+            chain: Blockchain.BASE,
+            assetId: '0x0000000000000000000000000000000000000000',
+          },
+          raw: '1', // Price in wei
+        },
+        startTime: '2025-03-28T00:00:00.000Z',
+        endTime: '2030-03-30T00:00:00.000Z',
+        walletLimit: 10,
+      },
+    ],
+  },
+});
+
+console.log('Launchpad created successfully!', launchpadResult);
+```
+
 ### Minting an NFT (EVM)
 
 ```typescript

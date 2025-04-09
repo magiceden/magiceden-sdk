@@ -32,19 +32,6 @@ export const BaseCreateLaunchpadParamsSchema = z.object({
   creator: z.string().min(1).describe('Creator wallet address'),
 
   /**
-   * The social media links.
-   */
-  social: z
-    .object({
-      discordUrl: z.string().optional(),
-      externalUrl: z.string().optional(),
-      telegramUrl: z.string().optional(),
-      twitterUsername: z.string().optional(),
-    })
-    .optional()
-    .describe('Social media links'),
-
-  /**
    * The collection name.
    */
   name: z.string().min(1).max(MAX_NAME_LENGTH).describe('Collection name'),
@@ -163,6 +150,21 @@ export const SolanaCreateLaunchpadParamsSchema = BaseCreateLaunchpadParamsSchema
   //   })
   //   .optional()
   //   .describe('Accounts for the launchpad'),
+
+  /**
+   * The social media links.
+   * 
+   * Currently only works on Solana. EVM is not yet supported.
+   */
+  social: z
+    .object({
+      discordUrl: z.string().optional(),
+      externalUrl: z.string().optional(),
+      telegramUrl: z.string().optional(),
+      twitterUsername: z.string().optional(),
+    })
+    .optional()
+    .describe('Social media links'),
 
   /**
    * The collection name.
