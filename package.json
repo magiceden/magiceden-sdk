@@ -1,6 +1,6 @@
 {
   "name": "@magiceden/magiceden-sdk",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "A TypeScript SDK for interacting with Magic Eden's API across multiple chains.",
   "author": "Magic Eden",
   "license": "MIT",

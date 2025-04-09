@@ -2,7 +2,7 @@
 
 A TypeScript SDK for interacting with Magic Eden's API across multiple chains (Solana and EVM-compatible blockchains).
 
-> **BETA NOTICE**: This SDK is currently in beta. Only the endpoints and methods documented in this README have been confirmed to work. Other endpoints are still being tested and may have issues. API signatures and parameters may change before the stable release.
+> **BETA NOTICE**: This SDK is currently in beta. The endpoints and methods documented in this README have been tested, but still may contain bugs or other issues. API signatures and parameters may still change before the stable release.
 
 ## Installation
 
