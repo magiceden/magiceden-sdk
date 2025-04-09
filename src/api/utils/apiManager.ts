@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import { NetworkError, AuthenticationError, RateLimitError, ApiError } from '../../errors';
 import { RetryablePromise } from '../../helpers';
 import https from 'https';
+import { USER_AGENT } from '../../constants/sdk';
 
 /**
  * API configuration options
@@ -63,6 +64,7 @@ export class ApiManager {
       baseURL,
       headers: {
         'Content-Type': 'application/json',
+        'x-sdk-name': USER_AGENT,
         ...(options.apiKey && { Authorization: `Bearer ${options.apiKey}` }),
         ...options.headers,
       },
