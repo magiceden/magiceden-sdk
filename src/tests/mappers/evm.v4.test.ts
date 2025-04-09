@@ -138,7 +138,7 @@ describe('EvmApiMappers V4', () => {
       const params: EvmUpdateLaunchpadParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
-        collection: '0x3456789012abcdef3456789012abcdef34567890',
+        collectionId: '0x3456789012abcdef3456789012abcdef34567890',
         owner: '0x4567890123abcdef4567890123abcdef45678901',
         social: {
           discordUrl: 'https://discord.com/updated',
@@ -184,7 +184,7 @@ describe('EvmApiMappers V4', () => {
       expect(result.protocol).toBe(EvmProtocolType.ERC721);
 
       // Verify collection and owner identifiers
-      expect(result.collection).toBe('0x3456789012abcdef3456789012abcdef34567890');
+      expect(result.collectionId).toBe('0x3456789012abcdef3456789012abcdef34567890');
       expect(result.owner).toBe('0x4567890123abcdef4567890123abcdef45678901');
 
       // Verify social media links
@@ -228,7 +228,7 @@ describe('EvmApiMappers V4', () => {
       const params: EvmUpdateLaunchpadParams = {
         chain: Blockchain.POLYGON as Blockchain.POLYGON,
         protocol: EvmProtocolType.ERC1155 as EvmProtocolType.ERC1155,
-        collection: '0x3456789012abcdef3456789012abcdef34567890',
+        collectionId: '0x3456789012abcdef3456789012abcdef34567890',
         owner: '0x4567890123abcdef4567890123abcdef45678901',
         name: 'Updated ERC1155 Collection',
         tokenId: 1,
@@ -241,7 +241,7 @@ describe('EvmApiMappers V4', () => {
       // Verify required properties
       expect(result.chain).toBe(Blockchain.POLYGON);
       expect(result.protocol).toBe(EvmProtocolType.ERC1155);
-      expect(result.collection).toBe('0x3456789012abcdef3456789012abcdef34567890');
+      expect(result.collectionId).toBe('0x3456789012abcdef3456789012abcdef34567890');
       expect(result.owner).toBe('0x4567890123abcdef4567890123abcdef45678901');
       expect(result.name).toBe('Updated ERC1155 Collection');
       expect(result.tokenId).toBe(1);

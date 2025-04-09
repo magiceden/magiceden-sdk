@@ -90,7 +90,7 @@ describe('SolanaApiMappers V4', () => {
       const params: SolanaUpdateLaunchpadParams = {
         chain: Blockchain.SOLANA as Blockchain.SOLANA,
         protocol: SolProtocolType.METAPLEX_CORE as SolProtocolType.METAPLEX_CORE,
-        collection: 'collectionAddress123',
+        collectionId: 'collectionAddress123',
         owner: 'ownerAddress123',
         social: {
           discordUrl: 'https://discord.com/test',
@@ -111,11 +111,6 @@ describe('SolanaApiMappers V4', () => {
         newSymbol: 'UPDT',
         externalLink: 'https://example.com/external',
         payer: 'payerAddress123',
-        authorization: {
-          signature: 'signature123',
-          signer: 'signerAddress123',
-          timestamp: 'timestamp123',
-        },
       };
 
       const result = SolanaApiMappers.v4.updateLaunchpadRequest(params);
@@ -128,7 +123,7 @@ describe('SolanaApiMappers V4', () => {
       expect(result.protocol).toBe(SolProtocolType.METAPLEX_CORE);
 
       // Verify collection and owner identifiers
-      expect(result.collection).toBe('collectionAddress123');
+      expect(result.collectionId).toBe('collectionAddress123');
       expect(result.owner).toBe('ownerAddress123');
 
       // Verify social media links

@@ -199,7 +199,7 @@ describe('EvmNftService V4', () => {
       const mockParams: EvmUpdateLaunchpadParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721,
-        collection: validEvmAddress,
+        collectionId: validEvmAddress,
         owner: validEvmAddress,
         message: 'Update collection message',
         signature: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
@@ -219,7 +219,7 @@ describe('EvmNftService V4', () => {
         payoutRecipient: validEvmAddress,
       };
 
-      const mockApiRequest = { collection: validEvmAddress /* other fields */ };
+      const mockApiRequest = { collectionId: validEvmAddress /* other fields */ };
 
       // Create mock response with metadata according to V4UpdateLaunchpadResponse
       const mockResponseWithMetadata: V4UpdateLaunchpadResponse = {
@@ -253,7 +253,7 @@ describe('EvmNftService V4', () => {
       const mockParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
-        collection: validEvmAddress,
+        collectionId: validEvmAddress,
         owner: validEvmAddress,
         message: 'Update collection message',
         signature: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',

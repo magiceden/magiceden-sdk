@@ -187,6 +187,8 @@ const launchpadResult = await client.nft.createLaunchpad({
   isOpenEdition: false,
 });
 
+console.log('Launchpad created successfully:', launchpadResult);
+
 // Gives you the following response, which contains all transactions that were created and sent in the process as well as some metadata about the launchpad:
 /**
  * [
@@ -278,15 +280,26 @@ const launchpadResult = await client.nft.createLaunchpad({
  */
 ```
 
-The `createLaunchpad` function allows you to set up a new NFT collection with multiple mint stages, including an allowlist (whitelist) stage and a public stage. You can configure:
+### Updating a Launchpad
 
-- Collection details (name, symbol, description)
-- Royalty settings
-- Social media links
-- Mint stages with different pricing and access controls
-- Supply limits and wallet limits
+```typescript
+// Update an existing NFT launchpad
+const updateResult = await client.nft.updateLaunchpad({
+  chain: Blockchain.SOLANA,
+  protocol: SolProtocolType.METAPLEX_CORE,
+  collectionId: '22zxgVwS7cXkTRfvFgERnN5KZpLgukQXAoauNkHtghX2',
+  owner: walletAddress,
+  payer: walletAddress,
+  symbol: 'TEST2',
+  newSymbol: 'TEST',
+  candyMachineId: 'iQU3uT6WnnYkCXqXreXm2ysihoj8WGXk5GJtczcos6a',
+  name: 'TestCollection',
+  payoutRecipient: walletAddress,
+  royaltyRecipients: [{ address: walletAddress, share: 100 }],
+});
 
-This example creates a collection with a 10,000 NFT supply, 5% royalties, and two mint stages.
+console.log('Launchpad updated successfully!', updateResult);
+```
 
 ### Complete Example
 
