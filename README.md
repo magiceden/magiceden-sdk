@@ -287,18 +287,34 @@ console.log('Launchpad created successfully:', launchpadResult);
 const updateResult = await client.nft.updateLaunchpad({
   chain: Blockchain.SOLANA,
   protocol: SolProtocolType.METAPLEX_CORE,
-  collectionId: '22zxgVwS7cXkTRfvFgERnN5KZpLgukQXAoauNkHtghX2',
+  collectionId: '<COLLECTION_ID>',
   owner: walletAddress,
   payer: walletAddress,
   symbol: 'TEST2',
   newSymbol: 'TEST',
-  candyMachineId: 'iQU3uT6WnnYkCXqXreXm2ysihoj8WGXk5GJtczcos6a',
+  candyMachineId: '<CANDY_MACHINE_ID>',
   name: 'TestCollection',
   payoutRecipient: walletAddress,
   royaltyRecipients: [{ address: walletAddress, share: 100 }],
 });
 
 console.log('Launchpad updated successfully!', updateResult);
+```
+
+### Minting an NFT
+
+```typescript
+// Mint NFTs from a launchpad
+const mintResult = await client.nft.mint({
+  chain: Blockchain.SOLANA,
+  collectionId: '22zxgVwS7cXkTRfvFgERnN5KZpLgukQXAoauNkHtghX2',
+  nftAmount: 1,
+  kind: MintStageKind.Public,
+  candyMachineId: 'iQU3uT6WnnYkCXqXreXm2ysihoj8WGXk5GJtczcos6a',
+  symbol: 'TEST',
+});
+
+console.log('Mint completed successfully!', mintResult);
 ```
 
 ### Complete Example
