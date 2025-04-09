@@ -64,7 +64,7 @@ export class ApiManager {
       baseURL,
       headers: {
         'Content-Type': 'application/json',
-        'X-SDK-Name': USER_AGENT,
+        'x-sdk-name': USER_AGENT,
         ...(options.apiKey && { Authorization: `Bearer ${options.apiKey}` }),
         ...options.headers,
       },
