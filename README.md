@@ -22,7 +22,7 @@ import { MagicEdenSDK } from '@magiceden/magiceden-sdk';
 
 ## Solana SDK
 
-### Initialization
+### Initialization (Solana)
 
 ```typescript
 import { MagicEdenSDK } from '@magiceden/magiceden-sdk';
@@ -40,7 +40,7 @@ const solanaClient = MagicEdenSDK.v1.createSolanaKeypairClient(
 );
 ```
 
-### Listing an NFT
+### Listing an NFT (Solana)
 
 ```typescript
 // List an NFT for sale
@@ -52,7 +52,7 @@ const listResult = await solanaClient.nft.list({
 console.log('Listing created:', listResult);
 ```
 
-### Canceling a Listing
+### Canceling a Listing (Solana)
 
 ```typescript
 // Cancel an existing listing
@@ -64,7 +64,7 @@ const cancelResult = await solanaClient.nft.cancelListing({
 console.log('Listing canceled:', cancelResult);
 ```
 
-### Making an Offer
+### Making an Offer (Solana)
 
 ```typescript
 // Make an offer on an NFT
@@ -76,7 +76,7 @@ const offerResult = await solanaClient.nft.makeItemOffer({
 console.log('Offer made:', offerResult);
 ```
 
-### Canceling an Offer
+### Canceling an Offer (Solana)
 
 ```typescript
 // Cancel an existing offer
@@ -102,7 +102,7 @@ const takeOfferResult = await solanaClient.nft.takeItemOffer({
 console.log('Offer accepted:', takeOfferResult);
 ```
 
-### Buying an NFT
+### Buying an NFT (Solana)
 
 ```typescript
 // Buy an NFT at the listed price
@@ -115,7 +115,7 @@ const buyResult = await solanaClient.nft.buy({
 console.log('Purchase completed:', buyResult);
 ```
 
-### Transferring an NFT
+### Transferring an NFT (Solana)
 
 ```typescript
 // Transfer an NFT to another wallet
@@ -128,7 +128,12 @@ const transferResult = await solanaClient.nft.transfer({
 console.log('Transfer completed:', transferResult);
 ```
 
-### Creating a Launchpad
+### Creating a Launchpad (Solana)
+
+Creating a launchpad on Solana is a two-step process. The steps are as follows:
+
+1. Create the launchpad with `createLaunchpad`.
+2. Publish the launchpad with `publishLaunchpad`.
 
 ```typescript
 // Create a new NFT launchpad
@@ -280,7 +285,7 @@ console.log('Launchpad created successfully:', launchpadResult);
  */
 ```
 
-### Updating a Launchpad
+### Updating a Launchpad (Solana)
 
 ```typescript
 // Update an existing NFT launchpad
@@ -301,7 +306,7 @@ const updateResult = await client.nft.updateLaunchpad({
 console.log('Launchpad updated successfully!', updateResult);
 ```
 
-### Minting an NFT
+### Minting an NFT (Solana)
 
 ```typescript
 // Mint NFTs from a launchpad
@@ -317,7 +322,7 @@ const mintResult = await client.nft.mint({
 console.log('Mint completed successfully!', mintResult);
 ```
 
-### Complete Example
+### Complete Example (Solana)
 
 ```typescript
 // Example testing file
@@ -356,7 +361,7 @@ listNFT();
 
 ## EVM SDK (Ethereum, Polygon, Base, etc)
 
-### Initialization
+### Initialization (EVM)
 
 ```typescript
 import { MagicEdenSDK } from '@magiceden/magiceden-sdk';
@@ -370,7 +375,34 @@ const evmClient = MagicEdenSDK.v1.createViemEvmClient(
 );
 ```
 
-### Minting an NFT
+### Listing an NFT (EVM)
+
+```typescript
+// List an NFT for sale on EVM chains
+const listResult = await client.nft.list({
+  chain: Blockchain.BASE,
+  params: [{
+    token: '0x949de1b4d4cc4a8e63b7565b6dc525d8eb5dd15a:0',
+    price: '10000000012',
+  }]
+});
+
+console.log('List completed successfully!', listResult);
+```
+
+### Canceling a Listing (EVM)
+
+```typescript
+// Cancel an existing listing on EVM chains
+const cancelResult = await client.nft.cancelListing({
+  chain: Blockchain.BASE,
+  orderIds: ['0xc34124b0276f92ca985c2b7e25e9a5c3164c5aa45a2fe1ff1ac6c33b4665649c'],
+});
+
+console.log('Listing canceled successfully!', cancelResult);
+```
+
+### Minting an NFT (EVM)
 
 ```typescript
 // Mint an NFT from a collection
