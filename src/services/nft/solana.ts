@@ -4,6 +4,7 @@ import { ClientConfig } from '../../types';
 import { SolanaApiMappers } from '../../mappers/nft';
 import { SolanaTransactionAdapters } from '../../adapters/transactions';
 import { ChainOperation, SignatureOperation } from '../../types/operations';
+import { createSolanaLaunchpadAuthorizationPayload } from '../../helpers';
 
 /**
  * Solana-specific NFT service implementation
@@ -20,19 +21,10 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getPublishLaunchpadResponse(
     params: ChainMethodParams<'solana', 'publishLaunchpad'>,
   ): Promise<boolean> {
-    const timestamp = Date.now().toString();
-    const message = `Signing as authority for ${params.candyMachineId} at ${timestamp}`;
-    const signature = await this.config.wallet.signMessage(message);
-
-    const publishLaunchpadRequest: V4PublishLaunchpadRequest = {
+    const response = await this.v4ApiClient.publishLaunchpad({
       ...SolanaApiMappers.v4.publishLaunchpadRequest(params),
-      authorization: {
-        signer: this.config.wallet.getAddress(),
-        signature,
-        timestamp,
-      },
-    };
-    const response = await this.v4ApiClient.publishLaunchpad(publishLaunchpadRequest);
+      authorization: await createSolanaLaunchpadAuthorizationPayload(this.config.wallet, params.candyMachineId),
+    });
     return response.success;
   }
 
@@ -61,19 +53,10 @@ export class SolanaNftService extends BaseNftService<'solana'> {
     // TODO: Later on, properly implement extra signers for the launchpad routes
     // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
 
-    const timestamp = Date.now().toString();
-    const message = `Signing as authority for ${params.candyMachineId} at ${timestamp}`;
-    const signature = await this.config.wallet.signMessage(message);
-
-    const updateLaunchpadRequest: V4UpdateLaunchpadRequest = {
+    const response = await this.v4ApiClient.updateLaunchpad({
       ...SolanaApiMappers.v4.updateLaunchpadRequest(params),
-      authorization: {
-        signer: this.config.wallet.getAddress(),
-        signature,
-        timestamp,
-      },
-    };
-    const response = await this.v4ApiClient.updateLaunchpad(updateLaunchpadRequest);
+      authorization: await createSolanaLaunchpadAuthorizationPayload(this.config.wallet, params.candyMachineId),
+    });
     return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }
 

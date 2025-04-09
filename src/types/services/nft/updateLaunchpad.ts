@@ -37,19 +37,6 @@ export const BaseUpdateLaunchpadParamsSchema = z.object({
   protocol: TokenProtocolType.describe('Token protocol type'),
   
   /**
-   * The social media links.
-   */
-  social: z
-    .object({
-      discordUrl: z.string().optional(),
-      externalUrl: z.string().optional(),
-      telegramUrl: z.string().optional(),
-      twitterUsername: z.string().optional(),
-    })
-    .optional()
-    .describe('Social media links'),
-  
-  /**
    * The collection name.
    */
   name: z.string().min(1).max(MAX_NAME_LENGTH).optional().describe('Collection name'),
@@ -153,11 +140,6 @@ export const EvmUpdateLaunchpadParamsSchema = BaseUpdateLaunchpadParamsSchema.ex
   protocol: z.enum([EvmProtocolType.ERC721, EvmProtocolType.ERC1155]),
   
   /**
-   * Message to sign for authentication.
-   */
-  message: z.string().describe('Message to sign'),
-  
-  /**
    * Signature of the message for authentication.
    */
   signature: z.string().describe('Signature of the message'),
@@ -189,6 +171,19 @@ export const SolanaUpdateLaunchpadParamsSchema = BaseUpdateLaunchpadParamsSchema
    */
   payer: zSolanaAddress.describe('Payer address'),
   
+  /**
+   * The social media links.
+   */
+  social: z
+    .object({
+      discordUrl: z.string().optional(),
+      externalUrl: z.string().optional(),
+      telegramUrl: z.string().optional(),
+      twitterUsername: z.string().optional(),
+    })
+    .optional()
+    .describe('Social media links'),
+
   /**
    * The collection name.
    */
