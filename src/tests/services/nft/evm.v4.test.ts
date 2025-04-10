@@ -201,13 +201,6 @@ describe('EvmNftService V4', () => {
         protocol: EvmProtocolType.ERC721,
         collectionId: validEvmAddress,
         owner: validEvmAddress,
-        message: 'Update collection message',
-        signature: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
-        social: {
-          discordUrl: 'https://discord.com/test',
-          externalUrl: 'https://example.com',
-          twitterUsername: 'testuser',
-        },
         name: 'Updated Collection',
         imageUrl: 'https://example.com/updated-image.png',
         description: 'Updated description',

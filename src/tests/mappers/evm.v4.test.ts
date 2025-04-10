@@ -130,11 +130,6 @@ describe('EvmApiMappers V4', () => {
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
         collectionId: '0x3456789012abcdef3456789012abcdef34567890',
         owner: '0x4567890123abcdef4567890123abcdef45678901',
-        social: {
-          discordUrl: 'https://discord.com/updated',
-          externalUrl: 'https://example.com/updated',
-          twitterUsername: 'updateduser',
-        },
         name: 'Updated Collection',
         imageUrl: 'https://example.com/updated-image.png',
         description: 'Updated description',
@@ -144,8 +139,6 @@ describe('EvmApiMappers V4', () => {
           { address: '0x7890abcdef1234567890abcdef1234567890abcd', share: 30 },
         ],
         payoutRecipient: '0x5678901234abcdef5678901234abcdef56789012',
-        message: 'Update collection message to sign',
-        signature: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
         mintStages: {
           stages: [
             {
@@ -222,8 +215,6 @@ describe('EvmApiMappers V4', () => {
         owner: '0x4567890123abcdef4567890123abcdef45678901',
         name: 'Updated ERC1155 Collection',
         tokenId: 1,
-        message: 'Update ERC1155 collection message',
-        signature: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
       };
 
       const result = EvmApiMappers.v4.updateLaunchpadRequest(params);
@@ -235,10 +226,6 @@ describe('EvmApiMappers V4', () => {
       expect(result.owner).toBe('0x4567890123abcdef4567890123abcdef45678901');
       expect(result.name).toBe('Updated ERC1155 Collection');
       expect(result.tokenId).toBe(1);
-      expect(result.message).toBe('Update ERC1155 collection message');
-      expect(result.signature).toBe(
-        '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
-      );
 
       // Verify optional properties are undefined
       expect(result.description).toBeUndefined();
