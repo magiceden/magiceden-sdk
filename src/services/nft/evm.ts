@@ -1,11 +1,11 @@
 import { BaseNftService } from './base';
-import { ChainMethodParams, SignatureResponse } from '../../types';
+import { ChainMethodParams, SignatureResponse, V4UpdateLaunchpadRequest } from '../../types';
 import { ClientConfig } from '../../types';
 import { EvmApiMappers } from '../../mappers/nft';
 import { EvmTransactionAdapters } from '../../adapters/transactions';
 import { ChainOperation, SignatureOperation } from '../../types/operations';
 import { EvmWalletProvider } from '../../wallet';
-import { getEvmChainFromId } from '../../helpers';
+import { createEvmLaunchpadAuthorizationPayload, getEvmChainFromId } from '../../helpers';
 
 /**
  * EVM-specific NFT service implementation
@@ -49,9 +49,10 @@ export class EvmNftService extends BaseNftService<'evm'> {
   protected async getUpdateLaunchpadOperations(
     params: ChainMethodParams<'evm', 'updateLaunchpad'>,
   ): Promise<ChainOperation<'evm'>[]> {
-    const response = await this.v4ApiClient.updateLaunchpad(
-      EvmApiMappers.v4.updateLaunchpadRequest(params),
-    );
+    const response = await this.v4ApiClient.updateLaunchpad({
+      ...EvmApiMappers.v4.updateLaunchpadRequest(params),
+      ...(await createEvmLaunchpadAuthorizationPayload(this.config.wallet)),
+    });
     return EvmTransactionAdapters.fromV4TransactionResponse(response);
   }
 

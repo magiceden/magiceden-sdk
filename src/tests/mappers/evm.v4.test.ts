@@ -11,11 +11,6 @@ describe('EvmApiMappers V4', () => {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
         creator: '0x1234567890abcdef1234567890abcdef12345678',
-        social: {
-          discordUrl: 'https://discord.com/test',
-          externalUrl: 'https://example.com',
-          twitterUsername: 'testuser',
-        },
         name: 'Test Collection',
         symbol: 'TEST',
         imageUrl: 'https://example.com/image.png',
@@ -82,11 +77,6 @@ describe('EvmApiMappers V4', () => {
         chain: Blockchain.POLYGON as Blockchain.POLYGON,
         protocol: EvmProtocolType.ERC1155 as EvmProtocolType.ERC1155,
         creator: '0x1234567890abcdef1234567890abcdef12345678',
-        social: {
-          discordUrl: 'https://discord.com/test',
-          externalUrl: 'https://example.com',
-          twitterUsername: 'testuser',
-        },
         name: 'Test Collection',
         symbol: 'TEST',
         imageUrl: 'https://example.com/image.png',
@@ -138,13 +128,8 @@ describe('EvmApiMappers V4', () => {
       const params: EvmUpdateLaunchpadParams = {
         chain: Blockchain.ETHEREUM as Blockchain.ETHEREUM,
         protocol: EvmProtocolType.ERC721 as EvmProtocolType.ERC721,
-        collection: '0x3456789012abcdef3456789012abcdef34567890',
+        collectionId: '0x3456789012abcdef3456789012abcdef34567890',
         owner: '0x4567890123abcdef4567890123abcdef45678901',
-        social: {
-          discordUrl: 'https://discord.com/updated',
-          externalUrl: 'https://example.com/updated',
-          twitterUsername: 'updateduser',
-        },
         name: 'Updated Collection',
         imageUrl: 'https://example.com/updated-image.png',
         description: 'Updated description',
@@ -154,8 +139,6 @@ describe('EvmApiMappers V4', () => {
           { address: '0x7890abcdef1234567890abcdef1234567890abcd', share: 30 },
         ],
         payoutRecipient: '0x5678901234abcdef5678901234abcdef56789012',
-        message: 'Update collection message to sign',
-        signature: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
         mintStages: {
           stages: [
             {
@@ -184,7 +167,7 @@ describe('EvmApiMappers V4', () => {
       expect(result.protocol).toBe(EvmProtocolType.ERC721);
 
       // Verify collection and owner identifiers
-      expect(result.collection).toBe('0x3456789012abcdef3456789012abcdef34567890');
+      expect(result.collectionId).toBe('0x3456789012abcdef3456789012abcdef34567890');
       expect(result.owner).toBe('0x4567890123abcdef4567890123abcdef45678901');
 
       // Verify social media links
@@ -228,12 +211,10 @@ describe('EvmApiMappers V4', () => {
       const params: EvmUpdateLaunchpadParams = {
         chain: Blockchain.POLYGON as Blockchain.POLYGON,
         protocol: EvmProtocolType.ERC1155 as EvmProtocolType.ERC1155,
-        collection: '0x3456789012abcdef3456789012abcdef34567890',
+        collectionId: '0x3456789012abcdef3456789012abcdef34567890',
         owner: '0x4567890123abcdef4567890123abcdef45678901',
         name: 'Updated ERC1155 Collection',
         tokenId: 1,
-        message: 'Update ERC1155 collection message',
-        signature: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
       };
 
       const result = EvmApiMappers.v4.updateLaunchpadRequest(params);
@@ -241,14 +222,10 @@ describe('EvmApiMappers V4', () => {
       // Verify required properties
       expect(result.chain).toBe(Blockchain.POLYGON);
       expect(result.protocol).toBe(EvmProtocolType.ERC1155);
-      expect(result.collection).toBe('0x3456789012abcdef3456789012abcdef34567890');
+      expect(result.collectionId).toBe('0x3456789012abcdef3456789012abcdef34567890');
       expect(result.owner).toBe('0x4567890123abcdef4567890123abcdef45678901');
       expect(result.name).toBe('Updated ERC1155 Collection');
       expect(result.tokenId).toBe(1);
-      expect(result.message).toBe('Update ERC1155 collection message');
-      expect(result.signature).toBe(
-        '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
-      );
 
       // Verify optional properties are undefined
       expect(result.description).toBeUndefined();

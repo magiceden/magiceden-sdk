@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { Blockchain, ZodEvmBlockchain } from '../../chains';
-import { zSolAuthorization } from '../../solana';
 import { SolanaSymbol } from '../../solana';
 import { zSolanaAddress } from '../../solana/primitives';
 
@@ -8,6 +7,9 @@ import { zSolanaAddress } from '../../solana/primitives';
  * Parameters for publishing a launchpad
  */
 export const BasePublishLaunchpadParamsSchema = z.object({
+  /**
+   * The chain to publish the launchpad on
+   */
   chain: z.nativeEnum(Blockchain),
 });
 
@@ -15,6 +17,9 @@ export const BasePublishLaunchpadParamsSchema = z.object({
  * Evm-specific parameters for publishing a launchpad
  */
 export const EvmPublishLaunchpadParamsSchema = BasePublishLaunchpadParamsSchema.extend({
+  /**
+   * The EVM chain to publish the launchpad on
+   */
   chain: ZodEvmBlockchain,
 });
 
@@ -22,10 +27,25 @@ export const EvmPublishLaunchpadParamsSchema = BasePublishLaunchpadParamsSchema.
  * Solana-specific parameters for publishing a launchpad
  */
 export const SolanaPublishLaunchpadParamsSchema = BasePublishLaunchpadParamsSchema.extend({
+
+  /**
+   * The chain to publish the launchpad on
+   * 
+   * Only used for Solana, so this should always be `Blockchain.SOLANA`.
+   * 
+   * @default Blockchain.SOLANA
+   */
   chain: z.literal(Blockchain.SOLANA),
+
+  /**
+   * The candy machine ID
+   */
   candyMachineId: zSolanaAddress,
+
+  /**
+   * The symbol of the launchpad/collection
+   */
   symbol: SolanaSymbol,
-  authorization: zSolAuthorization,
 });
 
 export type EvmPublishLaunchpadParams = z.infer<typeof EvmPublishLaunchpadParamsSchema>;

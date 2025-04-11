@@ -76,19 +76,13 @@ export const SolanaTransactionAdapters = {
       const result = SolanaSubmitParams.safeParse(step.params);
       return result.success;
     });
-
-    if (validSubmitSteps.length === 0) {
-      throw new Error(
-        'No submit step found in transaction response',
-      );
-    }
     
     // Get the first valid submit step and convert it to a SolanaSubmitParams object
     // Currently the only way to extract the candyMachineId, collectionId, and symbol is to get it from the submit step
     // This is a bit of a hack, but it works for now
     // Normally for each V4TransactionResponse, there should be one transaction step and one submit step
     // # of transaction steps could change, but there should always be only one submit step
-    const submitParams = SolanaSubmitParams.safeParse(validSubmitSteps[0].params).data;
+    const submitParams = validSubmitSteps.length > 0 ? SolanaSubmitParams.safeParse(validSubmitSteps[0].params).data : undefined;
 
     const transactions: TransactionOperation<'solana'>[] = [];
 

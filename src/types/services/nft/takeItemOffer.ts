@@ -8,13 +8,13 @@ export const BaseTakeItemOfferParamsSchema = z.object({
   /**
    * The NFT token
    *
-   * - For EVM, the token is in the format of <contract address>:<token id>
+   * - For EVM, the token is in the format of contractAddress:tokenId
    * - For Solana, the token is the mint address
    */
   token: z
     .string()
     .describe(
-      'The NFT token in the format of <contract address>:<token id> for EVM and <mint address> for Solana',
+      'The NFT token in the format of contractAddress:tokenId for EVM and <mint address> for Solana',
     ),
 });
 

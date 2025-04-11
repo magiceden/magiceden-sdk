@@ -1,9 +1,10 @@
 import { BaseNftService } from './base';
-import { ChainMethodParams, SignatureResponse } from '../../types';
+import { ChainMethodParams, SignatureResponse, V4PublishLaunchpadRequest, V4UpdateLaunchpadRequest } from '../../types';
 import { ClientConfig } from '../../types';
 import { SolanaApiMappers } from '../../mappers/nft';
 import { SolanaTransactionAdapters } from '../../adapters/transactions';
 import { ChainOperation, SignatureOperation } from '../../types/operations';
+import { createSolanaLaunchpadAuthorizationPayload } from '../../helpers';
 
 /**
  * Solana-specific NFT service implementation
@@ -20,9 +21,10 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   protected async getPublishLaunchpadResponse(
     params: ChainMethodParams<'solana', 'publishLaunchpad'>,
   ): Promise<boolean> {
-    const response = await this.v4ApiClient.publishLaunchpad(
-      SolanaApiMappers.v4.publishLaunchpadRequest(params),
-    );
+    const response = await this.v4ApiClient.publishLaunchpad({
+      ...SolanaApiMappers.v4.publishLaunchpadRequest(params),
+      authorization: await createSolanaLaunchpadAuthorizationPayload(this.config.wallet, params.candyMachineId),
+    });
     return response.success;
   }
 
@@ -50,9 +52,11 @@ export class SolanaNftService extends BaseNftService<'solana'> {
   ): Promise<ChainOperation<'solana'>[]> {
     // TODO: Later on, properly implement extra signers for the launchpad routes
     // Refer to comments in src/adapters/transactions/solana.ts and src/types/services/nft/createLaunchpad.ts for more details
-    const response = await this.v4ApiClient.updateLaunchpad(
-      SolanaApiMappers.v4.updateLaunchpadRequest(params),
-    );
+
+    const response = await this.v4ApiClient.updateLaunchpad({
+      ...SolanaApiMappers.v4.updateLaunchpadRequest(params),
+      authorization: await createSolanaLaunchpadAuthorizationPayload(this.config.wallet, params.candyMachineId),
+    });
     return SolanaTransactionAdapters.fromV4TransactionResponse(response);
   }
 

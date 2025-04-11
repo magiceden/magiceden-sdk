@@ -37,7 +37,7 @@ export interface V4CreateLaunchpadRequest {
 }
 
 export interface V4UpdateLaunchpadRequest {
-  collection: string;
+  collectionId: string;
   owner: string;
   chain: Blockchain;
   protocol: TokenProtocolType;

@@ -200,7 +200,7 @@ describe('SolanaNftService V4', () => {
       const mockParams: SolanaUpdateLaunchpadParams = {
         chain: Blockchain.SOLANA as Blockchain.SOLANA,
         protocol: SolProtocolType.METAPLEX_CORE as SolProtocolType.METAPLEX_CORE,
-        collection: 'collectionAddress123',
+        collectionId: 'collectionAddress123',
         owner: 'ownerAddress123',
         social: {
           discordUrl: 'https://discord.com/test',
@@ -221,11 +221,6 @@ describe('SolanaNftService V4', () => {
         newSymbol: 'UPDT',
         externalLink: 'https://example.com/external',
         payer: 'payerAddress123',
-        authorization: {
-          signature: 'signature123',
-          signer: 'signerAddress123',
-          timestamp: 'timestamp123',
-        },
       };
 
       const mockApiRequest = { launchpadAddress: validSolanaPubkey /* other fields */ };
